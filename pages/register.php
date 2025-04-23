@@ -2,25 +2,13 @@
 declare(strict_types=1);
 session_start();
 require_once(__DIR__ . '/../templates/register_body.php');
+require_once(__DIR__ . '/../templates/common.php');
+require_once(__DIR__ . '/../templates/headers.php');
+
+draw_initial_common_header('Register');
+draw_register_header();
+draw_final_common_header();
+draw_register_body();
+draw_common_footer();
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
-</head>
-
-<body>
-
-  <h1>Register a New Account</h1>
-
-  <?php
-  draw_register_body();
-  ?>
-
-</body>
-
-</html>

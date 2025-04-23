@@ -1,10 +1,18 @@
 <?php
 declare(strict_types=1);
+
+
 function draw_register_body()
 {
   ?>
-  <form action="../actions/action_register.php" method="POST">
-    <h2>Register</h2>
+  <header>
+    <h1 id="register-title">CarLink</h1>
+  </header>
+  <div id="register-image">
+    <img src="../images/login_register.jpg" alt="Register Image" width="50%" height="100%">
+  </div>
+  <form action="../actions/action_register.php" method="POST" id="register-form">
+    <h2>Sign up</h2>
     <?php
     if (isset($_SESSION['error'])) {
       echo '<p style="color:red;">' . $_SESSION['error'] . '</p>';
@@ -16,36 +24,38 @@ function draw_register_body()
     }
     ?>
 
-    <div>
-      <label for="username">Username:</label>
-      <input type="text" name="username" id="username" required>
+    <div class="username">
+      <label for="username" class="hide">Username:</label>
+      <input type="text" name="username" placeholder="Username" required>
     </div>
 
-    <div>
-      <label for="password">Password:</label>
-      <input type="password" name="password" id="password" required>
+    <div class="password">
+      <label for="password" class="hide">Password:</label>
+      <input type="password" name="password" placeholder="Password" required>
     </div>
 
-    <div>
-      <label for="confirm_password">Confirm Password:</label>
-      <input type="password" name="confirm_password" id="confirm_password" required>
+    <div class="confirm-password">
+      <label for="confirm_password" class="hide">Confirm Password:</label>
+      <input type="password" name="confirm_password" placeholder="Confirm password" required>
     </div>
 
-    <div>
-      <label for="email">Email:</label>
-      <input type="email" name="email" id="email" required>
+    <div class="email">
+      <label for="email" class="hide">Email:</label>
+      <input type="email" name="email" placeholder="Email" required>
     </div>
 
-    <div>
-      <label for="phone">Phone:</label>
-      <input type="text" name="phone" id="phone" required>
+    <div class="phone">
+      <label for="phone" class="hide">Phone:</label>
+      <input type="text" name="phone" placeholder="Phone number" required>
     </div>
 
-    <div>
-      <button type="submit">Register</button>
+    <div class="register-button">
+      <button type="submit">Register in CarLink</button>
     </div>
 
-    <p>Already have an account? <a href="login.php">Login here</a></p>
+    <div class="botttom-question">
+      <p>Already have an account? <a href="login.php">Login here</a></p>
+    </div>  
   </form>
   <?php
 }
