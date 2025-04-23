@@ -23,10 +23,10 @@ CREATE TABLE
     username VARCHAR NOT NULL UNIQUE,
     email VARCHAR NOT NULL UNIQUE,
     password VARCHAR NOT NULL,
-    age INT NOT NULL,
+    age INT,
     phone VARCHAR NOT NULL UNIQUE,
     profile_picture VARCHAR DEFAULT 'user.png',
-    location VARCHAR NOT NULL DEFAULT 'Unknown',
+    location VARCHAR DEFAULT 'Unknown',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     bio TEXT DEFAULT 'Start writing your bio here...'
   );
