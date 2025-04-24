@@ -15,3 +15,10 @@ function draw_register_header()
     <link rel="stylesheet" href="../css/register.css">
   <?php
 }
+
+function draw_home_header()
+{
+  ?>
+    <link rel="stylesheet" href="../css/home.css">
+  <?php
+}
