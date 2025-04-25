@@ -5,13 +5,11 @@ function draw_login_body()
 {
   ?>
   <header>
-    <h1 id="login-title">CarLink</h1>
+    <h1 id="login-title"><a href="../pages/home.php">CarLink</a></h1>
   </header>
-  <div id="login-image">
-    <img src="../images/login_register.jpg" alt="Login Image" width="50%" height="100%">
-  </div>
+  <div id="login-background"></div> 
   <form action="../actions/action_login.php" method="POST" id="login-form">
-    <h2>Log in</h2>
+    <h2>Log In</h2>
     <?php
     // Display error message if it exists
     if (isset($_SESSION['error'])) {
@@ -37,7 +35,7 @@ function draw_login_body()
     </div>
 
     <div class="login-button">
-      <button type="submit">Log in to CarLink</button>
+      <button type="submit">Log In to CarLink</button>
     </div>
 
     <div class="bottom-question">

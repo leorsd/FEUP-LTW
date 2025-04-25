@@ -6,13 +6,11 @@ function draw_register_body()
 {
   ?>
   <header>
-    <h1 id="register-title">CarLink</h1>
+    <h1 id="register-title"><a href="../pages/home.php">CarLink</a></h1>
   </header>
-  <div id="register-image">
-    <img src="../images/login_register.jpg" alt="Register Image" width="50%" height="100%">
-  </div>
+  <div id="register-background"></div>
   <form action="../actions/action_register.php" method="POST" id="register-form">
-    <h2>Sign up</h2>
+    <h2>Sign Up</h2>
     <?php
     if (isset($_SESSION['error'])) {
       echo '<p style="color:red;">' . $_SESSION['error'] . '</p>';
@@ -50,11 +48,11 @@ function draw_register_body()
     </div>
 
     <div class="register-button">
-      <button type="submit">Register in CarLink</button>
+      <button type="submit">Sign Up for CarLink</button>
     </div>
 
-    <div class="botttom-question">
-      <p>Already have an account? <a href="login.php">Login here</a></p>
+    <div class="bottom-question">
+      <p>Already have an account? <a href="login.php">Log in here</a></p>
     </div>  
   </form>
   <?php

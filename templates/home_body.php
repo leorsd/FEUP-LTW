@@ -4,20 +4,33 @@ declare(strict_types=1);
 function draw_home_body()
 {
   ?>
+  <header>
+    <div class="left">
+        <h2 class="logo">CarLink</h2>
+    </div>
+    <div class="center">
+      <button id="hire-button" class="selected">Hire a Service</button>
+      <p id="bar">|</p>
+      <button id="offer-button">Offer a Service</button>
+    </div>
+    <div class="right">
+      <button id="register-button"><a href="../pages/register.php">Sign Up</a></button>
+      <button id="login-button"><a href="../pages/login.php">Log In</a></button>
+    </div>
+  </header>
   <main>
-    <section class="intro-section" id="hire">
-      <div class="container">
-        <h1>Hire a Service</h1>
-        <p>Find someone to do the job you need, quickly and easily.</p>
-        <a href="#" class="btn">Get Started</a>
-      </div>
+    <section id="hire">
+      <h1>Connecting You to the Best Car Services - Hire or Offer with Ease</h1>
+      <p>Whether you need a mechanic, a detailer, or any other car service, we have you covered. Our platform connects you with trusted service providers in your area.</p>
+      <p>Find the perfect service provider for your needs today!</p>
+      <a href="../pages/login.php" class="btn">Get Help Now!</a>
     </section>
 
-    <section class="features" id="offer">
-      <div class="container">
-        <h2>Offer a Service</h2>
-        <p>Have a skill? Put it to work and help others out.</p>
-      </div>
+    <section id="offer" class="hide">
+      <h1>Connecting You to the Best Car Services - Hire or Offer with Ease</h1>
+      <p>Start earning now by offering your skills to those who need them. Connect with clients and grow your business today!</p>
+      <p>Find the perfect client for your skills today!</p>
+      <a href="../pages/login.php" class="btn">Start Earning Now!</a>
     </section>
   </main>
   <?php
