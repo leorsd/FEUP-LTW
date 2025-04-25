@@ -20,5 +20,6 @@ function draw_home_header()
 {
   ?>
     <link rel="stylesheet" href="../css/home.css">
+    <script src="../js/home.js" defer></script>
   <?php
 }
