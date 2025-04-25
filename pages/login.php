@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
-session_start(); // Start the session to handle any session variables like errors
+session_start(); 
+
 require_once(__DIR__ . '/../templates/login_body.php');
 require_once(__DIR__ . '/../templates/common.php');
 require_once(__DIR__ . '/../templates/headers.php');
