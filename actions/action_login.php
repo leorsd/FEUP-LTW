@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-// actions/action_login.php
 session_start();
 
 require_once(__DIR__ . '/../includes/db/connection.php');
@@ -38,8 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Set a success message
     $_SESSION['success'] = 'Login successful! Welcome back.';
 
-    // Redirect to dashboard or desired page
-    header('Location: ../pages/dashboard.php');
+    // Redirect to home page
+    header('Location: ../pages/home.php');
   } else {
     // Authentication failed, set the error and redirect back to login page
     $_SESSION['error'] = 'Invalid username or password.';
