@@ -3,31 +3,63 @@ declare(strict_types=1);
 
 function draw_profile_body()
 {
-  $username = $_SESSION['username'] ?? 'User';
   $user_info = $_SESSION['user_info'] ?? [];
+  $profile_pic = isset($user_info['profile_picture']) ? $user_info['profile_picture'] : 'user.jpg';
+  if ($profile_pic === 'user.jpg' || $profile_pic === '') {
+    $profile_pic_path = "../images/user.jpg";
+  } else {
+    $profile_pic_path = "../images/cache/" . htmlspecialchars((string) $profile_pic);
+  }
+
   ?>
   <header>
-    <h1>Welcome to your Profile, <?php echo htmlspecialchars($username); ?>!</h1>
+    <h1>Profile</h1>
     <nav>
       <a href="home.php">Home</a> |
       <a href="../actions/action_logout.php">Logout</a>
-      <!-- Optionally add more profile-related links here -->
     </nav>
+
   </header>
-  <main id="profile-mas" <section class="profile-section">
-    <h2>Account Details</h2>
-    <ul>
-      <li>Email: <?php echo htmlspecialchars($user_info['email'] ?? 'Not available'); ?></li>
-      <!-- Add more profile/account info as needed -->
-    </ul>
-    </>
+  <main id="profile-main">
     <section class="profile-section">
-      <h2>Recent Activity</h2>
-      <p>Here you could display a summary of recent actions, messages, or notifications.</p>
+      <div class="profile-top-row">
+        <img src="<?php echo $profile_pic_path; ?>" alt="Profile Picture" class="profile-avatar">
+        <div class="profile-username-block">
+          <span class="profile-username"><?php echo htmlspecialchars((string) ($user_info['username'] ?? '')); ?></span>
+        </div>
+      </div>
+      <div class="profile-actions-row">
+        <a href="edit_profile.php" class="profile-btn">Edit Profile</a>
+        <a href="change_password.php" class="change-password-btn">Change Password</a>
+      </div>
+      <ul class="profile-attributes">
+        <li><strong>Email:</strong> <?php echo htmlspecialchars((string) ($user_info['email'] ?? '')); ?></li>
+        <li><strong>Phone:</strong> <?php echo htmlspecialchars((string) ($user_info['phone'] ?? '')); ?></li>
+        <li><strong>Age:</strong> <?php echo htmlspecialchars((string) ($user_info['age'] ?? '')); ?></li>
+        <li><strong>Location:</strong> <?php echo htmlspecialchars((string) ($user_info['location'] ?? '')); ?></li>
+        <li><strong>Bio:</strong> <?php echo htmlspecialchars((string) ($user_info['bio'] ?? '')); ?></li>
+      </ul>
     </section>
-    <!-- Add more sections for profile widgets, etc. -->
   </main>
+
   <?php
+  // Show all possible flash messages (profile and password)
+  if (isset($_SESSION['profile_msg'])) {
+    echo '<p style="color:green; text-align:center;">' . $_SESSION['profile_msg'] . '</p>';
+    unset($_SESSION['profile_msg']);
+  }
+  if (isset($_SESSION['profile_error'])) {
+    echo '<p style="color:red; text-align:center;">' . $_SESSION['profile_error'] . '</p>';
+    unset($_SESSION['profile_error']);
+  }
+  if (isset($_SESSION['change_password_msg'])) {
+    echo '<p style="color:green; text-align:center;">' . $_SESSION['change_password_msg'] . '</p>';
+    unset($_SESSION['change_password_msg']);
+  }
+  if (isset($_SESSION['change_password_error'])) {
+    echo '<p style="color:red; text-align:center;">' . $_SESSION['change_password_error'] . '</p>';
+    unset($_SESSION['change_password_error']);
+  }
 }
 ?>
 

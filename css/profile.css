@@ -1,36 +1,284 @@
+html,
 body {
-  background-color: #f9f9f9;
-  font-family: "Segoe UI", Arial, sans-serif;
+  height: 100%;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
-header {
-  background: #111;
-  color: #fff;
-  padding: 2rem;
-  text-align: center;
-}
-header nav a {
-  color: #ffd700;
-  text-decoration: none;
-  margin: 0 1em;
-  font-weight: bold;
-}
-header nav a:hover {
-  text-decoration: underline;
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 #profile-main {
-  max-width: 900px;
-  margin: 2rem auto;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 0;
+}
+
+footer {
+  width: 100%;
+  text-align: center;
+  margin-top: auto;
+  background: #111;
+  color: #fff;
+  padding: 1em 0;
+  box-sizing: border-box;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+  max-width: 400px;
+  margin: 0 auto;
+  width: 100%;
+}
+.profile-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #333;
+}
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form input[type="number"],
+.profile-form input[type="password"],
+.profile-form textarea {
+  margin-top: 0.3em;
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+.profile-form textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+.profile-btn,
+.change-password-btn {
+  background: #0088cc;
+  color: #fff;
+  padding: 0.7em 2em;
+  border-radius: 6px;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1em;
+  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+.profile-btn:hover,
+.change-password-btn:hover {
+  background: #0077bb;
+  color: #fff;
+}
+.change-password-btn {
+  background: #ffbe4f;
+  color: #222;
+}
+
+.change-password-btn:hover {
+  background: #ffa600;
+  color: #222;
+}
+.profile-picture-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7em;
+  margin-bottom: 1.5em;
+}
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ffbe4f;
   background: #fff;
-  border-radius: 10px;
-  padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .profile-section {
-  margin-bottom: 2em;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  padding: 2.5em 2em 2em 2em;
+  max-width: 420px;
+  margin: 2em auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: unset;
+  height: auto;
+  margin: 2em auto 0 auto;
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
 }
-.profile-section h2 {
+.profile-attributes {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5em 0;
+  width: 100%;
+}
+.profile-attributes li {
+  margin-bottom: 0.7em;
+  font-size: 1.1em;
   color: #222;
-  margin-bottom: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Change password page tweaks */
+.change-password-section {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  padding: 2.5em 2em 2em 2em;
+  max-width: 420px;
+  margin: 2em auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-top-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5em;
+  width: 100%;
+  margin-bottom: 1.2em;
+  justify-content: center;
+}
+.profile-username-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.profile-username {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0088cc;
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 0.3em 1em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.profile-actions-row {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  margin-bottom: 1.5em;
+}
+
+.edit-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.edit-profile-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1em;
+  justify-content: space-between;
+}
+.edit-profile-row label {
+  min-width: 110px;
+  font-weight: 600;
+  color: #222;
+}
+.edit-profile-row input[type="text"],
+.edit-profile-row input[type="email"],
+.edit-profile-row input[type="number"],
+.edit-profile-row textarea {
+  flex: 1 1 0;
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+.edit-profile-row textarea {
+  min-height: 40px;
+  resize: vertical;
+}
+
+header {
+  width: 100%;
+  background: linear-gradient(90deg, #0088cc 0%, #ffbe4f 100%);
+  color: #fff;
+  padding: 2.5em 0 1.5em 0;
+  text-align: center;
+  border-radius: 0 0 18px 18px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5em;
+}
+header h1 {
+  font-size: 2.3rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin: 0 0 0.3em 0;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+header nav {
+  margin-top: 0.5em;
+}
+header nav a {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 0.4em 1.2em;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  margin: 0 0.3em;
+  transition: background 0.2s, color 0.2s;
+}
+header nav a:hover {
+  background: #fff;
+  color: #0088cc;
+}
+
+@media (max-width: 600px) {
+  .profile-section,
+  .change-password-section {
+    padding: 1em 0.5em;
+    max-width: 99vw;
+  }
+  .profile-form {
+    padding: 0 0.2em;
+  }
+  .profile-avatar {
+    width: 60px;
+    height: 60px;
+  }
+  .profile-top-row {
+    flex-direction: column;
+    gap: 0.7em;
+  }
+  .profile-username {
+    font-size: 1.2rem;
+    padding: 0.2em 0.7em;
+  }
+  .edit-profile-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.3em;
+  }
+  .edit-profile-form {
+    max-width: 99vw;
+    padding: 0 0.2em;
+  }
 }
