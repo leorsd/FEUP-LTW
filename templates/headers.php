@@ -5,21 +5,32 @@ declare(strict_types=1);
 function draw_login_header()
 {
   ?>
-    <link rel="stylesheet" href="../css/login.css">
+  <link rel="stylesheet" href="../css/login.css">
   <?php
 }
 
 function draw_register_header()
 {
   ?>
-    <link rel="stylesheet" href="../css/register.css">
+  <link rel="stylesheet" href="../css/register.css">
   <?php
 }
 
 function draw_home_header()
 {
   ?>
-    <link rel="stylesheet" href="../css/home.css">
-    <script src="../js/home.js" defer></script>
+  <link rel="stylesheet" href="../css/home.css">
+  <script src="../js/home.js" defer></script>
   <?php
 }
+
+function draw_profile_header()
+{
+  ?>
+    <link rel="stylesheet" href="../css/profile.css">
+    <script src="../js/profile.js" defer></script>
+    <?php
+}
+
+?>
+

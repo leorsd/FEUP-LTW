@@ -29,6 +29,21 @@ class User
     return $stmt->fetchColumn() > 0;
   }
 
+  // Check if email exists
+  public function emailExists(): bool
+  {
+    $stmt = $this->db->prepare('SELECT COUNT(*) FROM user WHERE email = :email');
+    $stmt->execute(['email' => $this->email]);
+    return $stmt->fetchColumn() > 0;
+  }
+  // Check if phone exists
+  public function phoneExists(): bool
+  {
+    $stmt = $this->db->prepare('SELECT COUNT(*) FROM user WHERE phone = :phone');
+    $stmt->execute(['phone' => $this->phone]);
+    return $stmt->fetchColumn() > 0;
+  }
+
   // Register a new user, password is passed as argument
   public function register(string $password): bool
   {
@@ -67,6 +82,62 @@ class User
     $stmt = $this->db->prepare('SELECT * FROM user WHERE username = :username');
     $stmt->execute(['username' => $this->username]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
+  // Update user profile fields (except password and profile_picture)
+  public function updateProfile(array $fields): bool
+  {
+    // $allowed = ['email', 'phone', 'age', 'location', 'bio'];
+    $allowed = ['phone', 'age', 'location', 'bio'];
+    $set = [];
+    $params = ['username' => $this->username];
+    foreach ($allowed as $field) {
+      if (isset($fields[$field])) {
+        // Validate age as integer or null
+        if ($field === 'age') {
+          $age = $fields[$field];
+          if ($age === '' || $age === null) {
+            $set[] = "age = NULL";
+          } else if (is_numeric($age) && intval($age) >= 0) {
+            $set[] = "age = :age";
+            $params['age'] = intval($age);
+          } else {
+            continue; // skip invalid age
+          }
+        } else {
+          $set[] = "$field = :$field";
+          $params[$field] = $fields[$field];
+        }
+      }
+    }
+    if (empty($set))
+      return false;
+    $sql = 'UPDATE user SET ' . implode(', ', $set) . ' WHERE username = :username';
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute($params);
+  }
+
+  // Update profile picture filename
+  public function updateProfilePicture(string $filename): bool
+  {
+    $stmt = $this->db->prepare('UPDATE user SET profile_picture = :profile_picture WHERE username = :username');
+    return $stmt->execute([
+      'profile_picture' => $filename,
+      'username' => $this->username
+    ]);
+  }
+
+  // Update password (after verifying current password)
+  public function updatePassword(string $currentPassword, string $newPassword): bool
+  {
+    if (!$this->verifyPassword($currentPassword))
+      return false;
+    $hashed = password_hash($newPassword, PASSWORD_DEFAULT);
+    $stmt = $this->db->prepare('UPDATE user SET password = :password WHERE username = :username');
+    return $stmt->execute([
+      'password' => $hashed,
+      'username' => $this->username
+    ]);
   }
 }
 

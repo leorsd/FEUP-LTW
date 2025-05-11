@@ -42,10 +42,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     exit();
   }
 
+  // Check if email is already registered
+  if ($user->emailExists()) {
+    $_SESSION['error'] = 'Email is already registered. Please use another one.';
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    exit();
+  }
+
+  // Check if phone number is already registered
+  if ($user->phoneExists()) {
+    $_SESSION['error'] = 'Phone number is already registered. Please use another one.';
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    exit();
+  }
+
   // Register user (password is passed directly)
   if ($user->register($password)) {
-    $_SESSION['success'] = 'Registration successful! You can now log in.';
-    header('Location: ../pages/login.php');
+    // Auto-login after registration
+    $_SESSION['username'] = $username;
+    $_SESSION['user_info'] = $user->getUserInfo();
+    $_SESSION['success'] = 'Registration successful! Welcome!';
+    header('Location: ../pages/home.php');
   } else {
     $_SESSION['error'] = 'An error occurred. Please try again.';
     header('Location: ' . $_SERVER['HTTP_REFERER']);

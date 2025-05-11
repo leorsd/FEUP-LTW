@@ -25,7 +25,7 @@ CREATE TABLE
     password VARCHAR NOT NULL,
     age INT,
     phone VARCHAR NOT NULL UNIQUE,
-    profile_picture VARCHAR DEFAULT 'user.png',
+    profile_picture VARCHAR DEFAULT 'user.jpg',
     location VARCHAR DEFAULT 'Unknown',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     bio TEXT DEFAULT 'Start writing your bio here...'
