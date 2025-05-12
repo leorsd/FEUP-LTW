@@ -16,13 +16,13 @@ class Service
         float $price,
         string $location,
         int $creatorId,
-        ?int $rating = null,
         ?int $status = null,
-        ?int $category = null
+        ?int $category = null,
+        ?string $image = null
     ): bool {
         $stmt = $this->db->prepare(
-            'INSERT INTO service (title, description, price, location, creator_id, status, category, rating)
-       VALUES (:title, :description, :price, :location, :creator_id, :status, :category)'
+            'INSERT INTO service (title, description, price, location, creator_id, status, category, image)
+       VALUES (:title, :description, :price, :location, :creator_id, :status, :category, :image)'
         );
         return $stmt->execute([
             'title' => $title,
@@ -32,7 +32,7 @@ class Service
             'creator_id' => $creatorId,
             'status' => $status,
             'category' => $category,
-            'rating' => $rating
+            'image' => $image,
         ]);
     }
 
@@ -57,39 +57,31 @@ class Service
     }
 
 
-    public function getFilteredAndOrderedServices(int $limit, int $offset, ?int $category, string $orderby): array
+    public function getPaginatedFilteredAndOrderedServices(int $limit, int $offset, ?int $category, string $orderby): array
     {
-        $query = 'SELECT * FROM service';
+        $query = 'SELECT service.*, service_category.name AS category_name, service_status.name AS status_name, 
+                user.username AS provider_username
+              FROM service
+              LEFT JOIN service_category ON service.category = service_category.id
+              LEFT JOIN service_status ON service.status = service_status.id
+              LEFT JOIN user ON service.creator_id = user.id';
         $params = [];
 
         // Add category filter
         if ($category) {
-            $query .= ' WHERE category = :category';
+            $query .= ' WHERE service.category = :category';
             $params['category'] = $category;
         }
 
         // Add ordering logic
-        switch ($orderby) {
-            case 'price-asc':
-                $query .= ' ORDER BY price ASC';
-                break;
-            case 'price-desc':
-                $query .= ' ORDER BY price DESC';
-                break;
-            case 'rating-asc':
-                $query .= ' ORDER BY rating ASC';
-                break;
-            case 'rating-desc':
-                $query .= ' ORDER BY rating DESC';
-                break;
-            case 'created_at-asc':
-                $query .= ' ORDER BY created_at ASC';
-                break;
-            case 'created_at-desc':
-            default:
-                $query .= ' ORDER BY created_at DESC';
-                break;
-        }
+        $query .= match ($orderby) {
+            'price-asc' => ' ORDER BY service.price ASC',
+            'price-desc' => ' ORDER BY service.price DESC',
+            'rating-asc' => ' ORDER BY service.rating ASC',
+            'rating-desc' => ' ORDER BY service.rating DESC',
+            'created_at-asc' => ' ORDER BY service.created_at ASC',
+            default => ' ORDER BY service.created_at DESC',
+        };
 
         // Add pagination
         $query .= ' LIMIT :limit OFFSET :offset';
@@ -107,37 +99,29 @@ class Service
 
     public function getAllFilteredAndOrderedServices(?int $category, string $orderby): array
     {
-        $query = 'SELECT * FROM service';
+        $query = 'SELECT service.*, service_category.name AS category_name, service_status.name AS status_name, 
+                user.username AS provider_username
+              FROM service
+              LEFT JOIN service_category ON service.category = service_category.id
+              LEFT JOIN service_status ON service.status = service_status.id
+              LEFT JOIN user ON service.creator_id = user.id';
         $params = [];
 
         // Add category filter
         if ($category) {
-            $query .= ' WHERE category = :category';
+            $query .= ' WHERE service.category = :category';
             $params['category'] = $category;
         }
 
         // Add ordering logic
-        switch ($orderby) {
-            case 'price-asc':
-                $query .= ' ORDER BY price ASC';
-                break;
-            case 'price-desc':
-                $query .= ' ORDER BY price DESC';
-                break;
-            case 'rating-asc':
-                $query .= ' ORDER BY rating ASC';
-                break;
-            case 'rating-desc':
-                $query .= ' ORDER BY rating DESC';
-                break;
-            case 'created_at-asc':
-                $query .= ' ORDER BY created_at ASC';
-                break;
-            case 'created_at-desc':
-            default:
-                $query .= ' ORDER BY created_at DESC';
-                break;
-        }
+        $query .= match ($orderby) {
+            'price-asc' => ' ORDER BY service.price ASC',
+            'price-desc' => ' ORDER BY service.price DESC',
+            'rating-asc' => ' ORDER BY service.rating ASC',
+            'rating-desc' => ' ORDER BY service.rating DESC',
+            'created_at-asc' => ' ORDER BY service.created_at ASC',
+            default => ' ORDER BY service.created_at DESC',
+        };
 
         $stmt = $this->db->prepare($query);
         foreach ($params as $key => $value) {
