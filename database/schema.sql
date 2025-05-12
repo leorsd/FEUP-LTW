@@ -43,6 +43,11 @@ CREATE TABLE
     title VARCHAR NOT NULL,
     description VARCHAR NOT NULL,
     price REAL NOT NULL,
+    rating REAL CHECK (
+      rating >= 0
+      AND rating <= 5
+    ),
+    image VARCHAR DEFAULT 'service.jpg',
     location VARCHAR NOT NULL DEFAULT 'Unknown',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status INT REFERENCES service_status (id) ON DELETE SET NULL,
