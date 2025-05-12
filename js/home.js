@@ -1,42 +1,60 @@
-const hireButton = document.getElementById('hire-button');
-const offerButton = document.getElementById('offer-button');
-const offerSection = document.getElementById('offer');
-offerSection.style.display = 'none';
+document.addEventListener('DOMContentLoaded', () => {
+    const servicesList = document.getElementById('services-list');
+    const prevPageButton = document.getElementById('prev-page');
+    const nextPageButton = document.getElementById('next-page');
+    const currentPageSpan = document.getElementById('current-page');
 
-hireButton.addEventListener('click', () => hireSelected());
-offerButton.addEventListener('click', () => offerSelected());
+    let currentPage = 1; // Start with page 1
+    const limit = 3; // Number of services per page
+    const orderby = 'created_at-desc'; // Default ordering
 
+    // Function to fetch and display services
+    async function fetchServices(page) {
+        try {
+            const response = await fetch(`/api/services_api.php?paginated=true&page=${page}&limit=${limit}&orderby=${orderby}`);
+            const services = await response.json();
 
-function hireSelected() {
-    const offerButton = document.getElementById('offer-button');
-    offerButton.classList.remove('selected');
-    const hireButton = document.getElementById('hire-button');
-    hireButton.classList.add('selected');
+            // Clear the current services list
+            servicesList.innerHTML = '';
 
-    const hireSection = document.getElementById('hire');
-    const offerSection = document.getElementById('offer');
-    offerSection.classList.add('hide');
+            // Add the new services to the list
+            services.forEach(service => {
+                const serviceItem = document.createElement('div');
+                serviceItem.classList.add('service-item');
+                serviceItem.innerHTML = `
+                    <h4>${service.title}</h4>
+                    <p>${service.description}</p>
+                    <p>Price: $${service.price}</p>
+                    <p>Rating: ${service.rating}</p>
+                `;
+                servicesList.appendChild(serviceItem);
+            });
 
-    setTimeout(() => {
-        offerSection.style.display = 'none';
-        hireSection.style.display = 'flex';
-        hireSection.classList.remove("hide");
-    }, 500);
-}
+            // Update the current page display
+            currentPageSpan.textContent = page;
 
-function offerSelected() {
-    const hireButton = document.getElementById('hire-button');
-    hireButton.classList.remove('selected');
-    const offerButton = document.getElementById('offer-button');
-    offerButton.classList.add('selected');
+            // Enable or disable pagination buttons
+            prevPageButton.disabled = page === 1;
+            nextPageButton.disabled = services.length < limit; // Disable "Next" if fewer than `limit` services are returned
+        } catch (error) {
+            console.error('Error fetching services:', error);
+        }
+    }
 
-    const hireSection = document.getElementById('hire');
-    const offerSection = document.getElementById('offer');
-    hireSection.classList.add('hide');
+    // Event listener for the "Previous" button
+    prevPageButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            fetchServices(currentPage);
+        }
+    });
 
-    setTimeout(() => {
-        hireSection.style.display = 'none';
-        offerSection.style.display = 'flex';
-        offerSection.classList.remove("hide");
-    }, 500);
-}
+    // Event listener for the "Next" button
+    nextPageButton.addEventListener('click', () => {
+        currentPage++;
+        fetchServices(currentPage);
+    });
+
+    // Initial fetch for page 1
+    fetchServices(currentPage);
+});
