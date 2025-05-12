@@ -31,4 +31,33 @@ function draw_common_footer()
   </html>
   <?php
 }
-?>
+
+function draw_common_headbar($user_info)
+{
+  $profile_pic = $user_info['profile_picture'];
+  if ($profile_pic === 'user.jpg' || $profile_pic === '') {
+    $profile_pic_path = "../images/user.jpg";
+  } else {
+    $profile_pic_path = "../images/cache/" . htmlspecialchars((string) $profile_pic);
+  }
+  ?>
+  
+  <header>
+    <h1 id="logo"><a href="../pages/home.php">CarLink</a></h1>
+    <div class="search-bar">
+      <form action="../actions/action_search.php" method="GET">
+        <input type="text" name="query-text" placeholder="Search for a service..." required>
+        <button type="submit">Search</button>
+      </form>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="../pages/home.php">Home</a></li>
+        <li><a href="../pages/favorites.php">Favorites</a></li>
+        <li><a href="../pages/services.php">Services</a></li>
+        <li><a href="../pages/profile.php"><img src="<?php echo $profile_pic_path; ?>" alt="Profile Picture" class="profile-avatar"></a></li>
+      </ul>
+    </nav>
+  </header>
+  <?php
+}
