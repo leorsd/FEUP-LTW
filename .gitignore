@@ -2,7 +2,7 @@
 *.db
 
 # Ignore cached images
-images/cache/
+images/cache/*
 
 # Ignore any configuration files you don't want to share (e.g., local development config)
 .env

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 session_start();
 session_destroy();
-header('Location: ../pages/home.php');
+header('Location: ../pages/welcome.php');
 exit();
 ?>
 
