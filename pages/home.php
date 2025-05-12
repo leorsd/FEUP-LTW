@@ -2,13 +2,28 @@
 declare(strict_types=1);
 session_start();
 
-require_once(__DIR__ . '/../templates/home_body.php');
+require_once(__DIR__ . '/../includes/db/connection.php');
+require_once(__DIR__ . '/../lib/category.php');
 require_once(__DIR__ . '/../templates/common.php');
 require_once(__DIR__ . '/../templates/headers.php');
+require_once(__DIR__ . '/../templates/home_body.php');
+
+$db = getDatabaseConnection();
+$category = new Category($db);
+$categories = $category->getAllCategories();
+
+$user_info = $_SESSION['user_info'] ?? null;
+
+if (!isset($user_info)) {
+    $_SESSION['error'] = "Please log in to access this page.";
+    header('Location: login.php');
+    exit();
+}
 
 draw_initial_common_header('CarLink');
 draw_home_header();
 draw_final_common_header();
-draw_home_body();
+draw_common_headbar($user_info);
+draw_home_body($categories);
 draw_common_footer();
 ?>

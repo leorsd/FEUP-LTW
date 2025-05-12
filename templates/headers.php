@@ -16,11 +16,11 @@ function draw_register_header()
   <?php
 }
 
-function draw_home_header()
+function draw_welcome_header()
 {
   ?>
-  <link rel="stylesheet" href="../css/home.css">
-  <script src="../js/home.js" defer></script>
+  <link rel="stylesheet" href="../css/welcome.css">
+  <script src="../js/welcome.js" defer></script>
   <?php
 }
 
@@ -30,6 +30,15 @@ function draw_profile_header()
     <link rel="stylesheet" href="../css/profile.css">
     <script src="../js/profile.js" defer></script>
     <?php
+}
+
+function draw_home_header()
+{
+  ?>
+  <link rel="stylesheet" href="../css/headbar.css">
+  <link rel="stylesheet" href="../css/home.css">
+  <script src="../js/home.js" defer></script>
+  <?php
 }
 
 ?>
