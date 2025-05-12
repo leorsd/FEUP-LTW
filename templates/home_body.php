@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-function draw_home_body(array $categories)
+function draw_home_body()
 {
     ?>
     <section id="create-service-section">
@@ -13,25 +13,8 @@ function draw_home_body(array $categories)
     </section>
     
     <section id="default-searches">
-        <ul>
-            <?php
-            foreach ($categories as $category) {
-
-                if (!isset($category['id']) || !isset($category['name'])) {
-                    continue;
-                }
-                
-                $categoryId = htmlspecialchars((string)$category['id']);
-                $categoryName = htmlspecialchars($category['name']);
-                ?>
-                <li>
-                    <a href="../pages/category.php?id=<?= $categoryId ?>" class="category-link">
-                        <?= $categoryName ?>
-                    </a>
-                </li>
-                <?php
-            }
-            ?>
+        <ul id=categories-list>
+            <!-- Categories will be dynamically loaded here -->
         </ul>
     </section>
 

@@ -41,5 +41,14 @@ function draw_home_header()
   <?php
 }
 
+function draw_create_service_header()
+{
+  ?>
+  <link rel="stylesheet" href="../css/headbar.css">
+  <link rel="stylesheet" href="../css/create_service.css">
+  <script src="../js/create_service.js" defer></script>
+  <?php
+}
+
 ?>
 
