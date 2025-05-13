@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-// actions/action_register.php
 session_start();
 
 require_once(__DIR__ . '/../includes/db/connection.php');

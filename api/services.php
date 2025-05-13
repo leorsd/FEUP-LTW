@@ -16,7 +16,7 @@ $limit = isset($_GET['limit']) ? (int) $_GET['limit'] : 12; // Default limit
 $offset = ($page - 1) * $limit;
 
 if ($paginated) {
-    $services = $service->getFilteredAndOrderedServices($limit, $offset, $category, $orderby);
+    $services = $service->getPaginatedFilteredAndOrderedServices($limit, $offset, $category, $orderby);
     $total = $service->countFilteredServices($category);
 
     echo json_encode([

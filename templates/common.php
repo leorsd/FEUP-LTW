@@ -35,7 +35,7 @@ function draw_common_footer()
 function draw_common_headbar($user_info)
 {
   $profile_pic = $user_info['profile_picture'];
-  if ($profile_pic === 'user.jpg' || $profile_pic === '') {
+  if (!isset($profile_pic) || $profile_pic === '') {
     $profile_pic_path = "../images/user.jpg";
   } else {
     $profile_pic_path = "../images/cache/" . htmlspecialchars((string) $profile_pic);

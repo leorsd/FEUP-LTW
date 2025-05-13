@@ -19,69 +19,69 @@ DROP TABLE IF EXISTS service_review;
 
 CREATE TABLE
   user (
-    id INT PRIMARY KEY,
-    username VARCHAR NOT NULL UNIQUE,
-    email VARCHAR NOT NULL UNIQUE,
-    password VARCHAR NOT NULL,
-    age INT,
-    phone VARCHAR NOT NULL UNIQUE,
-    profile_picture VARCHAR DEFAULT 'user.jpg',
-    location VARCHAR DEFAULT 'Unknown',
+    id INTEGER PRIMARY KEY,
+    username TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    age INTEGER,
+    phone TEXT NOT NULL UNIQUE,
+    profile_picture TEXT,
+    location TEXT DEFAULT 'Unknown',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     bio TEXT DEFAULT 'Start writing your bio here...'
   );
 
 CREATE TABLE
   admin (
-    user_id INT PRIMARY KEY REFERENCES user (id) ON DELETE CASCADE
+    user_id INTEGER PRIMARY KEY REFERENCES user (id) ON DELETE CASCADE
   );
 
 CREATE TABLE
   service (
-    id INT PRIMARY KEY,
-    creator_id INT REFERENCES user (id) ON DELETE CASCADE,
-    title VARCHAR NOT NULL,
-    description VARCHAR NOT NULL,
+    id INTEGER PRIMARY KEY,
+    creator_id INTEGER REFERENCES user (id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
     price REAL NOT NULL,
     rating REAL CHECK (
       rating >= 0
       AND rating <= 5
     ),
-    image VARCHAR DEFAULT 'service.jpg',
-    location VARCHAR NOT NULL DEFAULT 'Unknown',
+    image TEXT,
+    location TEXT NOT NULL DEFAULT 'Unknown',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status INT REFERENCES service_status (id) ON DELETE SET NULL,
-    category INT REFERENCES service_category (id) ON DELETE SET NULL
+    status INTEGER REFERENCES service_status (id) ON DELETE SET NULL,
+    category INTEGER REFERENCES service_category (id) ON DELETE SET NULL
   );
 
 CREATE TABLE
   message (
-    id INT PRIMARY KEY,
-    sender_id INT REFERENCES user (id) ON DELETE CASCADE,
-    receiver_id INT REFERENCES user (id) ON DELETE CASCADE,
+    id INTEGER PRIMARY KEY,
+    sender_id INTEGER REFERENCES user (id) ON DELETE CASCADE,
+    receiver_id INTEGER REFERENCES user (id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
 
 CREATE TABLE
   favorites (
-    user_id INT REFERENCES user (id) ON DELETE CASCADE,
-    service_id INT REFERENCES service (id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES user (id) ON DELETE CASCADE,
+    service_id INTEGER REFERENCES service (id) ON DELETE CASCADE,
     PRIMARY KEY (user_id, service_id)
   );
 
 CREATE TABLE
-  service_category (id INT PRIMARY KEY, name VARCHAR NOT NULL UNIQUE);
+  service_category (id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE);
 
 CREATE TABLE
-  service_status (id INT PRIMARY KEY, name VARCHAR NOT NULL UNIQUE);
+  service_status (id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE);
 
 CREATE TABLE
   service_review (
-    id INT PRIMARY KEY,
-    service_id INT REFERENCES service (id) ON DELETE CASCADE,
-    user_id INT REFERENCES user (id) ON DELETE CASCADE,
-    rating INT CHECK (
+    id INTEGER PRIMARY KEY,
+    service_id INTEGER REFERENCES service (id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES user (id) ON DELETE CASCADE,
+    rating INTEGER CHECK (
       rating >= 1
       AND rating <= 5
     ),
