@@ -3,12 +3,6 @@ declare(strict_types=1);
 function draw_change_password_body()
 {
   ?>
-  <header>
-    <h1>Change Password</h1>
-    <nav>
-      <a href="profile.php">Back to Profile</a>
-    </nav>
-  </header>
   <main id="profile-main">
     <section class="profile-section">
       <?php if (isset($_SESSION['change_password_msg'])): ?>
@@ -30,6 +24,7 @@ function draw_change_password_body()
           <input type="password" name="confirm_new_password" required>
         </label>
         <button type="submit" class="profile-btn">Change Password</button>
+        <a href="profile.php">Back to Profile</a>
       </form>
     </section>
   </main>

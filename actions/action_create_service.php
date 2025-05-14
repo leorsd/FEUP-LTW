@@ -14,13 +14,13 @@ if (!isset($_SESSION['user_info'])) {
 
 $serviceTitle = trim($_POST['service_title'] ?? '');
 $serviceDescription = trim($_POST['service_description'] ?? '');
-$servicePrice = floatval($_POST['service_price'] ?? 0);
+$servicePrice = intval($_POST['service_price'] ?? -1);
 $serviceCategory = intval($_POST['service_category'] ?? 0);
 $serviceLocation = trim($_POST['service_location'] ?? '');
 $serviceStatus = 1; //Default status when created is open
 
-if (empty($serviceTitle) || empty($serviceDescription) || $servicePrice <= 0 || $serviceCategory <= 0 || empty($serviceLocation)) {
-    $_SESSION['error'] = "All fields are required, and price must be greater than 0.";
+if (empty($serviceTitle) || empty($serviceDescription) || $servicePrice < 0 || $serviceCategory <= 0 || empty($serviceLocation)) {
+    $_SESSION['error'] = "All fields are required, and price must be greater or equal to 0.";
     header('Location: ../pages/create_service.php');
     exit();
 }

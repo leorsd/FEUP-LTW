@@ -14,7 +14,7 @@ header {
     align-items: center;
     justify-content: space-between;
     background-color: black;
-    padding: 0.5rem 10rem;
+    padding: 1rem 10rem;
 }
 
 #logo a {
@@ -46,9 +46,17 @@ header {
 .search-bar button {
     padding: 0.5rem 1rem;
     font-size: 1rem;
+    font-weight: 700;
     border: none;
-    background-color: white; /* Bootstrap primary color */
+    background-color: darkgrey; /* Bootstrap primary color */
     cursor: pointer;
+    color: white;
+
+    &:hover {
+        background-color: grey; /* Darker shade on hover */
+        transition: background-color 0.3s ease;
+    }
+
 }
 
 nav ul {
@@ -74,5 +82,16 @@ nav ul li a {
         object-fit: cover;
         border-radius: 50%;
         font-size: 1rem;
+
+        &:hover {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+    }
+
+
+    &:hover {
+        transform: scale(1.1);
+        transition: transform 0.3s ease;; 
     }
 }

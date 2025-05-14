@@ -6,22 +6,11 @@ function draw_register_body()
 {
   ?>
   <header>
-    <h1 id="register-title"><a href="../pages/home.php">CarLink</a></h1>
+    <h1 id="register-title"><a href="../pages/welcome.php">CarLink</a></h1>
   </header>
   <div id="register-background"></div>
   <form action="../actions/action_register.php" method="POST" id="register-form">
     <h2>Sign Up</h2>
-    <?php
-    if (isset($_SESSION['error'])) {
-      echo '<p style="color:red;">' . $_SESSION['error'] . '</p>';
-      unset($_SESSION['error']);
-    }
-    if (isset($_SESSION['success'])) {
-      echo '<p style="color:green;">' . $_SESSION['success'] . '</p>';
-      unset($_SESSION['success']);
-    }
-    ?>
-
     <div class="username">
       <label for="username" class="hide">Username:</label>
       <input type="text" name="username" placeholder="Username" required>

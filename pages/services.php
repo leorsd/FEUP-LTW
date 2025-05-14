@@ -5,8 +5,7 @@ session_start();
 
 require_once(__DIR__ . '/../templates/common.php');
 require_once(__DIR__ . '/../templates/headers.php');
-require_once(__DIR__ . '/../templates/profile_body.php');
-
+require_once(__DIR__ . '/../templates/services_body.php');
 
 $user_info = $_SESSION['user_info'] ?? null;
 
@@ -17,9 +16,9 @@ if (!isset($user_info)) {
 }
 
 draw_initial_common_header('CarLink');
-draw_profile_header();
+draw_services_header();
 draw_final_common_header();
 draw_common_headbar($user_info);
-draw_profile_body();
+draw_services_body();
 draw_common_footer();
 ?>

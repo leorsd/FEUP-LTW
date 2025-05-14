@@ -28,6 +28,7 @@ function draw_profile_header()
 {
   ?>
     <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/headbar.css">
     <script src="../js/profile.js" defer></script>
     <?php
 }
@@ -37,6 +38,7 @@ function draw_home_header()
   ?>
   <link rel="stylesheet" href="../css/headbar.css">
   <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/services_grid.css">
   <script src="../js/home.js" defer></script>
   <?php
 }
@@ -47,6 +49,32 @@ function draw_create_service_header()
   <link rel="stylesheet" href="../css/headbar.css">
   <link rel="stylesheet" href="../css/create_service.css">
   <script src="../js/create_service.js" defer></script>
+  <?php
+}
+
+function draw_services_header()
+{
+  ?>
+  <link rel="stylesheet" href="../css/headbar.css">
+  <link rel="stylesheet" href="../css/services.css">
+  <link rel="stylesheet" href="../css/services_grid.css">
+  <script src="../js/services.js" defer></script>
+  <?php
+}
+
+function draw_change_pasword_header()
+{
+  ?>
+  <link rel="stylesheet" href="../css/change_password.css">
+  <link rel="stylesheet" href="../css/headbar.css">
+  <?php
+}
+
+function draw_edit_profile_header()
+{
+  ?>
+  <link rel="stylesheet" href="../css/edit_profile.css">
+  <link rel="stylesheet" href="../css/headbar.css">
   <?php
 }
 

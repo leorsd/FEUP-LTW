@@ -4,12 +4,6 @@ function draw_edit_profile_body()
 {
   $user_info = $_SESSION['user_info'] ?? [];
   ?>
-  <header>
-    <h1>Edit Profile</h1>
-    <nav>
-      <a href="profile.php">Back to Profile</a>
-    </nav>
-  </header>
   <main id="profile-main">
     <section class="profile-section">
       <?php if (isset($_SESSION['profile_msg'])): ?>
@@ -43,6 +37,7 @@ function draw_edit_profile_body()
           <input type="file" name="profile_picture" accept="image/*">
         </div>
         <button type="submit" class="profile-btn">Update Profile</button>
+        <a href="profile.php">Back to Profile</a>
       </form>
     </section>
   </main>

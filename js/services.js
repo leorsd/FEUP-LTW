@@ -3,18 +3,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const prevPageButton = document.getElementById("prev-page");
   const nextPageButton = document.getElementById("next-page");
   const pageSpan = document.getElementById("current-page");
-  const categoriesList = document.getElementById("categories-list");
 
   let page = 1; // Start with page 1
   const per_page = 12; // Number of services per page
   const orderby = "created_at-desc"; // Default ordering
   const status = "Open"; // Default status
 
+
+  function buildApiUrl(page, per_page) {
+    const params = new URLSearchParams(window.location.search);
+
+    params.set('page', page);
+    params.set('per_page', per_page);
+    params.set('status', status); // Only access open services
+
+    return `/api/services.php?${params.toString()}`;
+  }
+
   // Function to fetch and display services
   async function fetchServices(page) {
     try {
       const response = await fetch(
-        `/api/services.php?orderby=${orderby}&page=${page}&per_page=${per_page}&status=${status}`
+        buildApiUrl(page, per_page)
       );
       const data = await response.json();
       const services = data.services;
@@ -22,6 +32,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const totalPages = Math.ceil(total / per_page);
 
       servicesList.innerHTML = "";
+
+      if (services.length === 0) {
+        const noServicesMsg = document.createElement("div");
+        noServicesMsg.className = "no-services";
+        noServicesMsg.textContent = "No services found for your search...";
+        servicesList.appendChild(noServicesMsg);
+
+        prevPageButton.disabled = true;
+        nextPageButton.disabled = true;
+
+        pageSpan.textContent = `Page 0 of 0`;
+        return;
+      }
 
       services.forEach((service) => {
         if (!service.image) {
@@ -54,37 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Fetch categories from the API
-  async function fetchCategories() {
-    try {
-        const response = await fetch("../api/categories.php");
-        const categories = await response.json();
-
-        // Check for errors in the response
-        if (categories.error) {
-            console.error("Error fetching categories:", categories.error);
-            categoriesList.innerHTML = "<li>Error loading categories</li>";
-            return;
-        }
-
-        // Render categories
-        categoriesList.innerHTML = ""; // Clear any existing content
-        categories.forEach((category) => {
-            const listItem = document.createElement("li");
-            listItem.innerHTML = `
-                <li><a href="../pages/services.php?category=${category.id}" class="category-link">
-                    ${category.name}
-                </a></li>
-            `;
-            categoriesList.appendChild(listItem);
-        });
-    } catch (error) {
-        console.error("Error fetching categories:", error);
-        categoriesList.innerHTML = "<li>Error loading categories</li>";
-    }
-}
-
-  // Event listener for the "Previous" button
   prevPageButton.addEventListener("click", () => {
     if (page > 1) {
       page--;
@@ -93,14 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Event listener for the "Next" button
   nextPageButton.addEventListener("click", () => {
     page++;
     window.scrollTo(0, 0);
     fetchServices(page);
   });
 
-  // Initial fetch for page 1
   fetchServices(page);
-  fetchCategories();
 });
