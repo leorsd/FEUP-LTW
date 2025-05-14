@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once(__DIR__ . '/../templates/common.php');
+
 function draw_home_body()
 {
     ?>
@@ -17,21 +19,8 @@ function draw_home_body()
             <!-- Categories will be dynamically loaded here -->
         </ul>
     </section>
-
-    <section id="home-services">
-
-        <button id="open-filters" class="filter-button">Filters</button>
-
-        <div id="services-list">
-            <!-- Services will be dynamically loaded here -->
-        </div>
-        <div id="pagination">
-            <button id="prev-page" disabled>Previous</button>
-            <span id="current-page">1</span>
-            <button id="next-page">Next</button>
-        </div>
-    </section>
     <?php
+    draw_services_grid();
 }
 ?>
 

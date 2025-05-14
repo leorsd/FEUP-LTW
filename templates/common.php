@@ -46,7 +46,7 @@ function draw_common_headbar($user_info)
     <h1 id="logo"><a href="../pages/home.php">CarLink</a></h1>
     <div class="search-bar">
       <form action="../actions/action_search.php" method="GET">
-        <input type="text" name="query-text" placeholder="Search for a service..." required>
+        <input type="text" name="search" placeholder="Search for a service..." required>
         <button type="submit">Search</button>
       </form>
     </div>
@@ -54,10 +54,30 @@ function draw_common_headbar($user_info)
       <ul>
         <li><a href="../pages/home.php">Home</a></li>
         <li><a href="../pages/favorites.php">Favorites</a></li>
-        <li><a href="../pages/services.php">Services</a></li>
+        <li><a href="../pages/my_services.php">Services</a></li>
         <li><a href="../pages/profile.php"><img src="<?php echo $profile_pic_path; ?>" alt="Profile Picture" class="profile-avatar"></a></li>
       </ul>
     </nav>
   </header>
+  <?php
+}
+
+
+function draw_services_grid()
+{
+  ?>
+  <section id="services-container">
+
+        <button id="open-filters" class="filter-button">Filters</button>
+
+        <div id="services-list">
+            <!-- Services will be dynamically loaded here -->
+        </div>
+        <div id="pagination">
+            <button id="prev-page" disabled>Previous</button>
+            <span id="current-page">1</span>
+            <button id="next-page">Next</button>
+        </div>
+    </section>
   <?php
 }

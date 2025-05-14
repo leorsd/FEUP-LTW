@@ -2,23 +2,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const servicesList = document.getElementById("services-list");
   const prevPageButton = document.getElementById("prev-page");
   const nextPageButton = document.getElementById("next-page");
-  const currentPageSpan = document.getElementById("current-page");
+  const pageSpan = document.getElementById("current-page");
   const categoriesList = document.getElementById("categories-list");
 
-  let currentPage = 1; // Start with page 1
-  const limit = 12; // Number of services per page
+  let page = 1; // Start with page 1
+  const per_page = 12; // Number of services per page
   const orderby = "created_at-desc"; // Default ordering
+  const status = "Open"; // Default status
 
   // Function to fetch and display services
   async function fetchServices(page) {
     try {
       const response = await fetch(
-        `/api/services.php?paginated=true&page=${page}&limit=${limit}&orderby=${orderby}`
+        `/api/services.php?orderby=${orderby}&page=${page}&per_page=${per_page}&status=${status}`
       );
       const data = await response.json();
       const services = data.services;
       const total = data.total;
-      const totalPages = Math.ceil(total / limit);
+      const totalPages = Math.ceil(total / per_page);
 
       servicesList.innerHTML = "";
 
@@ -44,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         servicesList.appendChild(serviceItem);
       });
 
-      currentPageSpan.textContent = page;
+      pageSpan.textContent = `Page ${page} of ${totalPages}`;
 
       prevPageButton.disabled = page === 1;
       nextPageButton.disabled = page >= totalPages;
@@ -71,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         categories.forEach((category) => {
             const listItem = document.createElement("li");
             listItem.innerHTML = `
-                <li><a href="../pages/category.php?id=${category.id}" class="category-link">
+                <li><a href="../pages/services.php?category=${category.id}" class="category-link">
                     ${category.name}
                 </a></li>
             `;
@@ -85,19 +86,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Event listener for the "Previous" button
   prevPageButton.addEventListener("click", () => {
-    if (currentPage > 1) {
-      currentPage--;
-      fetchServices(currentPage);
+    if (page > 1) {
+      page--;
+      window.scrollTo(0, 0);
+      fetchServices(page);
     }
   });
 
   // Event listener for the "Next" button
   nextPageButton.addEventListener("click", () => {
-    currentPage++;
-    fetchServices(currentPage);
+    page++;
+    window.scrollTo(0, 0);
+    fetchServices(page);
   });
 
   // Initial fetch for page 1
-  fetchServices(currentPage);
+  fetchServices(page);
   fetchCategories();
 });
