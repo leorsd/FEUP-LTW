@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoriesList = document.getElementById("categories-list");
 
   let currentPage = 1; // Start with page 1
-  const limit = 3; // Number of services per page
+  const limit = 12; // Number of services per page
   const orderby = "created_at-desc"; // Default ordering
 
   // Function to fetch and display services
@@ -71,9 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
         categories.forEach((category) => {
             const listItem = document.createElement("li");
             listItem.innerHTML = `
-                <a href="../pages/category.php?id=${category.id}" class="category-link">
+                <li><a href="../pages/category.php?id=${category.id}" class="category-link">
                     ${category.name}
-                </a>
+                </a></li>
             `;
             categoriesList.appendChild(listItem);
         });
