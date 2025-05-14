@@ -5,10 +5,10 @@ function draw_home_body()
 {
     ?>
     <section id="create-service-section">
-        <h2>Got car skills? Want to make some money?</h2>
-        <h2>You are in the right place!</h2>
-        <p>Create your service, receive messages from customers, start working and earning money!</p>
-        <p>It's that simple!</p>
+        <div id="create-service-text">
+            <h2>Got car skills? Want to make some money?</h2>
+            <h2>You are in the right place!</h2>
+        </div>
         <a href="../pages/create_service.php" class="create-service-button">Create a Service</a>
     </section>
     
@@ -19,7 +19,6 @@ function draw_home_body()
     </section>
 
     <section id="home-services">
-        <h3>Recommended Services</h3>
 
         <button id="open-filters" class="filter-button">Filters</button>
 
