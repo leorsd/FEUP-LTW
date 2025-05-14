@@ -12,18 +12,10 @@ function draw_profile_body()
   }
 
   ?>
-  <header>
-    <h1>Profile</h1>
-    <nav>
-      <a href="home.php">Home</a> |
-      <a href="../actions/action_logout.php">Logout</a>
-    </nav>
-
-  </header>
   <main id="profile-main">
     <section class="profile-section">
       <div class="profile-top-row">
-        <img src="<?php echo $profile_pic_path; ?>" alt="Profile Picture" class="profile-avatar">
+        <img src="<?php echo $profile_pic_path; ?>" alt="Profile Picture" class="profile-image">
         <div class="profile-username-block">
           <span class="profile-username"><?php echo htmlspecialchars((string) ($user_info['username'] ?? '')); ?></span>
         </div>
@@ -39,6 +31,9 @@ function draw_profile_body()
         <li><strong>Location:</strong> <?php echo htmlspecialchars((string) ($user_info['location'] ?? '')); ?></li>
         <li><strong>Bio:</strong> <?php echo htmlspecialchars((string) ($user_info['bio'] ?? '')); ?></li>
       </ul>
+      <div class="profile-bottom-row">
+        <a href="../actions/action_logout.php" class="logout-btn">Logout</a>
+      </div>
     </section>
   </main>
 

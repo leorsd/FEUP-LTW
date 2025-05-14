@@ -12,8 +12,9 @@ if (!isset($_SESSION['username'])) {
 }
 
 draw_initial_common_header('Change Password');
-draw_profile_header();
+draw_change_pasword_header();
 draw_final_common_header();
+draw_common_headbar($_SESSION['user_info']);
 draw_change_password_body();
 draw_common_footer();
 ?>
