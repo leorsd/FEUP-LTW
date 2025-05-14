@@ -44,12 +44,10 @@ function draw_common_headbar($user_info)
   
   <header>
     <h1 id="logo"><a href="../pages/home.php">CarLink</a></h1>
-    <div class="search-bar">
-      <form action="../actions/action_search.php" method="GET">
-        <input type="text" name="search" placeholder="Search for a service..." required>
-        <button type="submit">Search</button>
-      </form>
-    </div>
+    <form id="search-bar">
+      <input type="text" id="search-input" name="search" placeholder="Search for a service..." required>
+      <button type="submit">Search</button>
+    </form>
     <nav>
       <ul>
         <li><a href="../pages/home.php">Home</a></li>
@@ -67,17 +65,54 @@ function draw_services_grid()
 {
   ?>
   <section id="services-container">
-
-        <button id="open-filters" class="filter-button">Filters</button>
-
-        <div id="services-list">
-            <!-- Services will be dynamically loaded here -->
+      <div id="filters-buttons">
+        <button id="clear-filters">Clear Filters</button>
+        <button id="open-filters">Filters</button>
+      </div>
+      <div id="services-list">
+          <!-- Services will be dynamically loaded here -->
+      </div>
+      <div id="pagination">
+          <button id="prev-page" disabled>Previous</button>
+          <span id="current-page">1</span>
+          <button id="next-page">Next</button>
+      </div>
+  </section>
+  <section id="filter-popup" class="hidden">
+    <div id="filter-container">
+      <button id="close-filter-popup">&times;</button>
+      <h2>Filter Services</h2>
+      <form id="filter-form">
+        <label for="category">Category:</label>
+        <select id="form-categories" name="category">
+          <!-- Categories will be dynamically loaded here -->
+        </select>
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" placeholder="Enter location">
+        <label for="provider">Provider:</label>
+        <input type="text" id="provider" name="provider" placeholder="Enter provider username">
+        <label for="price-range">Price Range:</label>
+        <div id="price-range-boxes">
+          <input type="number" id="min-price" name="min-price" min="0" max="1000" step="1" placeholder="Min price">
+          <input type="number" id="max-price" name="max-price" min="0" max="1000" step="1" placeholder="Max price">
         </div>
-        <div id="pagination">
-            <button id="prev-page" disabled>Previous</button>
-            <span id="current-page">1</span>
-            <button id="next-page">Next</button>
+        <label for="rating-range">Rating Range:</label>
+        <div id="rating-range-boxes">
+          <input type="number" id="min-rating" name="min-rating" min="0" max="5" step="0.1" placeholder="Min rating">
+          <input type="number" id="max-rating" name="max-rating" min="0" max="5" step="0.1" placeholder="Max rating">
         </div>
-    </section>
+        <label for="sort-by">Order By:</label>
+        <select id="order-by" name="order-by">
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating-asc">Rating: Low to High</option>
+          <option value="rating-desc">Rating: High to Low</option>
+          <option value="created_at-asc">Date: Oldest First</option>
+          <option value="created_at-desc">Date: Newest First</option>
+        </select>
+        <button type="submit">Apply Filters</button>
+      </form>
+    </div>
+  </section>
   <?php
 }

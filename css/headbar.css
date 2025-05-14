@@ -24,39 +24,39 @@ header {
     color: white;
 }
 
-.search-bar form{
+#search-bar{
     flex: 1;
     display: flex;
     justify-content: center;
-}
 
-.search-bar form input{
-    width: 30rem;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border: none;
-    background-color: white; /* White background for input */
-}
+    input{
+        width: 30rem;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        background-color: white;
 
-.search-bar form input:focus {
-    outline: none;
-    border: 2px solid grey; /* Bootstrap primary color */
-}
-
-.search-bar button {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    font-weight: 700;
-    border: none;
-    background-color: darkgrey; /* Bootstrap primary color */
-    cursor: pointer;
-    color: white;
-
-    &:hover {
-        background-color: grey; /* Darker shade on hover */
-        transition: background-color 0.3s ease;
+        &:focus{
+            outline: none;
+            border: 2px solid grey; 
+        }
     }
 
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        font-weight: 700;
+        border: none;
+        background-color: darkgrey; 
+        cursor: pointer;
+        color: white;
+
+        &:hover {
+            background-color: grey; 
+            transition: background-color 0.3s ease;
+        }
+
+    }
 }
 
 nav ul {

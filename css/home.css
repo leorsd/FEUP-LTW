@@ -40,10 +40,12 @@
     ul {
         list-style: none;
     
-        li a{
-            text-decoration: none;
+        li .category-button{
             color: black;
             display: inline-block;
+            border: none;
+            background-color: inherit;
+            font-size: 1.2rem;
 
             &:hover{
                 transform: scale(1.2);
