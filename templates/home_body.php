@@ -19,8 +19,11 @@ function draw_home_body()
             <!-- Categories will be dynamically loaded here -->
         </ul>
     </section>
+    <section id="main-content">
+        <h2 id="search-title">Services</h2>
+        <?php draw_services_grid(); ?>
+    </section>
     <?php
-    draw_services_grid();
 }
 ?>
 

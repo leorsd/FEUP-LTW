@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const searchForm = document.getElementById("search-bar");
-  const clearFiltersButton = document.getElementById("clear-filters");
-  const openFilterPopupButton = document.getElementById("open-filters");
-  const closeFilterPopupButton = document.getElementById("close-filter-popup");  
+  const clearFiltersButton = document.getElementById("clear-filters");  
   const filterForm = document.getElementById("filter-form");
   const servicesList = document.getElementById("services-list");
   const prevPageButton = document.getElementById("prev-page");
@@ -126,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       categoriesList.innerHTML = ""; 
+      categoriesOption.innerHTML = "";
       categories.forEach((category) => {
         const listItem = document.createElement("li");
         listItem.innerHTML = `
@@ -134,6 +133,12 @@ document.addEventListener("DOMContentLoaded", () => {
           </button>
         `;
         categoriesList.appendChild(listItem);
+
+        const option = document.createElement("label");
+        option.innerHTML = `
+        <input type="checkbox" name="categories" value="${category.id}"> ${category.name}
+        `;
+        categoriesOption.appendChild(option);
       });
 
       document.querySelectorAll('.category-button').forEach(btn => {
@@ -144,15 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
           fetchServices();
         });
       });
-
-      categoriesOption.innerHTML = "";
-      categories.forEach((category) => {
-        const option = document.createElement("option");
-        option.value = category.id;
-        option.textContent = category.name;
-        categoriesOption.appendChild(option);
-      });
-
 
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -183,18 +179,6 @@ document.addEventListener("DOMContentLoaded", () => {
     searchForm.reset(); 
   });
 
-  openFilterPopupButton.addEventListener("click", () => {
-    const filterPopup = document.getElementById("filter-popup");
-    filterPopup.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-  });
-
-  closeFilterPopupButton.addEventListener("click", () => {
-    const filterPopup = document.getElementById("filter-popup");
-    filterPopup.classList.add("hidden");
-    document.body.style.overflow = "auto";
-  });
-
   clearFiltersButton.addEventListener("click", () => {
     search = null;
     provider = null;
@@ -211,14 +195,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   filterForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    category = filterForm.elements["category"].value;
-    provider = filterForm.elements["provider"].value;
-    location = filterForm.elements["location"].value;
-    min_price = filterForm.elements["min-price"].value;
-    max_price = filterForm.elements["max-price"].value;
-    min_rating = filterForm.elements["min-rating"].value;
-    max_rating = filterForm.elements["max-rating"].value;
-    orderby = filterForm.elements["order-by"].value;
+    const formData = new FormData(filterForm);
+
+    category = formData.getAll("categories").join(",");
+    provider = formData.get("provider");
+    location = formData.get("location");
+    min_price = formData.get("min-price");
+    max_price = formData.get("max-price");
+    min_rating = formData.get("min-rating");
+    max_rating = formData.get("max-rating");
+    orderby = formData.get("order-by");
     if (category === "") category = null;
     if (min_price === "") min_price = null;
     if (max_price === "") max_price = null;
@@ -227,9 +213,6 @@ document.addEventListener("DOMContentLoaded", () => {
     page = 1;
     fetchServices();
     filterForm.reset();
-    const filterPopup = document.getElementById("filter-popup");
-    filterPopup.classList.add("hidden");
-    document.body.style.overflow = "auto";
   });
 
   fetchCategories();

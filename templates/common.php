@@ -64,11 +64,42 @@ function draw_common_headbar($user_info)
 function draw_services_grid()
 {
   ?>
-  <section id="services-container">
-      <div id="filters-buttons">
-        <button id="clear-filters">Clear Filters</button>
-        <button id="open-filters">Filters</button>
-      </div>
+  <div id="services-grid-filters">
+    <div id="filters">
+      <h3>Filters</h3>
+      <form id="filter-form">
+        <label for="category">Category</label>
+        <div id="form-categories">
+          <!-- Categories will be dynamically loaded here -->
+        </div>
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" placeholder="Enter location">
+        <label for="provider">Provider</label>
+        <input type="text" id="provider" name="provider" placeholder="Enter provider username">
+        <label for="price-range">Price</label>
+        <div id="price-range-boxes">
+          <input type="number" id="min-price" name="min-price" min="0" max="1000" step="1" placeholder="Min price">
+          <input type="number" id="max-price" name="max-price" min="0" max="1000" step="1" placeholder="Max price">
+        </div>
+        <label for="rating-range">Rating</label>
+        <div id="rating-range-boxes">
+          <input type="number" id="min-rating" name="min-rating" min="0" max="5" step="0.1" placeholder="Min rating">
+          <input type="number" id="max-rating" name="max-rating" min="0" max="5" step="0.1" placeholder="Max rating">
+        </div>
+        <label for="sort-by">Order By</label>
+        <select id="order-by" name="order-by">
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating-asc">Rating: Low to High</option>
+          <option value="rating-desc">Rating: High to Low</option>
+          <option value="created_at-asc">Date: Oldest First</option>
+          <option value="created_at-desc" selected>Date: Newest First</option>
+        </select>
+        <button type="submit">Apply Filters</button>
+      </form>
+      <button id="clear-filters">Clear Filters</button>
+    </div>
+    <div id="services-container">
       <div id="services-list">
           <!-- Services will be dynamically loaded here -->
       </div>
@@ -77,42 +108,7 @@ function draw_services_grid()
           <span id="current-page">1</span>
           <button id="next-page">Next</button>
       </div>
-  </section>
-  <section id="filter-popup" class="hidden">
-    <div id="filter-container">
-      <button id="close-filter-popup">&times;</button>
-      <h2>Filter Services</h2>
-      <form id="filter-form">
-        <label for="category">Category:</label>
-        <select id="form-categories" name="category">
-          <!-- Categories will be dynamically loaded here -->
-        </select>
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" placeholder="Enter location">
-        <label for="provider">Provider:</label>
-        <input type="text" id="provider" name="provider" placeholder="Enter provider username">
-        <label for="price-range">Price Range:</label>
-        <div id="price-range-boxes">
-          <input type="number" id="min-price" name="min-price" min="0" max="1000" step="1" placeholder="Min price">
-          <input type="number" id="max-price" name="max-price" min="0" max="1000" step="1" placeholder="Max price">
-        </div>
-        <label for="rating-range">Rating Range:</label>
-        <div id="rating-range-boxes">
-          <input type="number" id="min-rating" name="min-rating" min="0" max="5" step="0.1" placeholder="Min rating">
-          <input type="number" id="max-rating" name="max-rating" min="0" max="5" step="0.1" placeholder="Max rating">
-        </div>
-        <label for="sort-by">Order By:</label>
-        <select id="order-by" name="order-by">
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="rating-asc">Rating: Low to High</option>
-          <option value="rating-desc">Rating: High to Low</option>
-          <option value="created_at-asc">Date: Oldest First</option>
-          <option value="created_at-desc">Date: Newest First</option>
-        </select>
-        <button type="submit">Apply Filters</button>
-      </form>
     </div>
-  </section>
+  </div>
   <?php
 }
