@@ -11,7 +11,7 @@ $service = new Service($db);
 // Get query parameters
 $search = isset($_GET['search']) ? trim($_GET['search']) : null; // Search text
 $provider = isset($_GET['provider']) ? trim($_GET['provider']) : null; // Provider username
-$category = isset($_GET['category']) ? (int)$_GET['category'] : null; // Category id
+$category = isset($_GET['category']) && $_GET['category'] !== '' ? array_map('intval', explode(',', $_GET['category'])) : null; // array of category ids
 $location = isset($_GET['location']) ? trim($_GET['location']) : null; // Location
 $status = isset($_GET['status']) ? trim($_GET['status']) : null; // Status (Open, Closed, Cancelled)
 $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : null;

@@ -53,9 +53,10 @@ class Service
             $where[] = 'user.username LIKE :provider';
             $params['provider'] = '%' . $filters['provider'] . '%';
         }
-        if (!empty($filters['category'])) {
-            $where[] = 'service.category = :category';
-            $params['category'] = $filters['category'];
+        if (!empty($filters['category']) && is_array($filters['category'])) {
+            $in = implode(',', array_fill(0, count($filters['category']), '?'));
+            $where[] = "service.category IN ($in)";
+            $params = array_merge($params, $filters['category']);
         }
         if (!empty($filters['location'])) {
             $where[] = 'service.location LIKE :location';
@@ -87,8 +88,14 @@ class Service
         }
 
         $stmt = $this->db->prepare($query);
+        $paramIndex = 1;
         foreach ($params as $key => $value) {
-            $stmt->bindValue(":$key", $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            if (is_int($key)) {
+                $stmt->bindValue($paramIndex, $value, PDO::PARAM_INT);
+                $paramIndex++;
+            } else {
+                $stmt->bindValue(":$key", $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            }
         }
         $stmt->execute();
 
@@ -117,9 +124,10 @@ class Service
             $params['provider'] = '%' . $filters['provider'] . '%';
         }
 
-        if (!empty($filters['category'])) {
-            $where[] = 'service.category = :category';
-            $params['category'] = $filters['category'];
+        if (!empty($filters['category']) && is_array($filters['category'])) {
+            $in = implode(',', array_fill(0, count($filters['category']), '?'));
+            $where[] = "service.category IN ($in)";
+            $params = array_merge($params, $filters['category']);
         }
 
         if (!empty($filters['location'])) {
@@ -173,11 +181,17 @@ class Service
         }
 
         $stmt = $this->db->prepare($query);
+        $paramIndex = 1;
         foreach ($params as $key => $value) {
-            if ($key === 'limit' || $key === 'offset') {
-                $stmt->bindValue(":$key", (int)$value, PDO::PARAM_INT);
+            if (is_int($key)) {
+                $stmt->bindValue($paramIndex, $value, PDO::PARAM_INT);
+                $paramIndex++;
             } else {
-                $stmt->bindValue(":$key", $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+                if ($key === 'limit' || $key === 'offset') {
+                    $stmt->bindValue(":$key", (int)$value, PDO::PARAM_INT);
+                } else {
+                    $stmt->bindValue(":$key", $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+                }
             }
         }
         $stmt->execute();
