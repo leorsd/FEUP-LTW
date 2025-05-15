@@ -36,6 +36,23 @@ class Service
         ]);
     }
 
+
+    public function getServiceById(int $id): ?array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT service.*, service_category.name AS category_name, service_status.name AS status_name, 
+            user.username AS provider_username, user.profile_picture AS provider_image
+            FROM service
+            LEFT JOIN service_category ON service.category = service_category.id
+            LEFT JOIN service_status ON service.status = service_status.id
+            LEFT JOIN user ON service.creator_id = user.id
+            WHERE service.id = :id'
+        );
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+
+
     public function countFilteredServices(array $filters = []): int
     {
         $query = 'SELECT COUNT(*) FROM service
@@ -106,7 +123,7 @@ class Service
     public function getFilteredAndOrderedServices(array $filters, string $orderby, ?int $page = null, ?int $per_page = null): array
     {
         $query = 'SELECT service.*, service_category.name AS category_name, service_status.name AS status_name, 
-                user.username AS provider_username
+                user.username AS provider_username, user.profile_picture AS provider_image
               FROM service
               LEFT JOIN service_category ON service.category = service_category.id
               LEFT JOIN service_status ON service.status = service_status.id
