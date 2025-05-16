@@ -21,7 +21,18 @@ function draw_home_body()
     </section>
     <section id="main-content">
         <h2 id="search-title">Services</h2>
-        <?php draw_services_grid(); ?>
+        <?php draw_services_grid(
+            [
+                'search_filter' => false,
+                'provider_filter' => true,
+                'status_filter' => false,
+                'category_filter' => true,
+                'location_filter' => true,
+                'price_filter' => true,
+                'rating_filter' => true,
+                'orderby_filter' => true,
+            ]
+        ); ?>
     </section>
     <?php
 }

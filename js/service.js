@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
       text: form.elements["review-text"].value,
       reviewer_id: form.elements["reviewer_id"].value,
     };
-    const response = await fetch('../api/review.php', {
+    const response = await fetch('../api/reviews.php', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

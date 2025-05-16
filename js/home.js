@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let provider = urlParams.get("provider") || null;
   let category = urlParams.get("category") || null;
   let location = urlParams.get("location") || null;
-  const status = "Active"; // Default status
+  const status = "1"; // Default status, Active
   let min_price = urlParams.get("min_price") || null;
   let max_price = urlParams.get("max_price") || null;
   let min_rating = urlParams.get("min_rating") || null;
@@ -179,6 +179,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   function setupLiveFilters() {
+
+    searchForm.elements["search"].addEventListener("input", (e) => {
+      search = e.target.value || null;
+      page = 1; 
+      fetchServices();
+    });
+
     // Category checkboxes
     filterForm.querySelectorAll('input[name="categories"]').forEach(cb => {
       cb.addEventListener("change", () => {
@@ -364,15 +371,6 @@ document.addEventListener("DOMContentLoaded", () => {
     page++;
     window.scrollTo(0, 0);
     fetchServices();
-  });
-
-  searchForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    search = searchForm.elements["search"].value;
-    if (search === "") search = null;
-    page = 1; 
-    fetchServices();
-    searchForm.reset(); 
   });
 
   clearFiltersButton.addEventListener("click", () => {

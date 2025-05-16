@@ -87,5 +87,15 @@ function draw_service_header()
   <?php
 }
 
+function draw_my_services_header()
+{
+  ?>
+  <link rel="stylesheet" href="../css/my_services.css">
+  <link rel="stylesheet" href="../css/headbar.css">
+  <link rel="stylesheet" href="../css/services_grid.css">
+  <script src="../js/my_services.js" defer></script>
+  <?php
+}
+
 ?>
 
