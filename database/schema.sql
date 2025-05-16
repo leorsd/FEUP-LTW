@@ -46,7 +46,7 @@ CREATE TABLE
     rating REAL CHECK (
       rating >= 0
       AND rating <= 5
-    ),
+    ) DEFAULT NULL,
     image TEXT,
     location TEXT NOT NULL DEFAULT 'Unknown',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -80,11 +80,11 @@ CREATE TABLE
   service_review (
     id INTEGER PRIMARY KEY,
     service_id INTEGER REFERENCES service (id) ON DELETE CASCADE,
-    user_id INTEGER REFERENCES user (id) ON DELETE CASCADE,
+    reviewer_id INTEGER REFERENCES user (id) ON DELETE CASCADE,
     rating INTEGER CHECK (
       rating >= 1
       AND rating <= 5
     ),
-    comment TEXT,
+    text TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );

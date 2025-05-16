@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let provider = urlParams.get("provider") || null;
   let category = urlParams.get("category") || null;
   let location = urlParams.get("location") || null;
-  const status = "Open"; // Default status
+  const status = "Active"; // Default status
   let min_price = urlParams.get("min_price") || null;
   let max_price = urlParams.get("max_price") || null;
   let min_rating = urlParams.get("min_rating") || null;
@@ -82,17 +82,32 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       services.forEach((service) => {
+
         if (!service.image) {
-          service.image = "../images/service.png"; // Default image if none provided
+          service.image = "../images/service.png";
         }else {
-          service.image = `../images/cache/${service.image}`; // Use the provided image
+          service.image = `../images/cache/${service.image}`; 
         }
-        const serviceItem = document.createElement("div");
+
+        if (!service.provider_image) {
+          service.provider_image = "../images/user.jpg"; 
+        }else {
+          service.provider_image = `../images/cache/${service.provider_image}`; 
+        }
+
+        if (!service.rating) {
+          service.rating = "Not rated yet";
+        }else{
+          service.rating = service.rating.toFixed(1);
+        }
+        const serviceItem = document.createElement("a");
+        serviceItem.href = `service.php?id=${service.id}`;
         serviceItem.classList.add("service-item");
         serviceItem.innerHTML = `
                 <img src="${service.image}" alt="${service.title}" class="service-image">
                 <h4>${service.title}</h4>
                 <p>Description: ${service.description}</p>
+                <img src="${service.provider_image}" alt="profile image" class="provider-image">
                 <p>Provider: ${service.provider_username}</p>
                 <p>Category: ${service.category_name}</p>
                 <p>Location: ${service.location}</p>

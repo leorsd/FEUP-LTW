@@ -78,5 +78,14 @@ function draw_edit_profile_header()
   <?php
 }
 
+function draw_service_header()
+{
+  ?>
+  <link rel="stylesheet" href="../css/service.css">
+  <link rel="stylesheet" href="../css/headbar.css">
+  <script src="../js/service.js" defer></script>
+  <?php
+}
+
 ?>
 
