@@ -1,12 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const searchForm = document.getElementById("search-bar");
-  const clearFiltersButton = document.getElementById("clear-filters");  
+  const clearFiltersButton = document.getElementById("clear-filters"); 
   const filterForm = document.getElementById("filter-form");
   const servicesList = document.getElementById("services-list");
   const prevPageButton = document.getElementById("prev-page");
   const nextPageButton = document.getElementById("next-page");
   const pageSpan = document.getElementById("current-page");
-  const categoriesList = document.getElementById("categories-list");
   const categoriesOption = document.getElementById("form-categories");
 
   let page = 1; // Start with page 1
@@ -14,25 +13,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const urlParams = new URLSearchParams(window.location.search);
   
-  let search = urlParams.get("search") || null;
-  let provider = urlParams.get("provider") || null;
-  let category = urlParams.get("category") || null;
-  let location = urlParams.get("location") || null;
-  const status = "1"; // Default status, Active
-  let min_price = urlParams.get("min_price") || null;
-  let max_price = urlParams.get("max_price") || null;
-  let min_rating = urlParams.get("min_rating") || null;
-  let max_rating = urlParams.get("max_rating") || null;
-  let orderby = urlParams.get("orderby") || "created_at-desc";
+  let search = null;
+  let provider_id = urlParams.get("provider_id");
+  let category =  null;
+  let location =  null;
+  let status = null; 
+  let min_price =  null;
+  let max_price =  null;
+  let min_rating =  null;
+  let max_rating = null;
+  let orderby =  "created_at-desc";
+
+  let categoriesLoaded = false;
+    let statusesLoaded = false;
+
+    function trySetupLiveFilters() {
+        if (categoriesLoaded && statusesLoaded) {
+            setupLiveFilters();
+        }
+    }
 
   function build_api_query() {
-    let query = `/api/services.php?orderby=${orderby}&page=${page}&per_page=${per_page}&status=${status}`;
+    let query = `/api/services.php?provider_id=${encodeURIComponent(provider_id)}&page=${page}&per_page=${per_page}&orderby=${orderby}`;
 
     if (search) {
       query += `&search=${encodeURIComponent(search)}`;
-    }
-    if (provider) {
-      query += `&provider=${encodeURIComponent(provider)}`;
     }
     if (category) {
       query += `&category=${encodeURIComponent(category)}`;
@@ -52,7 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (max_rating) {
       query += `&max_rating=${encodeURIComponent(max_rating)}`;
     }
-    console.log(query);
+    if (status) {
+      query += `&status=${encodeURIComponent(status)}`;
+    }
+
+    console.log("API Query:", query);
     return query;
   }
 
@@ -127,63 +136,66 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function fetchCategories() {
-    try {
-      const response = await fetch("../api/categories.php");
-      const categories = await response.json();
+    async function fetchCategories() {
+        try {
+            const response = await fetch("../api/categories.php");
+            const categories = await response.json();
 
-      if (categories.error) {
-        console.error("Error fetching categories:", categories.error);
-        categoriesList.innerHTML = "<li>Error loading categories</li>";
-        return;
-      }
+            if (categories.error) {
+                console.error("Error fetching categories:", categories.error);
+                return;
+            }
 
-      categoriesList.innerHTML = ""; 
-      categoriesOption.innerHTML = "";
-      categories.forEach((category) => {
-        const listItem = document.createElement("li");
-        listItem.innerHTML = `
-          <button class="category-button" data-category="${category.id}">
-            ${category.name}
-          </button>
-        `;
-        categoriesList.appendChild(listItem);
+            categoriesOption.innerHTML = "";
+            categories.forEach((category) => {
+                const option = document.createElement("label");
+                option.innerHTML = `
+                <input type="checkbox" name="categories" value="${category.id}"> ${category.name}
+                `;
+                categoriesOption.appendChild(option);
+            });
 
-        const option = document.createElement("label");
-        option.innerHTML = `
-        <input type="checkbox" name="categories" value="${category.id}"> ${category.name}
-        `;
-        categoriesOption.appendChild(option);
-      });
+            categoriesLoaded = true;
+            trySetupLiveFilters();
 
-      document.querySelectorAll('.category-button').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          e.preventDefault();
-
-          filterForm.querySelectorAll('input[name="categories"]').forEach(cb => cb.checked = false);
-          const catId = this.getAttribute('data-category');
-          filterForm.querySelector(`input[name="categories"][value="${catId}"]`).checked = true;
-          category = catId;
-          page = 1;
-          fetchServices();
-        });
-      });
-
-      setupLiveFilters();
-
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      categoriesList.innerHTML = "<li>Error loading categories</li>";
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+        }
     }
-  }
 
+    async function fetchStatuses() {
+        try {
+            const response = await fetch("../api/statuses.php");
+            const statuses = await response.json();
+            if (statuses.error) {
+                console.error("Error fetching statuses:", statuses.error);
+                return;
+            }
+            const statusesOption = document.getElementById("form-statuses");
+            statusesOption.innerHTML = "";
+            statuses.forEach((status) => {
+                const option = document.createElement("label");
+                option.innerHTML = `
+                <input type="checkbox" name="status" value="${status.id}"> ${status.name}
+                `;
+                statusesOption.appendChild(option);
+            });
+
+            statusesLoaded = true;
+            trySetupLiveFilters();
+            
+        } catch (error) {
+            console.error("Error fetching statuses:", error);
+        }
+    }
 
   function setupLiveFilters() {
 
-    searchForm.elements["search"].addEventListener("input", (e) => {
-      search = e.target.value || null;
-      page = 1; 
-      fetchServices();
+    filterForm.elements["search"].addEventListener("input", (e) => {
+        search = e.target.value;
+        if (search === "") search = null;
+        page = 1; 
+        fetchServices();
     });
 
     // Category checkboxes
@@ -196,19 +208,15 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // Provider input
-    filterForm.elements["provider"].addEventListener("input", (e) => {
-      provider = e.target.value || null;
-      page = 1;
-      fetchServices();
-    });
-
-    // Location input
-    filterForm.elements["location"].addEventListener("input", (e) => {
-      location = e.target.value || null;
-      page = 1;
-      fetchServices();
-    });
+    // Status checkboxes
+    filterForm.querySelectorAll('input[name="status"]').forEach(cb => {
+        cb.addEventListener("change", () => {
+            status = Array.from(filterForm.querySelectorAll('input[name="status"]:checked')).map(cb => cb.value).join(",");
+            if (status === "") status = null;
+            page = 1;
+            fetchServices();
+        });
+    });   
 
     // --- Price Range Sync ---
     const minPriceBar = filterForm.elements["min-price"];
@@ -359,51 +367,58 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  prevPageButton.addEventListener("click", () => {
-    if (page > 1) {
-      page--;
-      window.scrollTo(0, 0);
-      fetchServices();
-    }
-  });
+    searchForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const value = searchForm.elements["search"].value.trim();
+        if (value !== "") {
+            window.location.href = `../pages/home.php?search=${encodeURIComponent(value)}`;
+        }
+    });
 
-  nextPageButton.addEventListener("click", () => {
-    page++;
-    window.scrollTo(0, 0);
+    prevPageButton.addEventListener("click", () => {
+        if (page > 1) {
+        page--;
+        window.scrollTo(0, 0);
+        fetchServices();
+        }
+    });
+
+    nextPageButton.addEventListener("click", () => {
+        page++;
+        window.scrollTo(0, 0);
+        fetchServices();
+    });
+
+    clearFiltersButton.addEventListener("click", () => {
+        search = null;
+        category = null;
+        min_price = null;
+        max_price = null;
+        min_rating = null;
+        max_rating = null;
+        status = null;
+        orderby = "created_at-desc";
+        page = 1; 
+
+        filterForm.elements["min-price"].value = 0;
+        filterForm.elements["max-price"].value = 1000;
+        filterForm.elements["min-price-number"].value = "";
+        filterForm.elements["max-price-number"].value = "";
+
+        filterForm.elements["min-rating"].value = 1;
+        filterForm.elements["max-rating"].value = 5;
+        filterForm.elements["min-rating-number"].value = "";
+        filterForm.elements["max-rating-number"].value = "";
+
+        filterForm.elements["search"].value = "";
+        filterForm.elements["order-by"].value = "created_at-desc";
+
+        filterForm.querySelectorAll('input[name="categories"]').forEach(cb => cb.checked = false);
+        filterForm.querySelectorAll('input[name="status"]').forEach(cb => cb.checked = false);
+        fetchServices();
+    });
+
+    fetchCategories();
+    fetchStatuses();
     fetchServices();
-  });
-
-  clearFiltersButton.addEventListener("click", () => {
-    search = null;
-    provider = null;
-    category = null;
-    location = null;
-    min_price = null;
-    max_price = null;
-    min_rating = null;
-    max_rating = null;
-    orderby = "created_at-desc";
-    page = 1; 
-
-    filterForm.elements["min-price"].value = 0;
-    filterForm.elements["max-price"].value = 1000;
-    filterForm.elements["min-price-number"].value = "";
-    filterForm.elements["max-price-number"].value = "";
-
-    filterForm.elements["min-rating"].value = 1;
-    filterForm.elements["max-rating"].value = 5;
-    filterForm.elements["min-rating-number"].value = "";
-    filterForm.elements["max-rating-number"].value = "";
-
-    filterForm.elements["provider"].value = "";
-    filterForm.elements["location"].value = "";
-    filterForm.elements["order-by"].value = "created_at-desc";
-
-    filterForm.querySelectorAll('input[name="categories"]').forEach(cb => cb.checked = false);
-    fetchServices();
-  });
-
-
-  fetchCategories();
-  fetchServices();
 });
