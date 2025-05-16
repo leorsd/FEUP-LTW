@@ -78,13 +78,25 @@ function draw_services_grid()
         <input type="text" id="provider" name="provider" placeholder="Enter provider username">
         <label for="price-range">Price</label>
         <div id="price-range-boxes">
-          <input type="number" id="min-price" name="min-price" min="0" max="1000" step="1" placeholder="Min price">
-          <input type="number" id="max-price" name="max-price" min="0" max="1000" step="1" placeholder="Max price">
+          <div id="min-price-row">
+            <input type="number" id="min-price-number" name="min-price-number" min="0" max="1000" step="1" placeholder="Min Price">
+            <input type="range" id="min-price" name="min-price" min="0" max="1000" step="1" value="0">
+          </div>
+          <div id="max-price-row">
+            <input type="number" id="max-price-number" name="max-price-number" min="0" max="1000" step="1" placeholder="Max Price">
+            <input type="range" id="max-price" name="max-price" min="0" max="1000" step="1" value="1000">
+          </div>
         </div>
         <label for="rating-range">Rating</label>
         <div id="rating-range-boxes">
-          <input type="number" id="min-rating" name="min-rating" min="0" max="5" step="0.1" placeholder="Min rating">
-          <input type="number" id="max-rating" name="max-rating" min="0" max="5" step="0.1" placeholder="Max rating">
+          <div id="min-rating-row">
+            <input type="number" id="min-rating-number" name="min-rating-number" min="1" max="5" step="0.1" placeholder="Min Rating">
+            <input type="range" id="min-rating" name="min-rating" min="1" max="5" step="0.1" value="1">
+          </div>
+          <div id="max-rating-row">
+            <input type="number" id="max-rating-number" name="max-rating-number" min="1" max="5" step="0.1" placeholder="Max Rating">
+            <input type="range" id="max-rating" name="max-rating" min="1" max="5" step="0.1" value="5">
+          </div>
         </div>
         <label for="sort-by">Order By</label>
         <select id="order-by" name="order-by">
@@ -95,7 +107,6 @@ function draw_services_grid()
           <option value="created_at-asc">Date: Oldest First</option>
           <option value="created_at-desc" selected>Date: Newest First</option>
         </select>
-        <button type="submit">Apply Filters</button>
       </form>
       <button id="clear-filters">Clear Filters</button>
     </div>

@@ -157,22 +157,22 @@ class Service
             $params['status'] = $filters['status'];
         }
 
-        if (!empty($filters['min_price'])) {
+        if ($filters['min_price'] !== null) {
             $where[] = 'service.price >= :min_price';
             $params['min_price'] = $filters['min_price'];
         }
 
-        if (!empty($filters['max_price'])) {
+        if ($filters['max_price'] !== null) {
             $where[] = 'service.price <= :max_price';
             $params['max_price'] = $filters['max_price'];
         }
 
-        if (!empty($filters['min_rating'])) {
+        if ($filters['min_rating'] !== null) {
             $where[] = 'service.rating >= :min_rating';
             $params['min_rating'] = $filters['min_rating'];
         }
 
-        if (!empty($filters['max_rating'])) {
+        if ($filters['max_rating'] !== null) {
             $where[] = 'service.rating <= :max_rating';
             $params['max_rating'] = $filters['max_rating'];
         }
