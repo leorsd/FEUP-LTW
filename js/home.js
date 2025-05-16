@@ -40,10 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (location) {
       query += `&location=${encodeURIComponent(location)}`;
     }
-    if (min_price) {
+    if (min_price !== null && min_price !== "" && min_price !== undefined) {
       query += `&min_price=${encodeURIComponent(min_price)}`;
     }
-    if (max_price) {
+    if (max_price !== null && max_price !== "" && max_price !== undefined) {
       query += `&max_price=${encodeURIComponent(max_price)}`;
     }
     if (min_rating) {
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (max_rating) {
       query += `&max_rating=${encodeURIComponent(max_rating)}`;
     }
-
+    console.log(query);
     return query;
   }
 
@@ -159,16 +159,197 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll('.category-button').forEach(btn => {
         btn.addEventListener('click', function(e) {
           e.preventDefault();
-          category = this.getAttribute('data-category');
+
+          filterForm.querySelectorAll('input[name="categories"]').forEach(cb => cb.checked = false);
+          const catId = this.getAttribute('data-category');
+          filterForm.querySelector(`input[name="categories"][value="${catId}"]`).checked = true;
+          category = catId;
           page = 1;
           fetchServices();
         });
       });
 
+      setupLiveFilters();
+
     } catch (error) {
       console.error("Error fetching categories:", error);
       categoriesList.innerHTML = "<li>Error loading categories</li>";
     }
+  }
+
+
+  function setupLiveFilters() {
+    // Category checkboxes
+    filterForm.querySelectorAll('input[name="categories"]').forEach(cb => {
+      cb.addEventListener("change", () => {
+        category = Array.from(filterForm.querySelectorAll('input[name="categories"]:checked')).map(cb => cb.value).join(",");
+        if (category === "") category = null;
+        page = 1;
+        fetchServices();
+      });
+    });
+
+    // Provider input
+    filterForm.elements["provider"].addEventListener("input", (e) => {
+      provider = e.target.value || null;
+      page = 1;
+      fetchServices();
+    });
+
+    // Location input
+    filterForm.elements["location"].addEventListener("input", (e) => {
+      location = e.target.value || null;
+      page = 1;
+      fetchServices();
+    });
+
+    // --- Price Range Sync ---
+    const minPriceBar = filterForm.elements["min-price"];
+    const maxPriceBar = filterForm.elements["max-price"];
+    const minPriceNumber = filterForm.elements["min-price-number"];
+    const maxPriceNumber = filterForm.elements["max-price-number"];
+
+    minPriceBar.addEventListener("input", (e) => {
+      let min = parseInt(e.target.value);
+      let max = parseInt(maxPriceBar.value);
+      if (min > max) {
+        min = max;
+        minPriceBar.value = min;
+      }
+      minPriceNumber.value = min;
+      min_price = min;
+      page = 1;
+      fetchServices();
+    });
+
+    minPriceNumber.addEventListener("input", (e) => {
+      const inputValue = e.target.value;
+      if (inputValue === "") {
+        minPriceBar.value = 0;
+        min_price = null;
+      } else {
+        let min = parseInt(inputValue);
+        let max = parseInt(maxPriceBar.value);
+        if (min > max) {
+          min = max;
+          minPriceNumber.value = min;
+        }
+        minPriceBar.value = min;
+        min_price = min;
+      }
+      page = 1;
+      fetchServices();
+    });
+
+    maxPriceBar.addEventListener("input", (e) => {
+      let max = parseInt(e.target.value);
+      let min = parseInt(minPriceBar.value);
+      if (max < min) {
+        max = min;
+        maxPriceBar.value = max;
+      }
+      maxPriceNumber.value = max;
+      max_price = max;
+      page = 1;
+      fetchServices();
+    });
+
+    maxPriceNumber.addEventListener("input", (e) => {
+      const inputValue = e.target.value;
+      if (inputValue === "") {
+        maxPriceBar.value = 1000;
+        max_price = null;
+      } else {
+        let max = parseInt(inputValue);
+        let min = parseInt(minPriceBar.value);
+        if (max < min) {
+          max = min;
+          maxPriceNumber.value = max;
+        }
+        maxPriceBar.value = max;
+        max_price = max;
+      }
+      page = 1;
+      fetchServices();
+    });
+
+    // --- Rating Range Sync ---
+    const minRatingBar = filterForm.elements["min-rating"];
+    const maxRatingBar = filterForm.elements["max-rating"];
+    const minRatingNumber = filterForm.elements["min-rating-number"];
+    const maxRatingNumber = filterForm.elements["max-rating-number"];
+
+    minRatingBar.addEventListener("input", (e) => {
+      let min = parseFloat(e.target.value);
+      let max = parseFloat(maxRatingBar.value);
+      if (min > max) {
+        min = max;
+        minRatingBar.value = min;
+      }
+      minRatingNumber.value = min;
+      min_rating = min;
+      page = 1;
+      fetchServices();
+    });
+
+    minRatingNumber.addEventListener("input", (e) => {
+      const inputValue = e.target.value;
+      if (inputValue === "") {
+        minRatingBar.value = 1;
+        min_rating = null;
+      } else {
+        let min = parseFloat(inputValue);
+        let max = parseFloat(maxRatingBar.value);
+        if (min > max) {
+          min = max;
+          minRatingNumber.value = min;
+        }
+        minRatingBar.value = min;
+        min_rating = min;
+      }
+      page = 1;
+      fetchServices();
+    });
+
+    maxRatingBar.addEventListener("input", (e) => {
+      let max = parseFloat(e.target.value);
+      let min = parseFloat(minRatingBar.value);
+      if (max < min) {
+        max = min;
+        maxRatingBar.value = max;
+      }
+      maxRatingNumber.value = max;
+      max_rating = max;
+      page = 1;
+      fetchServices();
+    });
+
+    maxRatingNumber.addEventListener("input", (e) => {
+      const inputValue = e.target.value;
+      if (inputValue === "") {
+        maxRatingBar.value = 5;
+        max_rating = null;
+      } else {
+        let max = parseFloat(inputValue);
+        let min = parseFloat(minRatingBar.value);
+        if (max < min) {
+          max = min;
+          maxRatingNumber.value = max;
+        }
+        maxRatingBar.value = max;
+        max_rating = max;
+      }
+      page = 1;
+      fetchServices();
+    });
+
+
+    // Order by select
+    filterForm.elements["order-by"].addEventListener("change", (e) => {
+      orderby = e.target.value;
+      page = 1;
+      fetchServices();
+    });
   }
 
   prevPageButton.addEventListener("click", () => {
@@ -205,30 +386,25 @@ document.addEventListener("DOMContentLoaded", () => {
     max_rating = null;
     orderby = "created_at-desc";
     page = 1; 
+
+    filterForm.elements["min-price"].value = 0;
+    filterForm.elements["max-price"].value = 1000;
+    filterForm.elements["min-price-number"].value = "";
+    filterForm.elements["max-price-number"].value = "";
+
+    filterForm.elements["min-rating"].value = 1;
+    filterForm.elements["max-rating"].value = 5;
+    filterForm.elements["min-rating-number"].value = "";
+    filterForm.elements["max-rating-number"].value = "";
+
+    filterForm.elements["provider"].value = "";
+    filterForm.elements["location"].value = "";
+    filterForm.elements["order-by"].value = "created_at-desc";
+
+    filterForm.querySelectorAll('input[name="categories"]').forEach(cb => cb.checked = false);
     fetchServices();
   });
 
-  filterForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const formData = new FormData(filterForm);
-
-    category = formData.getAll("categories").join(",");
-    provider = formData.get("provider");
-    location = formData.get("location");
-    min_price = formData.get("min-price");
-    max_price = formData.get("max-price");
-    min_rating = formData.get("min-rating");
-    max_rating = formData.get("max-rating");
-    orderby = formData.get("order-by");
-    if (category === "") category = null;
-    if (min_price === "") min_price = null;
-    if (max_price === "") max_price = null;
-    if (min_rating === "") min_rating = null;
-    if (max_rating === "") max_rating = null;
-    page = 1;
-    fetchServices();
-    filterForm.reset();
-  });
 
   fetchCategories();
   fetchServices();
