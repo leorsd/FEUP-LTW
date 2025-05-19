@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 function draw_service_body()
 {
-    $user_info = $_SESSION['user_info'] ?? null;
   ?>
     <main id="service-main">
         <h2>Service Details</h2>
@@ -41,11 +40,11 @@ function draw_service_body()
             <div id="reviews-form">
                 <h3>Leave a Review</h3>
                 <form id="review-form">
-                    <input type="hidden" name="reviewer_id" value="<?= htmlspecialchars((string)$user_info['id']) ?>">
                     <label for="review-text">Review:</label>
                     <textarea id="review-text" name="review-text" required></textarea>
                     <label for="review-rating">Rating:</label>
                     <select id="review-rating" name="review-rating" required>
+                        <option value="" disabled selected>Select a rating</option>
                         <option value="1">1 Star</option>
                         <option value="2">2 Stars</option>
                         <option value="3">3 Stars</option>

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 function draw_initial_common_header(string $title)
 {
+  $user_id = $_SESSION['user_info']['id'] ?? null;
   ?>
   <!DOCTYPE html>
   <html lang="en">
@@ -11,6 +12,9 @@ function draw_initial_common_header(string $title)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title; ?></title>
+    <script>
+      const CURRENT_USER_ID = <?= json_encode($user_id) ?>; // This will be used in the JavaScript code to identify the current user
+    </script>
 <?php }
 
 function draw_final_common_header()
@@ -52,7 +56,7 @@ function draw_common_headbar($user_info)
       <ul>
         <li><a href="../pages/home.php">Home</a></li>
         <li><a href="../pages/favorites.php">Favorites</a></li>
-        <li><a href="../pages/my_services.php?provider_id=<?php echo urlencode((string)$user_info['id']); ?>">My Services</a></li>
+        <li><a href="../pages/my_services.php?">My Services</a></li>
         <li><a href="../pages/profile.php"><img src="<?php echo $profile_pic_path; ?>" alt="Profile Picture" class="profile-avatar"></a></li>
       </ul>
     </nav>

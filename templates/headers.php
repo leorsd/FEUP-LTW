@@ -52,15 +52,6 @@ function draw_create_service_header()
   <?php
 }
 
-function draw_services_header()
-{
-  ?>
-  <link rel="stylesheet" href="../css/headbar.css">
-  <link rel="stylesheet" href="../css/services.css">
-  <link rel="stylesheet" href="../css/services_grid.css">
-  <script src="../js/services.js" defer></script>
-  <?php
-}
 
 function draw_change_pasword_header()
 {
@@ -97,5 +88,14 @@ function draw_my_services_header()
   <?php
 }
 
+function draw_favorites_header()
+{
+  ?>
+  <link rel="stylesheet" href="../css/favorites.css">
+  <link rel="stylesheet" href="../css/headbar.css">
+  <link rel="stylesheet" href="../css/services_grid.css">
+  <script src="../js/favorites.js" defer></script>
+  <?php
+}
 ?>
 
