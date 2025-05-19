@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let orderby = urlParams.get("orderby") || "created_at-desc";
 
   function build_api_query() {
-    let query = `/api/services.php?orderby=${orderby}&page=${page}&per_page=${per_page}&status=${status}`;
+    let query = `/api/services.php?orderby=${orderby}&page=${page}&per_page=${per_page}&status=${status}&user_id=${CURRENT_USER_ID}`;
 
     if (search) {
       query += `&search=${encodeURIComponent(search)}`;
@@ -52,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (max_rating) {
       query += `&max_rating=${encodeURIComponent(max_rating)}`;
     }
-    console.log(query);
     return query;
   }
 
@@ -100,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }else{
           service.rating = service.rating.toFixed(1);
         }
+
         const serviceItem = document.createElement("a");
         serviceItem.href = `service.php?id=${service.id}`;
         serviceItem.classList.add("service-item");
@@ -115,6 +115,38 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p>Price: $${service.price}</p>
                 <p>Rating: ${service.rating}</p>
             `;
+
+      
+        if (service.creator_id !== CURRENT_USER_ID) {
+          const favBtn = document.createElement("button");
+          favBtn.className = "favorite-btn";
+          favBtn.dataset.serviceId = service.id;
+          favBtn.textContent = service.is_favorite ? "💔 Remove from Favorites" : "❤️ Add to Favorites";
+          serviceItem.appendChild(favBtn);
+
+          favBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            try {
+              const response = await fetch('../api/favorites.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: CURRENT_USER_ID, service_id: service.id })
+              });
+              const result = await response.json();
+              if (result.favorited) {
+                favBtn.textContent = "💔 Remove from Favorites";
+                fetchServices();
+              } else {
+                favBtn.textContent = "❤️ Add to Favorites";
+                fetchServices();
+              }
+            } catch (error) {
+              alert("Failed to toggle favorite.");
+            }
+          });
+        }
+
         servicesList.appendChild(serviceItem);
       });
 

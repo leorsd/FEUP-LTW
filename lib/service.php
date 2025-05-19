@@ -51,9 +51,24 @@ class Service
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
+    public function isFavorite(int $userId, int $serviceId): bool
+    {
+        $stmt = $this->db->prepare('SELECT COUNT(*) FROM favorites WHERE user_id = :user_id AND service_id = :service_id');
+        $stmt->execute(['user_id' => $userId, 'service_id' => $serviceId]);
+        return (bool) $stmt->fetchColumn();
+    }
+
     private function buildFilters(array $filters, array &$params): string
     {
         $where = [];
+        $joins = '';
+
+        // Favorites filter
+        if (!empty($filters['favorites_owner'])) {
+            $joins .= ' INNER JOIN favorites ON favorites.service_id = service.id ';
+            $where[] = 'favorites.user_id = :favorites_owner';
+            $params['favorites_owner'] = $filters['favorites_owner'];
+        }
 
         if (!empty($filters['search'])) {
             $where[] = '(service.title LIKE :search OR service.description LIKE :search OR service.location LIKE :search OR user.username LIKE :search)';
@@ -114,8 +129,8 @@ class Service
             $where[] = 'service.rating <= :max_rating';
             $params['max_rating'] = $filters['max_rating'];
         }
-
-        return $where ? ' WHERE ' . implode(' AND ', $where) : '';
+        $whereClause = $where ? ' WHERE ' . implode(' AND ', $where) : '';
+        return $joins . $whereClause;
     }
 
     public function countFilteredServices(array $filters = []): int

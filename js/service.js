@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
       service_id: serviceId,
       rating: form.elements["review-rating"].value,
       text: form.elements["review-text"].value,
-      reviewer_id: form.elements["reviewer_id"].value,
+      reviewer_id: CURRENT_USER_ID,
     };
     const response = await fetch('../api/reviews.php', {
       method: "POST",

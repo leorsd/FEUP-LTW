@@ -10,11 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let page = 1; // Start with page 1
   const per_page = 12; // Number of services per page
-
-  const urlParams = new URLSearchParams(window.location.search);
   
   let search = null;
-  let provider_id = urlParams.get("provider_id");
+  let provider_id = CURRENT_USER_ID;
   let category =  null;
   let location =  null;
   let status = null; 
@@ -61,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
       query += `&status=${encodeURIComponent(status)}`;
     }
 
-    console.log("API Query:", query);
     return query;
   }
 
