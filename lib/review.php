@@ -12,6 +12,32 @@ class Review
 
     public function addReview(int $service_id, int $reviewer_id, int $rating, string $text): bool
     {
+        // Check if user bought and completed the service (status = Completed)
+        // First, get the id for the 'Completed' status
+        $statusStmt = $this->db->prepare('SELECT id FROM service_status WHERE name = ?');
+        $statusStmt->execute(['Completed']);
+        $completedStatusId = $statusStmt->fetchColumn();
+        if (!$completedStatusId) {
+            return false; // No completed status defined
+        }
+        $checkStmt = $this->db->prepare(
+            'SELECT COUNT(*) FROM service_customer WHERE service_id = ? AND customer_id = ? AND status = ?'
+        );
+        $checkStmt->execute([$service_id, $reviewer_id, $completedStatusId]);
+        $canReview = $checkStmt->fetchColumn() > 0;
+        if (!$canReview) {
+            return false;
+        }
+
+        // Prevent more than one review per user per service
+        $existsStmt = $this->db->prepare(
+            'SELECT COUNT(*) FROM service_review WHERE service_id = ? AND reviewer_id = ?'
+        );
+        $existsStmt->execute([$service_id, $reviewer_id]);
+        if ($existsStmt->fetchColumn() > 0) {
+            return false;
+        }
+
         $stmt = $this->db->prepare(
             'INSERT INTO service_review (service_id, reviewer_id, rating, text) VALUES (?, ?, ?, ?)'
         );
@@ -23,7 +49,7 @@ class Review
             );
             $avgStmt->execute([$service_id]);
             $avg = $avgStmt->fetchColumn();
-            
+
             $updateStmt = $this->db->prepare(
                 'UPDATE service SET rating = ? WHERE id = ?'
             );

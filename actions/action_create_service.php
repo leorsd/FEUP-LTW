@@ -32,7 +32,7 @@ if (isset($_FILES['service_image']) && $_FILES['service_image']['error'] === UPL
     $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
     $allowed_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
     if (in_array($ext, $allowed_exts)) {
-        $new_name = $_SESSION['username'] . '_' . time() . '.' . $ext;
+        $new_name = $_SESSION['user_info']['username'] . '_' . time() . '.' . $ext;
         $dest = __DIR__ . '/../images/cache/' . $new_name;
         if (move_uploaded_file($tmp_name, $dest)) {
             $imagePath = $new_name; // Save the image path for the database

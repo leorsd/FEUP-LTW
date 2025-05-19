@@ -7,14 +7,14 @@ require_once(__DIR__ . '/../lib/user.php');
 
 $db = getDatabaseConnection();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['user_info']['username'])) {
   $_SESSION['profile_error'] = 'You must be logged in.';
   header('Location: ../pages/profile.php');
   exit();
 }
 
 $user = new User($db);
-$user->setUserData($_SESSION['username'], '', '');
+$user->setUserData($_SESSION['user_info']['username'], '', '');
 
 $fields = [];
 // $allowed = ['email', 'phone', 'age', 'location', 'bio'];
@@ -32,7 +32,7 @@ if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] ===
   $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
   $allowed_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
   if (in_array($ext, $allowed_exts)) {
-    $new_name = $_SESSION['username'] . '_' . time() . '.' . $ext;
+    $new_name = $_SESSION['user_info']['username'] . '_' . time() . '.' . $ext;
     $dest = __DIR__ . '/../images/cache/' . $new_name;
     if (move_uploaded_file($tmp_name, $dest)) {
       $user->updateProfilePicture($new_name);

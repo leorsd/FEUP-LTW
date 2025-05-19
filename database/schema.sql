@@ -17,6 +17,8 @@ DROP TABLE IF EXISTS service_status;
 
 DROP TABLE IF EXISTS service_review;
 
+DROP TABLE IF EXISTS service_customer;
+
 CREATE TABLE
   user (
     id INTEGER PRIMARY KEY,
@@ -50,7 +52,6 @@ CREATE TABLE
     image TEXT,
     location TEXT NOT NULL DEFAULT 'Unknown',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status INTEGER REFERENCES service_status (id) ON DELETE SET NULL,
     category INTEGER REFERENCES service_category (id) ON DELETE SET NULL
   );
 
@@ -86,5 +87,14 @@ CREATE TABLE
       AND rating <= 5
     ),
     text TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+
+CREATE TABLE
+  service_customer (
+    id INTEGER PRIMARY KEY,
+    service_id INTEGER REFERENCES service (id) ON DELETE CASCADE,
+    customer_id INTEGER REFERENCES user (id) ON DELETE CASCADE,
+    status INTEGER REFERENCES service_status (id) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );

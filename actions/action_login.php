@@ -29,10 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   // Check if user exists and verify the password (password is passed directly)
   if ($user->userExists() && $user->verifyPassword($password)) {
-    // User is authenticated, store in session
-    $_SESSION['username'] = $username;
-
-    // EXPERIMENTAL
     $_SESSION['user_info'] = $user->getUserInfo(); // Store additional user info if needed
 
     // Set a success message

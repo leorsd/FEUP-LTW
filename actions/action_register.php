@@ -58,7 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // Register user (password is passed directly)
   if ($user->register($password)) {
     // Auto-login after registration
-    $_SESSION['username'] = $username;
     $_SESSION['user_info'] = $user->getUserInfo();
     $_SESSION['success'] = 'Registration successful! Welcome!';
     header('Location: ../pages/home.php');

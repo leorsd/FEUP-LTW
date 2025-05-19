@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../templates/edit_profile_body.php');
 require_once(__DIR__ . '/../templates/common.php');
 require_once(__DIR__ . '/../templates/headers.php');
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['user_info']['username'])) {
   $_SESSION['error'] = "Please log in to change your password.";
   header('Location: login.php');
   exit();

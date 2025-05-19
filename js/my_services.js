@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const searchForm = document.getElementById("search-bar");
-  const clearFiltersButton = document.getElementById("clear-filters"); 
+  const clearFiltersButton = document.getElementById("clear-filters");
   const filterForm = document.getElementById("filter-form");
   const servicesList = document.getElementById("services-list");
   const prevPageButton = document.getElementById("prev-page");
@@ -10,29 +10,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let page = 1; // Start with page 1
   const per_page = 12; // Number of services per page
-  
+
   let search = null;
   let provider_id = CURRENT_USER_ID;
-  let category =  null;
-  let location =  null;
-  let status = null; 
-  let min_price =  null;
-  let max_price =  null;
-  let min_rating =  null;
+  let category = null;
+  let location = null;
+  let status = null;
+  let min_price = null;
+  let max_price = null;
+  let min_rating = null;
   let max_rating = null;
-  let orderby =  "created_at-desc";
+  let orderby = "created_at-desc";
 
   let categoriesLoaded = false;
-    let statusesLoaded = false;
+  let statusesLoaded = false;
 
-    function trySetupLiveFilters() {
-        if (categoriesLoaded && statusesLoaded) {
-            setupLiveFilters();
-        }
+  function trySetupLiveFilters() {
+    if (categoriesLoaded && statusesLoaded) {
+      setupLiveFilters();
     }
+  }
 
   function build_api_query() {
-    let query = `/api/services.php?provider_id=${encodeURIComponent(provider_id)}&page=${page}&per_page=${per_page}&orderby=${orderby}`;
+    // Only fetch services the user bought (from service_customer table)
+    let query = `/api/services.php?my_services=1&page=${page}&per_page=${per_page}&orderby=${orderby}`;
 
     if (search) {
       query += `&search=${encodeURIComponent(search)}`;
@@ -64,9 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function fetchServices() {
     try {
-      const response = await fetch(
-        `${build_api_query()}`
-      );
+      const response = await fetch(`${build_api_query()}`);
 
       const data = await response.json();
       const services = data.services;
@@ -88,22 +87,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       services.forEach((service) => {
-
         if (!service.image) {
           service.image = "../images/service.png";
-        }else {
-          service.image = `../images/cache/${service.image}`; 
+        } else {
+          service.image = `../images/cache/${service.image}`;
         }
 
         if (!service.provider_image) {
-          service.provider_image = "../images/user.jpg"; 
-        }else {
-          service.provider_image = `../images/cache/${service.provider_image}`; 
+          service.provider_image = "../images/user.jpg";
+        } else {
+          service.provider_image = `../images/cache/${service.provider_image}`;
         }
 
         if (!service.rating) {
           service.rating = "Not rated yet";
-        }else{
+        } else {
           service.rating = service.rating.toFixed(1);
         }
         const serviceItem = document.createElement("a");
@@ -133,72 +131,73 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-    async function fetchCategories() {
-        try {
-            const response = await fetch("../api/categories.php");
-            const categories = await response.json();
+  async function fetchCategories() {
+    try {
+      const response = await fetch("../api/categories.php");
+      const categories = await response.json();
 
-            if (categories.error) {
-                console.error("Error fetching categories:", categories.error);
-                return;
-            }
+      if (categories.error) {
+        console.error("Error fetching categories:", categories.error);
+        return;
+      }
 
-            categoriesOption.innerHTML = "";
-            categories.forEach((category) => {
-                const option = document.createElement("label");
-                option.innerHTML = `
+      categoriesOption.innerHTML = "";
+      categories.forEach((category) => {
+        const option = document.createElement("label");
+        option.innerHTML = `
                 <input type="checkbox" name="categories" value="${category.id}"> ${category.name}
                 `;
-                categoriesOption.appendChild(option);
-            });
+        categoriesOption.appendChild(option);
+      });
 
-            categoriesLoaded = true;
-            trySetupLiveFilters();
-
-        } catch (error) {
-            console.error("Error fetching categories:", error);
-        }
+      categoriesLoaded = true;
+      trySetupLiveFilters();
+    } catch (error) {
+      console.error("Error fetching categories:", error);
     }
+  }
 
-    async function fetchStatuses() {
-        try {
-            const response = await fetch("../api/statuses.php");
-            const statuses = await response.json();
-            if (statuses.error) {
-                console.error("Error fetching statuses:", statuses.error);
-                return;
-            }
-            const statusesOption = document.getElementById("form-statuses");
-            statusesOption.innerHTML = "";
-            statuses.forEach((status) => {
-                const option = document.createElement("label");
-                option.innerHTML = `
+  async function fetchStatuses() {
+    try {
+      const response = await fetch("../api/statuses.php");
+      const statuses = await response.json();
+      if (statuses.error) {
+        console.error("Error fetching statuses:", statuses.error);
+        return;
+      }
+      const statusesOption = document.getElementById("form-statuses");
+      statusesOption.innerHTML = "";
+      statuses.forEach((status) => {
+        const option = document.createElement("label");
+        option.innerHTML = `
                 <input type="checkbox" name="status" value="${status.id}"> ${status.name}
                 `;
-                statusesOption.appendChild(option);
-            });
+        statusesOption.appendChild(option);
+      });
 
-            statusesLoaded = true;
-            trySetupLiveFilters();
-            
-        } catch (error) {
-            console.error("Error fetching statuses:", error);
-        }
+      statusesLoaded = true;
+      trySetupLiveFilters();
+    } catch (error) {
+      console.error("Error fetching statuses:", error);
     }
+  }
 
   function setupLiveFilters() {
-
     filterForm.elements["search"].addEventListener("input", (e) => {
-        search = e.target.value;
-        if (search === "") search = null;
-        page = 1; 
-        fetchServices();
+      search = e.target.value;
+      if (search === "") search = null;
+      page = 1;
+      fetchServices();
     });
 
     // Category checkboxes
-    filterForm.querySelectorAll('input[name="categories"]').forEach(cb => {
+    filterForm.querySelectorAll('input[name="categories"]').forEach((cb) => {
       cb.addEventListener("change", () => {
-        category = Array.from(filterForm.querySelectorAll('input[name="categories"]:checked')).map(cb => cb.value).join(",");
+        category = Array.from(
+          filterForm.querySelectorAll('input[name="categories"]:checked')
+        )
+          .map((cb) => cb.value)
+          .join(",");
         if (category === "") category = null;
         page = 1;
         fetchServices();
@@ -206,14 +205,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Status checkboxes
-    filterForm.querySelectorAll('input[name="status"]').forEach(cb => {
-        cb.addEventListener("change", () => {
-            status = Array.from(filterForm.querySelectorAll('input[name="status"]:checked')).map(cb => cb.value).join(",");
-            if (status === "") status = null;
-            page = 1;
-            fetchServices();
-        });
-    });   
+    filterForm.querySelectorAll('input[name="status"]').forEach((cb) => {
+      cb.addEventListener("change", () => {
+        status = Array.from(
+          filterForm.querySelectorAll('input[name="status"]:checked')
+        )
+          .map((cb) => cb.value)
+          .join(",");
+        if (status === "") status = null;
+        page = 1;
+        fetchServices();
+      });
+    });
 
     // --- Price Range Sync ---
     const minPriceBar = filterForm.elements["min-price"];
@@ -355,7 +358,6 @@ document.addEventListener("DOMContentLoaded", () => {
       fetchServices();
     });
 
-
     // Order by select
     filterForm.elements["order-by"].addEventListener("change", (e) => {
       orderby = e.target.value;
@@ -364,58 +366,64 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-    searchForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const value = searchForm.elements["search"].value.trim();
-        if (value !== "") {
-            window.location.href = `../pages/home.php?search=${encodeURIComponent(value)}`;
-        }
-    });
+  searchForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const value = searchForm.elements["search"].value.trim();
+    if (value !== "") {
+      window.location.href = `../pages/home.php?search=${encodeURIComponent(
+        value
+      )}`;
+    }
+  });
 
-    prevPageButton.addEventListener("click", () => {
-        if (page > 1) {
-        page--;
-        window.scrollTo(0, 0);
-        fetchServices();
-        }
-    });
+  prevPageButton.addEventListener("click", () => {
+    if (page > 1) {
+      page--;
+      window.scrollTo(0, 0);
+      fetchServices();
+    }
+  });
 
-    nextPageButton.addEventListener("click", () => {
-        page++;
-        window.scrollTo(0, 0);
-        fetchServices();
-    });
-
-    clearFiltersButton.addEventListener("click", () => {
-        search = null;
-        category = null;
-        min_price = null;
-        max_price = null;
-        min_rating = null;
-        max_rating = null;
-        status = null;
-        orderby = "created_at-desc";
-        page = 1; 
-
-        filterForm.elements["min-price"].value = 0;
-        filterForm.elements["max-price"].value = 1000;
-        filterForm.elements["min-price-number"].value = "";
-        filterForm.elements["max-price-number"].value = "";
-
-        filterForm.elements["min-rating"].value = 1;
-        filterForm.elements["max-rating"].value = 5;
-        filterForm.elements["min-rating-number"].value = "";
-        filterForm.elements["max-rating-number"].value = "";
-
-        filterForm.elements["search"].value = "";
-        filterForm.elements["order-by"].value = "created_at-desc";
-
-        filterForm.querySelectorAll('input[name="categories"]').forEach(cb => cb.checked = false);
-        filterForm.querySelectorAll('input[name="status"]').forEach(cb => cb.checked = false);
-        fetchServices();
-    });
-
-    fetchCategories();
-    fetchStatuses();
+  nextPageButton.addEventListener("click", () => {
+    page++;
+    window.scrollTo(0, 0);
     fetchServices();
+  });
+
+  clearFiltersButton.addEventListener("click", () => {
+    search = null;
+    category = null;
+    min_price = null;
+    max_price = null;
+    min_rating = null;
+    max_rating = null;
+    status = null;
+    orderby = "created_at-desc";
+    page = 1;
+
+    filterForm.elements["min-price"].value = 0;
+    filterForm.elements["max-price"].value = 1000;
+    filterForm.elements["min-price-number"].value = "";
+    filterForm.elements["max-price-number"].value = "";
+
+    filterForm.elements["min-rating"].value = 1;
+    filterForm.elements["max-rating"].value = 5;
+    filterForm.elements["min-rating-number"].value = "";
+    filterForm.elements["max-rating-number"].value = "";
+
+    filterForm.elements["search"].value = "";
+    filterForm.elements["order-by"].value = "created_at-desc";
+
+    filterForm
+      .querySelectorAll('input[name="categories"]')
+      .forEach((cb) => (cb.checked = false));
+    filterForm
+      .querySelectorAll('input[name="status"]')
+      .forEach((cb) => (cb.checked = false));
+    fetchServices();
+  });
+
+  fetchCategories();
+  fetchStatuses();
+  fetchServices();
 });

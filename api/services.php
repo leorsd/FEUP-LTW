@@ -1,7 +1,9 @@
 <?php
+session_start();
 require_once(__DIR__ . '/../includes/db/connection.php');
 require_once(__DIR__ . '/../lib/service.php');
 require_once(__DIR__ . '/../lib/review.php');
+require_once(__DIR__ . '/../lib/user.php');
 
 header('Content-Type: application/json');
 
@@ -14,9 +16,9 @@ if ($id !== null) {
 
     $review = new Review($db);
 
-    $serviceInfo = $service->getServiceById($id); 
+    $serviceInfo = $service->getServiceById($id);
     if ($serviceInfo) {
-        $serviceInfo['reviews'] = $review->getReviewsService($id); 
+        $serviceInfo['reviews'] = $review->getReviewsService($id);
         echo json_encode($serviceInfo);
     } else {
         http_response_code(404);
@@ -68,6 +70,18 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : null;
 
 // Represents the number of services that will be returned per page
 $per_page = isset($_GET['per_page']) ? (int)$_GET['per_page'] : null;
+$my_services = isset($_GET['my_services']) && $_GET['my_services'] == '1';
+
+// Get user_id from session if available
+$user_id = null;
+if (isset($_SESSION['user_info']['username'])) {
+    $userObj = new User($db);
+    $userObj->setUserData($_SESSION['user_info']['username'], '', '');
+    $userInfo = $userObj->getUserInfo();
+    if ($userInfo && isset($userInfo['id'])) {
+        $user_id = (int) $userInfo['id'];
+    }
+}
 
 $filters = [
     'favorites_owner' => $favorites_owner,
@@ -82,9 +96,18 @@ $filters = [
     'min_rating' => $min_rating,
     'max_rating' => $max_rating
 ];
+if ($user_id !== null) {
+    $filters['user_id'] = $user_id;
+}
 
-$services = $service->getFilteredAndOrderedServices($filters, $orderby, $page, $per_page);
-$total = $service->countFilteredServices($filters);
+if ($my_services && $user_id !== null) {
+    // Only show services the user bought (from service_customer)
+    $services = $service->getServicesBoughtByUser($user_id, $filters, $orderby, $page, $per_page);
+    $total = $service->countServicesBoughtByUser($user_id, $filters);
+} else {
+    $services = $service->getFilteredAndOrderedServices($filters, $orderby, $page, $per_page);
+    $total = $service->countFilteredServices($filters);
+}
 
 if ($user_id) {
     foreach ($services as &$srv) {

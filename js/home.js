@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const searchForm = document.getElementById("search-bar");
-  const clearFiltersButton = document.getElementById("clear-filters");  
+  const clearFiltersButton = document.getElementById("clear-filters");
   const filterForm = document.getElementById("filter-form");
   const servicesList = document.getElementById("services-list");
   const prevPageButton = document.getElementById("prev-page");
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const per_page = 12; // Number of services per page
 
   const urlParams = new URLSearchParams(window.location.search);
-  
+
   let search = urlParams.get("search") || null;
   let provider = urlParams.get("provider") || null;
   let category = urlParams.get("category") || null;
@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let max_rating = urlParams.get("max_rating") || null;
   let orderby = urlParams.get("orderby") || "created_at-desc";
 
+  // Remove status from default query for home page
   function build_api_query() {
     let query = `/api/services.php?orderby=${orderby}&page=${page}&per_page=${per_page}&status=${status}&user_id=${CURRENT_USER_ID}`;
 
@@ -57,9 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function fetchServices() {
     try {
-      const response = await fetch(
-        `${build_api_query()}`
-      );
+      const response = await fetch(`${build_api_query()}`);
 
       const data = await response.json();
       const services = data.services;
@@ -81,22 +80,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       services.forEach((service) => {
-
         if (!service.image) {
           service.image = "../images/service.png";
-        }else {
-          service.image = `../images/cache/${service.image}`; 
+        } else {
+          service.image = `../images/cache/${service.image}`;
         }
 
         if (!service.provider_image) {
-          service.provider_image = "../images/user.jpg"; 
-        }else {
-          service.provider_image = `../images/cache/${service.provider_image}`; 
+          service.provider_image = "../images/user.jpg";
+        } else {
+          service.provider_image = `../images/cache/${service.provider_image}`;
         }
 
         if (!service.rating) {
           service.rating = "Not rated yet";
-        }else{
+        } else {
           service.rating = service.rating.toFixed(1);
         }
 
@@ -104,19 +102,27 @@ document.addEventListener("DOMContentLoaded", () => {
         serviceItem.href = `service.php?id=${service.id}`;
         serviceItem.classList.add("service-item");
         serviceItem.innerHTML = `
-                <img src="${service.image}" alt="${service.title}" class="service-image">
-                <h4>${service.title}</h4>
-                <p>Description: ${service.description}</p>
-                <img src="${service.provider_image}" alt="profile image" class="provider-image">
-                <p>Provider: ${service.provider_username}</p>
-                <p>Category: ${service.category_name}</p>
-                <p>Location: ${service.location}</p>
-                <p>Status: ${service.status_name}</p>
-                <p>Price: $${service.price}</p>
-                <p>Rating: ${service.rating}</p>
+          <img src="${service.image}" alt="${
+          service.title
+        }" class="service-image">
+          <h4>${service.title}</h4>
+          <p>Description: ${service.description}</p>
+          <img src="${
+            service.provider_image
+          }" alt="profile image" class="provider-image">
+          <p>Provider: ${service.provider_username}</p>
+          <p>Category: ${service.category_name}</p>
+          <p>Location: ${service.location}</p>
+          ${
+            service.status_name !== undefined
+              ? `<p>Status: ${service.status_name}</p>`
+              : ""
+          }
+          <p>Price: $${service.price}</p>
+          <p>Rating: ${service.rating}</p>
             `;
 
-      
+
         if (service.creator_id !== CURRENT_USER_ID) {
           const favBtn = document.createElement("button");
           favBtn.className = "favorite-btn";
@@ -170,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      categoriesList.innerHTML = ""; 
+      categoriesList.innerHTML = "";
       categoriesOption.innerHTML = "";
       categories.forEach((category) => {
         const listItem = document.createElement("li");
@@ -188,13 +194,17 @@ document.addEventListener("DOMContentLoaded", () => {
         categoriesOption.appendChild(option);
       });
 
-      document.querySelectorAll('.category-button').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+      document.querySelectorAll(".category-button").forEach((btn) => {
+        btn.addEventListener("click", function (e) {
           e.preventDefault();
 
-          filterForm.querySelectorAll('input[name="categories"]').forEach(cb => cb.checked = false);
-          const catId = this.getAttribute('data-category');
-          filterForm.querySelector(`input[name="categories"][value="${catId}"]`).checked = true;
+          filterForm
+            .querySelectorAll('input[name="categories"]')
+            .forEach((cb) => (cb.checked = false));
+          const catId = this.getAttribute("data-category");
+          filterForm.querySelector(
+            `input[name="categories"][value="${catId}"]`
+          ).checked = true;
           category = catId;
           page = 1;
           fetchServices();
@@ -202,26 +212,27 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       setupLiveFilters();
-
     } catch (error) {
       console.error("Error fetching categories:", error);
       categoriesList.innerHTML = "<li>Error loading categories</li>";
     }
   }
 
-
   function setupLiveFilters() {
-
     searchForm.elements["search"].addEventListener("input", (e) => {
       search = e.target.value || null;
-      page = 1; 
+      page = 1;
       fetchServices();
     });
 
     // Category checkboxes
-    filterForm.querySelectorAll('input[name="categories"]').forEach(cb => {
+    filterForm.querySelectorAll('input[name="categories"]').forEach((cb) => {
       cb.addEventListener("change", () => {
-        category = Array.from(filterForm.querySelectorAll('input[name="categories"]:checked')).map(cb => cb.value).join(",");
+        category = Array.from(
+          filterForm.querySelectorAll('input[name="categories"]:checked')
+        )
+          .map((cb) => cb.value)
+          .join(",");
         if (category === "") category = null;
         page = 1;
         fetchServices();
@@ -382,7 +393,6 @@ document.addEventListener("DOMContentLoaded", () => {
       fetchServices();
     });
 
-
     // Order by select
     filterForm.elements["order-by"].addEventListener("change", (e) => {
       orderby = e.target.value;
@@ -415,7 +425,7 @@ document.addEventListener("DOMContentLoaded", () => {
     min_rating = null;
     max_rating = null;
     orderby = "created_at-desc";
-    page = 1; 
+    page = 1;
 
     filterForm.elements["min-price"].value = 0;
     filterForm.elements["max-price"].value = 1000;
@@ -431,10 +441,11 @@ document.addEventListener("DOMContentLoaded", () => {
     filterForm.elements["location"].value = "";
     filterForm.elements["order-by"].value = "created_at-desc";
 
-    filterForm.querySelectorAll('input[name="categories"]').forEach(cb => cb.checked = false);
+    filterForm
+      .querySelectorAll('input[name="categories"]')
+      .forEach((cb) => (cb.checked = false));
     fetchServices();
   });
-
 
   fetchCategories();
   fetchServices();

@@ -16,13 +16,12 @@ class Service
         float $price,
         string $location,
         int $creatorId,
-        ?int $status = null,
         ?int $category = null,
         ?string $image = null
     ): bool {
         $stmt = $this->db->prepare(
-            'INSERT INTO service (title, description, price, location, creator_id, status, category, image)
-             VALUES (:title, :description, :price, :location, :creator_id, :status, :category, :image)'
+            'INSERT INTO service (title, description, price, location, creator_id, category, image)
+             VALUES (:title, :description, :price, :location, :creator_id, :category, :image)'
         );
         return $stmt->execute([
             'title' => $title,
@@ -30,7 +29,6 @@ class Service
             'price' => $price,
             'location' => $location,
             'creator_id' => $creatorId,
-            'status' => $status,
             'category' => $category,
             'image' => $image,
         ]);
@@ -39,11 +37,9 @@ class Service
     public function getServiceById(int $id): ?array
     {
         $stmt = $this->db->prepare(
-            'SELECT service.*, service_category.name AS category_name, service_status.name AS status_name, 
-                    user.username AS provider_username, user.profile_picture AS provider_image
+            'SELECT service.*, service_category.name AS category_name, user.username AS provider_username, user.profile_picture AS provider_image
              FROM service
              LEFT JOIN service_category ON service.category = service_category.id
-             LEFT JOIN service_status ON service.status = service_status.id
              LEFT JOIN user ON service.creator_id = user.id
              WHERE service.id = :id'
         );
@@ -100,16 +96,6 @@ class Service
             $params['location'] = '%' . $filters['location'] . '%';
         }
 
-        if (!empty($filters['status']) && is_array($filters['status'])) {
-            $placeholders = [];
-            foreach ($filters['status'] as $i => $statusId) {
-                $key = "status_$i";
-                $placeholders[] = ":$key";
-                $params[$key] = $statusId;
-            }
-            $where[] = 'service.status IN (' . implode(', ', $placeholders) . ')';
-        }
-
         if (isset($filters['min_price'])) {
             $where[] = 'service.price >= :min_price';
             $params['min_price'] = $filters['min_price'];
@@ -137,15 +123,13 @@ class Service
     {
         $params = [];
         $query = 'SELECT COUNT(*) FROM service
-                  LEFT JOIN service_category ON service.category = service_category.id
-                  LEFT JOIN service_status ON service.status = service_status.id
-                  LEFT JOIN user ON service.creator_id = user.id';
+            LEFT JOIN user ON service.creator_id = user.id';
 
         $query .= $this->buildFilters($filters, $params);
 
         $stmt = $this->db->prepare($query);
         foreach ($params as $key => $value) {
-            $stmt->bindValue(":$key", $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            $stmt->bindValue(is_int($key) ? $key + 1 : ":$key", $value);
         }
 
         $stmt->execute();
@@ -155,12 +139,10 @@ class Service
     public function getFilteredAndOrderedServices(array $filters, string $orderby, ?int $page = null, ?int $per_page = null): array
     {
         $params = [];
-        $query = 'SELECT service.*, service_category.name AS category_name, service_status.name AS status_name, 
-                         user.username AS provider_username, user.profile_picture AS provider_image
-                  FROM service
-                  LEFT JOIN service_category ON service.category = service_category.id
-                  LEFT JOIN service_status ON service.status = service_status.id
-                  LEFT JOIN user ON service.creator_id = user.id';
+        $query = 'SELECT service.*, service_category.name AS category_name, user.username AS provider_username, user.profile_picture AS provider_image
+            FROM service
+            LEFT JOIN service_category ON service.category = service_category.id
+            LEFT JOIN user ON service.creator_id = user.id';
 
         $query .= $this->buildFilters($filters, $params);
 
@@ -174,17 +156,88 @@ class Service
         };
 
         if ($page !== null && $per_page !== null) {
+            $offset = ($page - 1) * $per_page;
             $query .= ' LIMIT :limit OFFSET :offset';
             $params['limit'] = $per_page;
-            $params['offset'] = ($page - 1) * $per_page;
+            $params['offset'] = $offset;
         }
 
         $stmt = $this->db->prepare($query);
         foreach ($params as $key => $value) {
-            $stmt->bindValue(":$key", $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            $stmt->bindValue(is_int($key) ? $key + 1 : ":$key", $value);
         }
 
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getServicesBoughtByUser(int $user_id, array $filters, string $orderby, ?int $page = null, ?int $per_page = null): array
+    {
+        $params = [];
+        $query = 'SELECT service.*, service_category.name AS category_name, user.username AS provider_username, user.profile_picture AS provider_image, service_customer.status AS status_id, service_status.name AS status_name
+              FROM service_customer
+              JOIN service ON service_customer.service_id = service.id
+              LEFT JOIN service_category ON service.category = service_category.id
+              LEFT JOIN user ON service.creator_id = user.id
+              LEFT JOIN service_status ON service_customer.status = service_status.id
+              WHERE service_customer.customer_id = :user_id';
+        $params['user_id'] = $user_id;
+        // Apply status filter directly to service_customer.status
+        if (!empty($filters['status']) && is_array($filters['status'])) {
+            $placeholders = [];
+            foreach ($filters['status'] as $i => $statusId) {
+                $ph = ':status' . $i;
+                $placeholders[] = $ph;
+                $params['status' . $i] = $statusId;
+            }
+            $query .= ' AND service_customer.status IN (' . implode(', ', $placeholders) . ')';
+        }
+        // Remove status and user_id from filters before passing to buildFilters
+        $filters = array_diff_key($filters, ['user_id' => 1, 'status' => 1]);
+        $extraWhere = $this->buildFilters($filters, $params);
+        if ($extraWhere) {
+            $query .= ' AND ' . substr($extraWhere, 7); // remove leading ' WHERE '
+        }
+        $query .= match ($orderby) {
+            'price-asc' => ' ORDER BY service.price ASC',
+            'price-desc' => ' ORDER BY service.price DESC',
+            'rating-asc' => ' ORDER BY service.rating ASC',
+            'rating-desc' => ' ORDER BY service.rating DESC',
+            'created_at-asc' => ' ORDER BY service.created_at ASC',
+            default => ' ORDER BY service.created_at DESC',
+        };
+        if ($page !== null && $per_page !== null) {
+            $offset = ($page - 1) * $per_page;
+            $query .= ' LIMIT :limit OFFSET :offset';
+            $params['limit'] = $per_page;
+            $params['offset'] = $offset;
+        }
+        $stmt = $this->db->prepare($query);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(is_int($key) ? $key + 1 : ":$key", $value);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countServicesBoughtByUser(int $user_id, array $filters = []): int
+    {
+        $params = [];
+        $query = 'SELECT COUNT(*) FROM service_customer
+                  JOIN service ON service_customer.service_id = service.id
+                  LEFT JOIN user ON service.creator_id = user.id
+                  WHERE service_customer.customer_id = :user_id';
+        $params['user_id'] = $user_id;
+        $filters = array_diff_key($filters, ['user_id' => 1]);
+        $extraWhere = $this->buildFilters($filters, $params);
+        if ($extraWhere) {
+            $query .= ' AND ' . substr($extraWhere, 7);
+        }
+        $stmt = $this->db->prepare($query);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(is_int($key) ? $key + 1 : ":$key", $value);
+        }
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
     }
 }
