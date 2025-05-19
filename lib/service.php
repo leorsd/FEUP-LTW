@@ -192,8 +192,8 @@ class Service
             }
             $query .= ' AND service_customer.status IN (' . implode(', ', $placeholders) . ')';
         }
-        // Remove status and user_id from filters before passing to buildFilters
-        $filters = array_diff_key($filters, ['user_id' => 1, 'status' => 1]);
+        // Remove status from filters before passing to buildFilters
+        $filters = array_diff_key($filters, ['status' => 1]);
         $extraWhere = $this->buildFilters($filters, $params);
         if ($extraWhere) {
             $query .= ' AND ' . substr($extraWhere, 7); // remove leading ' WHERE '
@@ -228,7 +228,18 @@ class Service
                   LEFT JOIN user ON service.creator_id = user.id
                   WHERE service_customer.customer_id = :user_id';
         $params['user_id'] = $user_id;
-        $filters = array_diff_key($filters, ['user_id' => 1]);
+        // Apply status filter directly to service_customer.status
+        if (!empty($filters['status']) && is_array($filters['status'])) {
+            $placeholders = [];
+            foreach ($filters['status'] as $i => $statusId) {
+                $ph = ':status' . $i;
+                $placeholders[] = $ph;
+                $params['status' . $i] = $statusId;
+            }
+            $query .= ' AND service_customer.status IN (' . implode(', ', $placeholders) . ')';
+        }
+        // Remove status from filters before passing to buildFilters
+        $filters = array_diff_key($filters, ['status' => 1]);
         $extraWhere = $this->buildFilters($filters, $params);
         if ($extraWhere) {
             $query .= ' AND ' . substr($extraWhere, 7);
