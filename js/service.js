@@ -52,9 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "service-location"
       ).innerHTML = `<p>Location: ${service.location}</p>`;
       document.getElementById(
-        "service-status"
-      ).innerHTML = `<p>${service.status_name}</p>`;
-      document.getElementById(
         "service-rating"
       ).innerHTML = `<p>Rating: ${service.rating}</p>`;
 

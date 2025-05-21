@@ -40,9 +40,6 @@ function draw_service_body()
                 <div id="service-location">
                     <!-- Location will be loaded from the database -->
                 </div>
-                <div id="service-status">
-                    <!-- Status will be loaded from the database -->
-                </div>
                 <div id="service-rating">
                     <!-- Rating will be loaded from the database -->
                 </div>
