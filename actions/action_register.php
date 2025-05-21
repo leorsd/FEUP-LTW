@@ -32,8 +32,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // Create a new User object
   $user = new User($db);
 
-  // Set user data
-  $user->setUserData($username, $email, $phone);
+  // Set user data with validation and catch errors
+  try {
+    $user->setUserData($username, $email, $phone);
+  } catch (InvalidArgumentException $e) {
+    $_SESSION['error'] = $e->getMessage();
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    exit();
+  }
+
+  // Password validation feedback
+  if (!User::validatePassword($password)) {
+    $_SESSION['error'] = 'Password must be at least 8 characters, contain at least one letter and one number.';
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    exit();
+  }
 
   if ($user->userExists()) {
     $_SESSION['error'] = 'Username is already taken. Please choose another one.';

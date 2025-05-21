@@ -14,8 +14,41 @@ class User
     $this->db = $db;
   }
 
+  // Username must be at least 3 characters, only letters, numbers, underscores
+  public static function validateUsername(string $username): bool
+  {
+    return preg_match('/^[A-Za-z0-9_]{3,}$/', $username) === 1;
+  }
+
+  // Email must be valid
+  public static function validateEmail(string $email): bool
+  {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+  }
+
+  // Phone must be digits, 9-15 digits
+  public static function validatePhone(string $phone): bool
+  {
+    return preg_match('/^\+?[0-9]{9,15}$/', $phone) === 1;
+  }
+
+  // Password: min 8 chars, at least 1 letter, 1 number
+  public static function validatePassword(string $password): bool
+  {
+    return preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=]{8,}$/', $password) === 1;
+  }
+
   public function setUserData(string $username, string $email, string $phone): void
   {
+    if ($username && !self::validateUsername($username)) {
+      throw new InvalidArgumentException('Invalid username.');
+    }
+    if ($email && !self::validateEmail($email)) {
+      throw new InvalidArgumentException('Invalid email.');
+    }
+    if ($phone && !self::validatePhone($phone)) {
+      throw new InvalidArgumentException('Invalid phone number.');
+    }
     $this->username = $username;
     $this->email = $email;
     $this->phone = $phone;
@@ -47,6 +80,21 @@ class User
   // Register a new user, password is passed as argument
   public function register(string $password): bool
   {
+    if (!$this->username || !$this->email || !$this->phone) {
+      return false;
+    }
+    if (!self::validateUsername($this->username)) {
+      return false;
+    }
+    if (!self::validateEmail($this->email)) {
+      return false;
+    }
+    if (!self::validatePhone($this->phone)) {
+      return false;
+    }
+    if (!self::validatePassword($password)) {
+      return false;
+    }
     if ($this->userExists()) {
       return false; // Username already exists
     }
@@ -93,17 +141,26 @@ class User
     $params = ['username' => $this->username];
     foreach ($allowed as $field) {
       if (isset($fields[$field])) {
-        // Validate age as integer or null
         if ($field === 'age') {
           $age = $fields[$field];
           if ($age === '' || $age === null) {
             $set[] = "age = NULL";
-          } else if (is_numeric($age) && intval($age) >= 0) {
+          } else if (is_numeric($age) && intval($age) >= 13) {
             $set[] = "age = :age";
             $params['age'] = intval($age);
           } else {
             continue; // skip invalid age
           }
+        } else if ($field === 'location') {
+          if (strlen($fields[$field]) > 100)
+            continue; // skip invalid location
+          $set[] = "location = :location";
+          $params['location'] = $fields[$field];
+        } else if ($field === 'bio') {
+          if (strlen($fields[$field]) > 1000)
+            continue; // skip invalid bio
+          $set[] = "bio = :bio";
+          $params['bio'] = $fields[$field];
         } else {
           $set[] = "$field = :$field";
           $params[$field] = $fields[$field];

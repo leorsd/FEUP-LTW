@@ -11,6 +11,17 @@ function draw_register_body()
   <div id="register-background"></div>
   <form action="../actions/action_register.php" method="POST" id="register-form">
     <h2>Sign Up</h2>
+    <?php if (isset($_SESSION['error'])): ?>
+      <div class="register-error" style="color: #b00; margin-bottom: 1em; text-align: center;">
+        <?php echo htmlspecialchars($_SESSION['error']);
+        unset($_SESSION['error']); ?>
+      </div>
+    <?php elseif (isset($_SESSION['success'])): ?>
+      <div class="register-success" style="color: #080; margin-bottom: 1em; text-align: center;">
+        <?php echo htmlspecialchars($_SESSION['success']);
+        unset($_SESSION['success']); ?>
+      </div>
+    <?php endif; ?>
     <div class="username">
       <label for="username" class="hide">Username:</label>
       <input type="text" name="username" placeholder="Username" required>
@@ -42,7 +53,7 @@ function draw_register_body()
 
     <div class="bottom-question">
       <p>Already have an account? <a href="login.php">Log in here</a></p>
-    </div>  
+    </div>
   </form>
   <?php
 }

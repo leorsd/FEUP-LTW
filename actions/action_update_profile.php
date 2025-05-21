@@ -9,7 +9,7 @@ $db = getDatabaseConnection();
 
 if (!isset($_SESSION['user_info']['username'])) {
   $_SESSION['profile_error'] = 'You must be logged in.';
-  header('Location: ../pages/profile.php');
+  header('Location: ../pages/edit_profile.php');
   exit();
 }
 
@@ -38,6 +38,31 @@ if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] ===
       $user->updateProfilePicture($new_name);
     }
   }
+}
+
+// Validate phone before updating profile
+if (!empty($fields['phone']) && !User::validatePhone($fields['phone'])) {
+  $_SESSION['profile_error'] = 'Invalid phone number.';
+  header('Location: ../pages/edit_profile.php');
+  exit();
+}
+// Validate age (must be integer >= 13 if set)
+if (isset($fields['age']) && $fields['age'] !== '' && (!is_numeric($fields['age']) || intval($fields['age']) < 13)) {
+  $_SESSION['profile_error'] = 'Age must be a number and at least 13.';
+  header('Location: ../pages/edit_profile.php');
+  exit();
+}
+// Validate location (max 100 chars)
+if (isset($fields['location']) && strlen($fields['location']) > 100) {
+  $_SESSION['profile_error'] = 'Location must be at most 100 characters.';
+  header('Location: ../pages/edit_profile.php');
+  exit();
+}
+// Validate bio (max 1000 chars)
+if (isset($fields['bio']) && strlen($fields['bio']) > 1000) {
+  $_SESSION['profile_error'] = 'Bio must be at most 1000 characters.';
+  header('Location: ../pages/edit_profile.php');
+  exit();
 }
 
 // Update profile fields
