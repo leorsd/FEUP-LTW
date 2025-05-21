@@ -258,4 +258,25 @@ class Service
         $stmt->execute([$serviceId, $userId]);
         return (bool) $stmt->fetchColumn();
     }
+
+    public function getUserOrderStatus(int $serviceId, int $userId): ?string
+    {
+        $stmt = $this->db->prepare('SELECT service_status.name FROM service_customer JOIN service_status ON service_customer.status = service_status.id WHERE service_customer.service_id = ? AND service_customer.customer_id = ?');
+        $stmt->execute([$serviceId, $userId]);
+        return $stmt->fetchColumn() ?: null;
+    }
+
+    /**
+     * Returns an array with 'hasOrdered' (bool) and 'status' (string|null) for a user and service.
+     */
+    public function getUserOrderInfo(int $serviceId, int $userId): array
+    {
+        $stmt = $this->db->prepare('SELECT service_status.name FROM service_customer JOIN service_status ON service_customer.status = service_status.id WHERE service_customer.service_id = ? AND service_customer.customer_id = ?');
+        $stmt->execute([$serviceId, $userId]);
+        $status = $stmt->fetchColumn();
+        return [
+            'hasOrdered' => $status !== false && $status !== null,
+            'status' => $status ?: null
+        ];
+    }
 }

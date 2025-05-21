@@ -9,11 +9,14 @@ function draw_service_body()
     $serviceId = isset($_GET['id']) ? (int) $_GET['id'] : null;
     $userId = $_SESSION['user_info']['id'] ?? null;
     $hasOrdered = false;
+    $orderStatus = null;
     if ($serviceId && $userId) {
         $service = new Service($db);
-        $hasOrdered = $service->hasUserOrderedService($serviceId, $userId);
+        $orderInfo = $service->getUserOrderInfo($serviceId, $userId);
+        $hasOrdered = $orderInfo['hasOrdered'];
+        $orderStatus = $orderInfo['status'];
     }
-  ?>
+    ?>
     <main id="service-main">
         <h2>Service Details</h2>
         <div id="service-info">
@@ -44,17 +47,18 @@ function draw_service_body()
                     <!-- Rating will be loaded from the database -->
                 </div>
                 <div id="service-order">
-                <?php if (isset($_SESSION['user_info']['username']) && !$hasOrdered): ?>
+                    <?php if (isset($_SESSION['user_info']['username']) && !$hasOrdered): ?>
                         <form action="../actions/action_order_service.php" method="POST" style="margin-top:1em;">
                             <input type="hidden" name="service_id" value="<?php echo htmlspecialchars($_GET['id'] ?? ''); ?>">
-                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
+                            <input type="hidden" name="csrf_token"
+                                value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
                             <button type="submit">Order Service</button>
                         </form>
-                <?php elseif (isset($_SESSION['user_info']['username']) && $hasOrdered): ?>
-                    <p>Already Ordered</p>
-                <?php else: ?>
+                    <?php elseif (isset($_SESSION['user_info']['username']) && $hasOrdered): ?>
+                                                        <p>Status: <?php echo htmlspecialchars($orderStatus ?? 'Ordered'); ?></p>
+                                                <?php else: ?>
                         <p><a href="../pages/login.php">Log in</a> to order this service.</p>
-                <?php endif; ?>
+                    <?php endif; ?>
                 </div>
             </section>
         </div>
@@ -85,3 +89,4 @@ function draw_service_body()
     <?php
 }
 ?>
+
