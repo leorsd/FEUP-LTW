@@ -3,6 +3,16 @@ declare(strict_types=1);
 
 function draw_service_body()
 {
+    require_once(__DIR__ . '/../includes/db/connection.php');
+    require_once(__DIR__ . '/../lib/service.php');
+    $db = getDatabaseConnection();
+    $serviceId = isset($_GET['id']) ? (int) $_GET['id'] : null;
+    $userId = $_SESSION['user_info']['id'] ?? null;
+    $hasOrdered = false;
+    if ($serviceId && $userId) {
+        $service = new Service($db);
+        $hasOrdered = $service->hasUserOrderedService($serviceId, $userId);
+    }
   ?>
     <main id="service-main">
         <h2>Service Details</h2>
@@ -34,24 +44,17 @@ function draw_service_body()
                     <!-- Rating will be loaded from the database -->
                 </div>
                 <div id="service-order">
-                  <?php if (isset($_SESSION['user_info']['username'])): ?>
+                <?php if (isset($_SESSION['user_info']['username']) && !$hasOrdered): ?>
                         <form action="../actions/action_order_service.php" method="POST" style="margin-top:1em;">
                             <input type="hidden" name="service_id" value="<?php echo htmlspecialchars($_GET['id'] ?? ''); ?>">
                             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
                             <button type="submit">Order Service</button>
                         </form>
-                        <?php if (isset($_SESSION['order_error'])): ?>
-                            <div class="order-error" style="color:#b00; margin-top:0.5em;">
-                                <?php echo htmlspecialchars($_SESSION['order_error']);
-                                unset($_SESSION['order_error']); ?> </div>
-                        <?php elseif (isset($_SESSION['order_msg'])): ?>
-                            <div class="order-success" style="color:#080; margin-top:0.5em;">
-                                <?php echo htmlspecialchars($_SESSION['order_msg']);
-                                unset($_SESSION['order_msg']); ?> </div>
-                        <?php endif; ?>
-                    <?php else: ?>
+                <?php elseif (isset($_SESSION['user_info']['username']) && $hasOrdered): ?>
+                    <p>Already Ordered</p>
+                <?php else: ?>
                         <p><a href="../pages/login.php">Log in</a> to order this service.</p>
-                    <?php endif; ?>
+                <?php endif; ?>
                 </div>
             </section>
         </div>
