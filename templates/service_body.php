@@ -45,15 +45,20 @@ function draw_service_body()
                 </div>
                 <div id="service-order">
                     <?php if (isset($_SESSION['user_info']['username']) && !$hasOrdered): ?>
-                        <form action="../actions/action_order_service.php" method="POST" style="margin-top:1em;">
+                        <form id="order-service-form" action="../actions/action_order_service.php" method="POST" style="margin-top:1em;">
                             <input type="hidden" name="service_id" value="<?php echo htmlspecialchars($_GET['id'] ?? ''); ?>">
                             <input type="hidden" name="csrf_token"
                                 value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
                             <button type="submit">Order Service</button>
                         </form>
                     <?php elseif (isset($_SESSION['user_info']['username']) && $hasOrdered): ?>
-                                                        <p>Status: <?php echo htmlspecialchars($orderStatus ?? 'Ordered'); ?></p>
-                                                <?php else: ?>
+                                        <p>Status: <?php echo htmlspecialchars($orderStatus ?? 'Ordered'); ?></p>
+                        <form id="cancel-service-form" action="../actions/action_cancel_order.php" method="POST" style="margin-top:1em;">
+                            <input type="hidden" name="service_id" value="<?php echo htmlspecialchars($_GET['id'] ?? ''); ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
+                            <button type="submit" style="background:#b00;color:#fff;">Cancel Order</button>
+                        </form>
+                    <?php else: ?>
                         <p><a href="../pages/login.php">Log in</a> to order this service.</p>
                     <?php endif; ?>
                 </div>

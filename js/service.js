@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const serviceId = urlParams.get("id");
 
   if (!serviceId) {
-    document.getElementById("service-main").innerHTML = "<p>Service not found.</p>";
+    document.getElementById("service-main").innerHTML =
+      "<p>Service not found.</p>";
     return;
   }
 
@@ -114,14 +115,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   // Confirmation popup for order form
-  const orderForm = document.querySelector("#service-order form");
-  if (orderForm) {
-    orderForm.addEventListener("submit", function (e) {
+  const orderServiceForm = document.getElementById("order-service-form");
+  if (orderServiceForm) {
+    orderServiceForm.addEventListener("submit", function (e) {
       if (!confirm("Are you sure you want to order this service?")) {
         e.preventDefault();
       }
     });
   }
 
-    loadServiceInfo();
+  // Confirmation popup for cancel form
+  const cancelServiceForm = document.getElementById("cancel-service-form");
+  if (cancelServiceForm) {
+    cancelServiceForm.addEventListener("submit", function (e) {
+      if (!confirm("Are you sure you want to cancel this order?")) {
+        e.preventDefault();
+      }
+    });
+  }
+
+  loadServiceInfo();
 });
