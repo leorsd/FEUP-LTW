@@ -251,4 +251,11 @@ class Service
         $stmt->execute();
         return (int) $stmt->fetchColumn();
     }
+
+    public function hasUserOrderedService(int $serviceId, int $userId): bool
+    {
+        $stmt = $this->db->prepare('SELECT 1 FROM service_customer WHERE service_id = ? AND customer_id = ?');
+        $stmt->execute([$serviceId, $userId]);
+        return (bool) $stmt->fetchColumn();
+    }
 }
