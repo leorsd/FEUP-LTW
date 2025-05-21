@@ -22,6 +22,15 @@ $db = getDatabaseConnection();
 $service_id = (int)$_POST['service_id'];
 $user_id = (int)$_SESSION['user_info']['id'];
 
+$service = new Service($db);
+$statusName = $service->getUserOrderStatus($service_id, $user_id);
+
+if ($statusName !== 'Ordered') {
+  $_SESSION['order_error'] = 'You can only cancel orders with status "Ordered".';
+  header('Location: ../pages/service.php?id=' . $service_id);
+  exit();
+}
+
 // Remove the order from service_customer
 $stmt = $db->prepare('DELETE FROM service_customer WHERE service_id = ? AND customer_id = ?');
 if ($stmt->execute([$service_id, $user_id])) {
