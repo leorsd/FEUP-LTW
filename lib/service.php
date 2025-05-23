@@ -81,6 +81,11 @@ class Service
             $params['provider_id'] = $filters['provider_id'];
         }
 
+        if (!empty($filters['exclude_provider_id'])) {
+            $where[] = 'user.id != :exclude_provider_id';
+            $params['exclude_provider_id'] = $filters['exclude_provider_id'];
+        }
+
         if (!empty($filters['category']) && is_array($filters['category'])) {
             $placeholders = [];
             foreach ($filters['category'] as $i => $catId) {

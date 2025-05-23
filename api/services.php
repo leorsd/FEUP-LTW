@@ -93,6 +93,8 @@ if (isset($_SESSION['user_info']['username'])) {
     }
 }
 
+$exclude_provider_id = isset($_GET['exclude_provider_id']) ? (int) $_GET['exclude_provider_id'] : null;
+
 $filters = [
     'favorites_owner' => $favorites_owner,
     'search' => $search,
@@ -100,6 +102,8 @@ $filters = [
     'provider_id' => $provider_id,
     'category' => $category,
     'location' => $location,
+    // NOTE: This is a workaround for the frontend to not show the services of the provider that is logged in
+    'exclude_provider_id' => $exclude_provider_id,
     'status' => $status,
     'min_price' => $min_price,
     'max_price' => $max_price,

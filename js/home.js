@@ -52,6 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (max_rating) {
       query += `&max_rating=${encodeURIComponent(max_rating)}`;
     }
+    // Exclude services where provider is the current user
+    query += `&exclude_provider_id=${CURRENT_USER_ID}`;
     return query;
   }
 
