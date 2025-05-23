@@ -103,6 +103,9 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           service.rating = service.rating.toFixed(1);
         }
+        const showStatus =
+          (currentTab === "ordered" || currentTab === "sold") &&
+          service.status_name !== undefined;
         const serviceItem = document.createElement("a");
         serviceItem.href = `service.php?id=${service.id}`;
         serviceItem.classList.add("service-item");
@@ -118,11 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p>Provider: ${service.provider_username}</p>
                 <p>Category: ${service.category_name}</p>
                 <p>Location: ${service.location}</p>
-                ${
-                  currentTab === "ordered" && service.status_name !== undefined
-                    ? `<p>Status: ${service.status_name}</p>`
-                    : ""
-                }
+                ${showStatus ? `<p>Status: ${service.status_name}</p>` : ""}
                 <p>Price: $${service.price}</p>
                 <p>Rating: ${service.rating}</p>
             `;
@@ -440,8 +439,48 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchServices();
   });
 
-  // --- TOGGLE LOGIC FOR ORDERED/PROVIDED/SOLD SERVICES ---
-  const orderedBtn = document.getElementById("ordered-services-btn");
+  // --- USER/VENDOR MAIN TOGGLE ---
+  const userSectionBtn = document.getElementById("user-section-btn");
+  const vendorSectionBtn = document.getElementById("vendor-section-btn");
+  const userSection = document.getElementById("user-section");
+  const vendorSection = document.getElementById("vendor-section");
+  const myServicesToggle = document.getElementById("my-services-toggle");
+  const userSectionHeader = userSection.querySelector(".section-header");
+
+  function showUserSection() {
+    userSectionBtn.classList.add("selected");
+    vendorSectionBtn.classList.remove("selected");
+    userSection.classList.remove("hide");
+    vendorSection.classList.add("hide");
+    // Hide vendor toggle, show user header
+    if (myServicesToggle) myServicesToggle.style.display = "none";
+    if (userSectionHeader) userSectionHeader.style.display = "";
+    orderedSection.classList.remove("hide");
+    providedSection.classList.add("hide");
+    soldSection.classList.add("hide");
+    // Reset to ordered services view
+    if (typeof showOrderedServices === "function") showOrderedServices();
+  }
+
+  function showVendorSection() {
+    vendorSectionBtn.classList.add("selected");
+    userSectionBtn.classList.remove("selected");
+    vendorSection.classList.remove("hide");
+    userSection.classList.add("hide");
+    // Show vendor toggle, hide user header
+    if (myServicesToggle) myServicesToggle.style.display = "";
+    if (userSectionHeader) userSectionHeader.style.display = "none";
+    orderedSection.classList.add("hide");
+    providedSection.classList.remove("hide");
+    soldSection.classList.add("hide");
+    if (typeof showProvidedServices === "function") showProvidedServices();
+  }
+
+  userSectionBtn.addEventListener("click", showUserSection);
+  vendorSectionBtn.addEventListener("click", showVendorSection);
+
+  // --- TOGGLE LOGIC FOR ORDERED/PROVIDED/SOLD SERVICES (now only inside vendor section) ---
+  const orderedBtn = document.getElementById("ordered-services-btn"); // now only in user section
   const providedBtn = document.getElementById("provided-services-btn");
   const soldBtn = document.getElementById("sold-services-btn");
   const orderedSection = document.getElementById("ordered-services-section");
@@ -452,10 +491,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showProvidedServices() {
     providedBtn.classList.add("selected");
-    orderedBtn.classList.remove("selected");
     soldBtn.classList.remove("selected");
     providedSection.classList.remove("hide");
-    orderedSection.classList.add("hide");
     soldSection.classList.add("hide");
     currentTab = "provided";
     // Hide only the status filter and its label
@@ -482,12 +519,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showOrderedServices() {
-    orderedBtn.classList.add("selected");
-    providedBtn.classList.remove("selected");
-    soldBtn.classList.remove("selected");
-    orderedSection.classList.remove("hide");
-    providedSection.classList.add("hide");
-    soldSection.classList.add("hide");
+    if (orderedBtn) orderedBtn.classList.add("selected");
+    if (providedBtn) providedBtn.classList.remove("selected");
+    if (soldBtn) soldBtn.classList.remove("selected");
+    if (orderedSection) orderedSection.classList.remove("hide");
+    if (providedSection) providedSection.classList.add("hide");
+    if (soldSection) soldSection.classList.add("hide");
     currentTab = "ordered";
     // Show only the status filter and its label
     const statusLabel = document.querySelector('label[for="status"]');
@@ -514,18 +551,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showSoldServices() {
     soldBtn.classList.add("selected");
-    orderedBtn.classList.remove("selected");
     providedBtn.classList.remove("selected");
     soldSection.classList.remove("hide");
-    orderedSection.classList.add("hide");
     providedSection.classList.add("hide");
     currentTab = "sold";
-    // Hide only the status filter and its label
+    // Show the status filter and its label for sold services
     const statusLabel = document.querySelector('label[for="status"]');
-    if (statusLabel) statusLabel.style.display = "none";
+    if (statusLabel) statusLabel.style.display = "";
     const statusFilter = document.getElementById("form-statuses");
-    if (statusFilter) statusFilter.style.display = "none";
-    // Switch API to fetch sold services
+    if (statusFilter) statusFilter.style.display = "";
+    // Switch API to fetch sold services, including status filter
     build_api_query = function () {
       let query = `/api/services.php?sold_services=1&page=${page}&per_page=${per_page}&orderby=${orderby}`;
       if (search) query += `&search=${encodeURIComponent(search)}`;
@@ -537,15 +572,24 @@ document.addEventListener("DOMContentLoaded", () => {
         query += `&max_price=${encodeURIComponent(max_price)}`;
       if (min_rating) query += `&min_rating=${encodeURIComponent(min_rating)}`;
       if (max_rating) query += `&max_rating=${encodeURIComponent(max_rating)}`;
-      // status filter is not used for sold services
+      if (status) query += `&status=${encodeURIComponent(status)}`;
       return query;
     };
     fetchServices();
   }
 
-  orderedBtn.addEventListener("click", showOrderedServices);
-  providedBtn.addEventListener("click", showProvidedServices);
-  soldBtn.addEventListener("click", showSoldServices);
+  // Only add vendor section button listeners if present
+  if (providedBtn && soldBtn) {
+    providedBtn.addEventListener("click", showProvidedServices);
+    soldBtn.addEventListener("click", showSoldServices);
+  }
+  // Only add user section button listener if present
+  if (orderedBtn) {
+    orderedBtn.addEventListener("click", showOrderedServices);
+  }
+
+  // Default: show user section
+  showUserSection();
 
   fetchCategories();
   fetchStatuses();

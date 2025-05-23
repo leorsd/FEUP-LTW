@@ -8,14 +8,24 @@ function draw_my_services_body()
     ?>
     <main>
         <h2 id="title">My Services</h2>
-        <div id="my-services-toggle">
-            <button id="ordered-services-btn" class="selected">Services I Ordered</button>
-            <button id="provided-services-btn">Services I Provide</button>
-            <button id="sold-services-btn">Services I Sold</button>
+        <div id="main-role-toggle">
+            <button id="user-section-btn" class="selected">Customer</button>
+            <button id="vendor-section-btn">Vendor</button>
+        </div>
+        <div id="user-section">
+            <div class="section-header">
+                <h3>My Orders</h3>
+            </div>
+        </div>
+        <div id="vendor-section" class="hide">
+            <div id="my-services-toggle">
+                <button id="provided-services-btn" class="selected">Services</button>
+                <button id="sold-services-btn">Orders</button>
+            </div>
         </div>
         <?php draw_services_grid([
             'search_filter' => true,
-            'provider_filter' => false, // Not needed for my services
+            'provider_filter' => false,
             'status_filter' => true,
             'category_filter' => true,
             'location_filter' => true,

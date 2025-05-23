@@ -22,13 +22,13 @@ footer{
     justify-content: center;
 }
 
-#my-services-toggle {
+#main-role-toggle {
   display: flex;
   justify-content: center;
   gap: 2rem;
   margin-bottom: 2rem;
 }
-#my-services-toggle button {
+#main-role-toggle button {
   font-size: 1.2rem;
   padding: 0.7rem 2.5rem;
   border: none;
@@ -39,10 +39,61 @@ footer{
   font-weight: 600;
   transition: background 0.2s, color 0.2s;
 }
+#main-role-toggle button.selected {
+  background: #222;
+  color: #fff;
+  border: 2px solid #222;
+}
+.section-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.section-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #222;
+  margin: 0;
+}
+#my-services-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+#my-services-toggle button {
+  font-size: 1.1rem;
+  padding: 0.6rem 2rem;
+  border: none;
+  border-radius: 8px;
+  background: #f5f5f5;
+  color: #222;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s;
+}
 #my-services-toggle button.selected {
   background: #222;
   color: #fff;
   border: 2px solid #222;
+}
+#user-section, #vendor-section {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 0.5rem auto;
+}
+#user-section .section-header, #vendor-section #my-services-toggle {
+  margin-top: 1.5rem;
+}
+@media (max-width: 600px) {
+  #main-role-toggle, #my-services-toggle {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .section-header h3 {
+    font-size: 1.3rem;
+  }
 }
 #ordered-services-section.hide, #provided-services-section.hide {
   display: none;

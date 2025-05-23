@@ -354,11 +354,21 @@ class Service
         $query = 'SELECT service.*, service_category.name AS category_name, user.username AS provider_username, user.profile_picture AS provider_image, service_customer.status AS status_id, service_status.name AS status_name, service_customer.customer_id AS customer_id
                   FROM service_customer
                   JOIN service ON service_customer.service_id = service.id
-                  JOIN user ON service.creator_id = user.id
                   LEFT JOIN service_category ON service.category = service_category.id
+                  LEFT JOIN user ON service.creator_id = user.id
                   LEFT JOIN service_status ON service_customer.status = service_status.id
                   WHERE service.creator_id = :user_id';
         $params['user_id'] = $user_id;
+        // Apply status filter directly to service_customer.status
+        if (!empty($filters['status']) && is_array($filters['status'])) {
+            $placeholders = [];
+            foreach ($filters['status'] as $i => $statusId) {
+                $ph = ':status' . $i;
+                $placeholders[] = $ph;
+                $params['status' . $i] = $statusId;
+            }
+            $query .= ' AND service_customer.status IN (' . implode(', ', $placeholders) . ')';
+        }
         // Remove status from filters before passing to buildFilters
         $filters = array_diff_key($filters, ['status' => 1]);
         $extraWhere = $this->buildFilters($filters, $params);
