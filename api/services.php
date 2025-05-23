@@ -7,6 +7,10 @@ require_once(__DIR__ . '/../lib/user.php');
 
 header('Content-Type: application/json');
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $db = getDatabaseConnection();
 $service = new Service($db);
 
@@ -81,6 +85,7 @@ $page = isset($_GET['page']) ? (int) $_GET['page'] : null;
 $per_page = isset($_GET['per_page']) ? (int) $_GET['per_page'] : null;
 $my_services = isset($_GET['my_services']) && $_GET['my_services'] == '1';
 $created_services = isset($_GET['created_services']) && $_GET['created_services'] == '1';
+$sold_services = isset($_GET['sold_services']) && $_GET['sold_services'] == '1';
 
 // Get user_id from session if available
 $user_id = null;
@@ -119,6 +124,10 @@ if ($created_services && $user_id !== null) {
     // Only show services the user bought (from service_customer)
     $services = $service->getServicesBoughtByUser($user_id, $filters, $orderby, $page, $per_page);
     $total = $service->countServicesBoughtByUser($user_id, $filters);
+} else if ($sold_services && $user_id !== null) {
+    // Only show services sold by the user (provider_id = user_id in service_customer)
+    $services = $service->getServicesSoldByUser($user_id, $filters, $orderby, $page, $per_page);
+    $total = $service->countServicesSoldByUser($user_id, $filters);
 } else {
     $services = $service->getFilteredAndOrderedServices($filters, $orderby, $page, $per_page);
     $total = $service->countFilteredServices($filters);

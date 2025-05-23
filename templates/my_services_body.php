@@ -9,8 +9,9 @@ function draw_my_services_body()
     <main>
         <h2 id="title">My Services</h2>
         <div id="my-services-toggle">
-            <button id="ordered-services-btn" class="selected">Ordered Services</button>
-            <button id="provided-services-btn">Provided Services</button>
+            <button id="ordered-services-btn" class="selected">Services I Ordered</button>
+            <button id="provided-services-btn">Services I Provide</button>
+            <button id="sold-services-btn">Services I Sold</button>
         </div>
         <?php draw_services_grid([
             'search_filter' => true,
@@ -27,6 +28,9 @@ function draw_my_services_body()
         </div>
         <div id="provided-services-section" class="hide">
             <div id="provided-services-list"></div>
+        </div>
+        <div id="sold-services-section" class="hide">
+            <div id="sold-services-list"></div>
         </div>
     </main>
     <?php

@@ -344,4 +344,71 @@ class Service
         $stmt->execute();
         return (int) $stmt->fetchColumn();
     }
+
+    /**
+     * Get services sold by the user (provider_id = user_id in service_customer)
+     */
+    public function getServicesSoldByUser(int $user_id, array $filters, string $orderby, ?int $page = null, ?int $per_page = null): array
+    {
+        $params = [];
+        $query = 'SELECT service.*, service_category.name AS category_name, user.username AS provider_username, user.profile_picture AS provider_image, service_customer.status AS status_id, service_status.name AS status_name, service_customer.customer_id AS customer_id
+                  FROM service_customer
+                  JOIN service ON service_customer.service_id = service.id
+                  JOIN user ON service.creator_id = user.id
+                  LEFT JOIN service_category ON service.category = service_category.id
+                  LEFT JOIN service_status ON service_customer.status = service_status.id
+                  WHERE service.creator_id = :user_id';
+        $params['user_id'] = $user_id;
+        // Remove status from filters before passing to buildFilters
+        $filters = array_diff_key($filters, ['status' => 1]);
+        $extraWhere = $this->buildFilters($filters, $params);
+        if ($extraWhere) {
+            $query .= ' AND ' . substr($extraWhere, 7); // remove leading ' WHERE '
+        }
+        $query .= match ($orderby) {
+            'price-asc' => ' ORDER BY service.price ASC',
+            'price-desc' => ' ORDER BY service.price DESC',
+            'rating-asc' => ' ORDER BY service.rating ASC',
+            'rating-desc' => ' ORDER BY service.rating DESC',
+            'created_at-asc' => ' ORDER BY service.created_at ASC',
+            default => ' ORDER BY service.created_at DESC',
+        };
+        if ($page !== null && $per_page !== null) {
+            $offset = ($page - 1) * $per_page;
+            $query .= ' LIMIT :limit OFFSET :offset';
+            $params['limit'] = $per_page;
+            $params['offset'] = $offset;
+        }
+        $stmt = $this->db->prepare($query);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(is_int($key) ? $key + 1 : ":$key", $value);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Count services sold by the user (provider_id = user_id in service_customer)
+     */
+    public function countServicesSoldByUser(int $user_id, array $filters = []): int
+    {
+        $params = [];
+        $query = 'SELECT COUNT(*) FROM service_customer
+                  JOIN service ON service_customer.service_id = service.id
+                  JOIN user ON service.creator_id = user.id
+                  WHERE service.creator_id = :user_id';
+        $params['user_id'] = $user_id;
+        // Remove status from filters before passing to buildFilters
+        $filters = array_diff_key($filters, ['status' => 1]);
+        $extraWhere = $this->buildFilters($filters, $params);
+        if ($extraWhere) {
+            $query .= ' AND ' . substr($extraWhere, 7); // remove leading ' WHERE '
+        }
+        $stmt = $this->db->prepare($query);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(is_int($key) ? $key + 1 : ":$key", $value);
+        }
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
+    }
 }
