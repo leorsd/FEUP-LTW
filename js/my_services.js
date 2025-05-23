@@ -218,6 +218,16 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
+    // Location input
+    if (filterForm.elements["location"]) {
+      filterForm.elements["location"].addEventListener("input", (e) => {
+        location = e.target.value;
+        if (location === "") location = null;
+        page = 1;
+        fetchServices();
+      });
+    }
+
     // --- Price Range Sync ---
     const minPriceBar = filterForm.elements["min-price"];
     const maxPriceBar = filterForm.elements["max-price"];
