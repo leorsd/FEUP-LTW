@@ -66,7 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchServices() {
     try {
       const response = await fetch(`${build_api_query()}`);
-
       const data = await response.json();
       const services = data.services;
       const total = data.total;
@@ -108,14 +107,22 @@ document.addEventListener("DOMContentLoaded", () => {
         serviceItem.href = `service.php?id=${service.id}`;
         serviceItem.classList.add("service-item");
         serviceItem.innerHTML = `
-                <img src="${service.image}" alt="${service.title}" class="service-image">
+                <img src="${service.image}" alt="${
+          service.title
+        }" class="service-image">
                 <h4>${service.title}</h4>
                 <p>Description: ${service.description}</p>
-                <img src="${service.provider_image}" alt="profile image" class="provider-image">
+                <img src="${
+                  service.provider_image
+                }" alt="profile image" class="provider-image">
                 <p>Provider: ${service.provider_username}</p>
                 <p>Category: ${service.category_name}</p>
                 <p>Location: ${service.location}</p>
-                <p>Status: ${service.status_name}</p>
+                ${
+                  currentTab === "ordered" && service.status_name !== undefined
+                    ? `<p>Status: ${service.status_name}</p>`
+                    : ""
+                }
                 <p>Price: $${service.price}</p>
                 <p>Rating: ${service.rating}</p>
             `;
@@ -441,36 +448,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentTab = "ordered"; // default
 
-  function showOrderedServices() {
-    orderedBtn.classList.add("selected");
-    providedBtn.classList.remove("selected");
-    orderedSection.classList.remove("hide");
-    providedSection.classList.add("hide");
-    currentTab = "ordered";
-    // Switch API to fetch ordered services
-    build_api_query = function () {
-      let query = `/api/services.php?my_services=1&page=${page}&per_page=${per_page}&orderby=${orderby}`;
-      if (search) query += `&search=${encodeURIComponent(search)}`;
-      if (category) query += `&category=${encodeURIComponent(category)}`;
-      if (location) query += `&location=${encodeURIComponent(location)}`;
-      if (min_price !== null && min_price !== "" && min_price !== undefined)
-        query += `&min_price=${encodeURIComponent(min_price)}`;
-      if (max_price !== null && max_price !== "" && max_price !== undefined)
-        query += `&max_price=${encodeURIComponent(max_price)}`;
-      if (min_rating) query += `&min_rating=${encodeURIComponent(min_rating)}`;
-      if (max_rating) query += `&max_rating=${encodeURIComponent(max_rating)}`;
-      if (status) query += `&status=${encodeURIComponent(status)}`;
-      return query;
-    };
-    fetchServices();
-  }
-
   function showProvidedServices() {
     providedBtn.classList.add("selected");
     orderedBtn.classList.remove("selected");
     providedSection.classList.remove("hide");
     orderedSection.classList.add("hide");
     currentTab = "provided";
+    // Hide only the status filter and its label
+    const statusLabel = document.querySelector('label[for="status"]');
+    if (statusLabel) statusLabel.style.display = "none";
+    const statusFilter = document.getElementById("form-statuses");
+    if (statusFilter) statusFilter.style.display = "none";
     // Switch API to fetch provided (created) services
     build_api_query = function () {
       let query = `/api/services.php?created_services=1&page=${page}&per_page=${per_page}&orderby=${orderby}`;
@@ -484,6 +472,35 @@ document.addEventListener("DOMContentLoaded", () => {
       if (min_rating) query += `&min_rating=${encodeURIComponent(min_rating)}`;
       if (max_rating) query += `&max_rating=${encodeURIComponent(max_rating)}`;
       // status filter is not used for provided services
+      return query;
+    };
+    fetchServices();
+  }
+
+  function showOrderedServices() {
+    orderedBtn.classList.add("selected");
+    providedBtn.classList.remove("selected");
+    orderedSection.classList.remove("hide");
+    providedSection.classList.add("hide");
+    currentTab = "ordered";
+    // Show only the status filter and its label
+    const statusLabel = document.querySelector('label[for="status"]');
+    if (statusLabel) statusLabel.style.display = "";
+    const statusFilter = document.getElementById("form-statuses");
+    if (statusFilter) statusFilter.style.display = "";
+    // Switch API to fetch ordered services
+    build_api_query = function () {
+      let query = `/api/services.php?my_services=1&page=${page}&per_page=${per_page}&orderby=${orderby}`;
+      if (search) query += `&search=${encodeURIComponent(search)}`;
+      if (category) query += `&category=${encodeURIComponent(category)}`;
+      if (location) query += `&location=${encodeURIComponent(location)}`;
+      if (min_price !== null && min_price !== "" && min_price !== undefined)
+        query += `&min_price=${encodeURIComponent(min_price)}`;
+      if (max_price !== null && max_price !== "" && max_price !== undefined)
+        query += `&max_price=${encodeURIComponent(max_price)}`;
+      if (min_rating) query += `&min_rating=${encodeURIComponent(min_rating)}`;
+      if (max_rating) query += `&max_rating=${encodeURIComponent(max_rating)}`;
+      if (status) query += `&status=${encodeURIComponent(status)}`;
       return query;
     };
     fetchServices();
