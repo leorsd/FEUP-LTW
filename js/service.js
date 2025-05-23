@@ -11,7 +11,17 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadServiceInfo() {
     try {
       const response = await fetch(`/api/services.php?id=${serviceId}`);
-      if (!response.ok) throw new Error("Service not found");
+      if (!response.ok) {
+        let errorMsg = "Service not found.";
+        try {
+          const errorData = await response.json();
+          if (errorData && errorData.error) errorMsg = errorData.error;
+        } catch (e) {}
+        document.getElementById(
+          "service-main"
+        ).innerHTML = `<p>${errorMsg}</p>`;
+        return;
+      }
       const service = await response.json();
 
       if (!service.image) {
@@ -56,6 +66,9 @@ document.addEventListener("DOMContentLoaded", () => {
         "service-rating"
       ).innerHTML = `<p>Rating: ${service.rating}</p>`;
 
+      // Render order status/actions
+      renderServiceOrder(service);
+
       // Fill in reviews
       const reviewsList = document.getElementById("reviews-list");
       reviewsList.innerHTML = "";
@@ -82,8 +95,66 @@ document.addEventListener("DOMContentLoaded", () => {
         reviewsList.innerHTML += "<p>No reviews yet.</p>";
       }
     } catch (error) {
-      document.getElementById("service-main").innerHTML =
-        "<p>Service not found.</p>";
+      document.getElementById(
+        "service-main"
+      ).innerHTML = `<p>Service not found.<br><span style='color:#b00;'>${error.message}</span></p>`;
+    }
+  }
+
+  function renderServiceOrder(service) {
+    const orderDiv = document.getElementById("service-order");
+    orderDiv.innerHTML = "";
+    // If user is the provider, don't show order/cancel
+    if (service.provider_id && CURRENT_USER_ID == service.provider_id) {
+      orderDiv.innerHTML = "<p>You are the provider of this service.</p>";
+      return;
+    }
+    // If user has already ordered, show status and cancel option
+    if (service.has_ordered) {
+      let cancelForm = "";
+      if (service.order_status === "Ordered") {
+        cancelForm = `
+        <form id="cancel-service-form" action="../actions/action_cancel_order.php" method="POST" style="margin-top:1em;">
+          <input type="hidden" name="service_id" value="${service.id}">
+          <input type="hidden" name="csrf_token" value="${
+            service.csrf_token || ""
+          }">
+          <button type="submit">Cancel Order</button>
+        </form>
+        `;
+      }
+      orderDiv.innerHTML = `
+        <p>Status: ${service.order_status || "Ordered"}</p>
+        ${cancelForm}
+      `;
+    } else {
+      // Not ordered yet
+      orderDiv.innerHTML = `
+        <form id="order-service-form" action="../actions/action_order_service.php" method="POST" style="margin-top:1em;">
+          <input type="hidden" name="service_id" value="${service.id}">
+          <input type="hidden" name="csrf_token" value="${
+            service.csrf_token || ""
+          }">
+          <button type="submit">Order Service</button>
+        </form>
+      `;
+    }
+    // Add confirmation popups
+    const orderServiceForm = document.getElementById("order-service-form");
+    if (orderServiceForm) {
+      orderServiceForm.addEventListener("submit", function (e) {
+        if (!confirm("Are you sure you want to order this service?")) {
+          e.preventDefault();
+        }
+      });
+    }
+    const cancelServiceForm = document.getElementById("cancel-service-form");
+    if (cancelServiceForm) {
+      cancelServiceForm.addEventListener("submit", function (e) {
+        if (!confirm("Are you sure you want to cancel this order?")) {
+          e.preventDefault();
+        }
+      });
     }
   }
 
@@ -113,26 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
         alert(`Error: ${errorText}`);
       }
     });
-
-  // Confirmation popup for order form
-  const orderServiceForm = document.getElementById("order-service-form");
-  if (orderServiceForm) {
-    orderServiceForm.addEventListener("submit", function (e) {
-      if (!confirm("Are you sure you want to order this service?")) {
-        e.preventDefault();
-      }
-    });
-  }
-
-  // Confirmation popup for cancel form
-  const cancelServiceForm = document.getElementById("cancel-service-form");
-  if (cancelServiceForm) {
-    cancelServiceForm.addEventListener("submit", function (e) {
-      if (!confirm("Are you sure you want to cancel this order?")) {
-        e.preventDefault();
-      }
-    });
-  }
 
   loadServiceInfo();
 });

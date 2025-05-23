@@ -13,12 +13,21 @@ $service = new Service($db);
 $id = isset($_GET['id']) ? (int) $_GET['id'] : null; // Service ID
 
 if ($id !== null) {
-
     $review = new Review($db);
-
     $serviceInfo = $service->getServiceById($id);
     if ($serviceInfo) {
         $serviceInfo['reviews'] = $review->getReviewsService($id);
+        // Add per-user order info if logged in
+        if (isset($_SESSION['user_info']['id'])) {
+            $orderInfo = $service->getUserOrderInfo($id, (int) $_SESSION['user_info']['id']);
+            $serviceInfo['has_ordered'] = $orderInfo['hasOrdered'];
+            $serviceInfo['order_status'] = $orderInfo['status'];
+        } else {
+            $serviceInfo['has_ordered'] = false;
+            $serviceInfo['order_status'] = null;
+        }
+        // Always include provider_id for frontend logic
+        $serviceInfo['provider_id'] = $serviceInfo['creator_id'] ?? null;
         echo json_encode($serviceInfo);
     } else {
         http_response_code(404);

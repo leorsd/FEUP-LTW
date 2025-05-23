@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let provider = urlParams.get("provider") || null;
   let category = urlParams.get("category") || null;
   let location = urlParams.get("location") || null;
-  const status = "1"; // Default status, Active
   let min_price = urlParams.get("min_price") || null;
   let max_price = urlParams.get("max_price") || null;
   let min_rating = urlParams.get("min_rating") || null;
@@ -27,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Remove status from default query for home page
   function build_api_query() {
-    let query = `/api/services.php?orderby=${orderby}&page=${page}&per_page=${per_page}&status=${status}&user_id=${CURRENT_USER_ID}`;
+    let query = `/api/services.php?orderby=${orderby}&page=${page}&per_page=${per_page}&user_id=${CURRENT_USER_ID}`;
 
     if (search) {
       query += `&search=${encodeURIComponent(search)}`;
@@ -122,22 +121,26 @@ document.addEventListener("DOMContentLoaded", () => {
           <p>Rating: ${service.rating}</p>
             `;
 
-
         if (service.creator_id !== CURRENT_USER_ID) {
           const favBtn = document.createElement("button");
           favBtn.className = "favorite-btn";
           favBtn.dataset.serviceId = service.id;
-          favBtn.textContent = service.is_favorite ? "💔 Remove from Favorites" : "❤️ Add to Favorites";
+          favBtn.textContent = service.is_favorite
+            ? "💔 Remove from Favorites"
+            : "❤️ Add to Favorites";
           serviceItem.appendChild(favBtn);
 
-          favBtn.addEventListener('click', async function(e) {
+          favBtn.addEventListener("click", async function (e) {
             e.preventDefault();
             e.stopPropagation();
             try {
-              const response = await fetch('../api/favorites.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_id: CURRENT_USER_ID, service_id: service.id })
+              const response = await fetch("../api/favorites.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  user_id: CURRENT_USER_ID,
+                  service_id: service.id,
+                }),
               });
               const result = await response.json();
               if (result.favorited) {

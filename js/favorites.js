@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const searchForm = document.getElementById("search-bar");
-  const clearFiltersButton = document.getElementById("clear-filters"); 
+  const clearFiltersButton = document.getElementById("clear-filters");
   const filterForm = document.getElementById("filter-form");
   const servicesList = document.getElementById("services-list");
   const prevPageButton = document.getElementById("prev-page");
@@ -11,13 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let page = 1; // Start with page 1
   const per_page = 12; // Number of services per page
 
-  
   let favorites_owner = CURRENT_USER_ID;
   let search = null;
   let provider = null;
-  let category =  null;
-  let location =  null;
-  let status = null; 
+  let category = null;
+  let location = null;
   let min_price =  null;
   let max_price =  null;
   let min_rating =  null;
@@ -25,7 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let orderby =  "created_at-desc";
 
   function build_api_query() {
-    let query = `/api/services.php?favorites_owner=${encodeURIComponent(favorites_owner)}&page=${page}&per_page=${per_page}&orderby=${orderby}&user_id=${CURRENT_USER_ID}`;
+    let query = `/api/services.php?favorites_owner=${encodeURIComponent(
+      favorites_owner
+    )}&page=${page}&per_page=${per_page}&orderby=${orderby}&user_id=${CURRENT_USER_ID}`;
 
     if (search) {
       query += `&search=${encodeURIComponent(search)}`;
@@ -51,9 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (max_rating) {
       query += `&max_rating=${encodeURIComponent(max_rating)}`;
     }
-    if (status) {
-      query += `&status=${encodeURIComponent(status)}`;
-    }
 
     console.log("API Query:", query);
     return query;
@@ -61,9 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function fetchServices() {
     try {
-      const response = await fetch(
-        `${build_api_query()}`
-      );
+      const response = await fetch(`${build_api_query()}`);
 
       const data = await response.json();
       const services = data.services;
@@ -85,22 +80,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       services.forEach((service) => {
-
         if (!service.image) {
           service.image = "../images/service.png";
-        }else {
-          service.image = `../images/cache/${service.image}`; 
+        } else {
+          service.image = `../images/cache/${service.image}`;
         }
 
         if (!service.provider_image) {
-          service.provider_image = "../images/user.jpg"; 
-        }else {
-          service.provider_image = `../images/cache/${service.provider_image}`; 
+          service.provider_image = "../images/user.jpg";
+        } else {
+          service.provider_image = `../images/cache/${service.provider_image}`;
         }
 
         if (!service.rating) {
           service.rating = "Not rated yet";
-        }else{
+        } else {
           service.rating = service.rating.toFixed(1);
         }
 
@@ -115,7 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p>Provider: ${service.provider_username}</p>
                 <p>Category: ${service.category_name}</p>
                 <p>Location: ${service.location}</p>
-                <p>Status: ${service.status_name}</p>
                 <p>Price: $${service.price}</p>
                 <p>Rating: ${service.rating}</p>
             `;
@@ -124,17 +117,22 @@ document.addEventListener("DOMContentLoaded", () => {
           const favBtn = document.createElement("button");
           favBtn.className = "favorite-btn";
           favBtn.dataset.serviceId = service.id;
-          favBtn.textContent = service.is_favorite ? "💔 Remove from Favorites" : "❤️ Add to Favorites";
+          favBtn.textContent = service.is_favorite
+            ? "💔 Remove from Favorites"
+            : "❤️ Add to Favorites";
           serviceItem.appendChild(favBtn);
 
-          favBtn.addEventListener('click', async function(e) {
+          favBtn.addEventListener("click", async function (e) {
             e.preventDefault();
             e.stopPropagation();
             try {
-              const response = await fetch('../api/favorites.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_id: CURRENT_USER_ID, service_id: service.id })
+              const response = await fetch("../api/favorites.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  user_id: CURRENT_USER_ID,
+                  service_id: service.id,
+                }),
               });
               const result = await response.json();
               if (result.favorited) {
@@ -163,45 +161,47 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function fetchCategories() {
-      try {
-          const response = await fetch("../api/categories.php");
-          const categories = await response.json();
+    try {
+      const response = await fetch("../api/categories.php");
+      const categories = await response.json();
 
-          if (categories.error) {
-              console.error("Error fetching categories:", categories.error);
-              return;
-          }
+      if (categories.error) {
+        console.error("Error fetching categories:", categories.error);
+        return;
+      }
 
-          categoriesOption.innerHTML = "";
-          categories.forEach((category) => {
-              const option = document.createElement("label");
-              option.innerHTML = `
+      categoriesOption.innerHTML = "";
+      categories.forEach((category) => {
+        const option = document.createElement("label");
+        option.innerHTML = `
               <input type="checkbox" name="categories" value="${category.id}"> ${category.name}
               `;
-              categoriesOption.appendChild(option);
-          });
+        categoriesOption.appendChild(option);
+      });
 
-          categoriesLoaded = true;
-          setupLiveFilters();
-
-      } catch (error) {
-          console.error("Error fetching categories:", error);
-      }
+      categoriesLoaded = true;
+      setupLiveFilters();
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
   }
 
   function setupLiveFilters() {
-
     filterForm.elements["search"].addEventListener("input", (e) => {
-        search = e.target.value;
-        if (search === "") search = null;
-        page = 1; 
-        fetchServices();
+      search = e.target.value;
+      if (search === "") search = null;
+      page = 1;
+      fetchServices();
     });
 
     // Category checkboxes
-    filterForm.querySelectorAll('input[name="categories"]').forEach(cb => {
+    filterForm.querySelectorAll('input[name="categories"]').forEach((cb) => {
       cb.addEventListener("change", () => {
-        category = Array.from(filterForm.querySelectorAll('input[name="categories"]:checked')).map(cb => cb.value).join(",");
+        category = Array.from(
+          filterForm.querySelectorAll('input[name="categories"]:checked')
+        )
+          .map((cb) => cb.value)
+          .join(",");
         if (category === "") category = null;
         page = 1;
         fetchServices();
@@ -364,7 +364,6 @@ document.addEventListener("DOMContentLoaded", () => {
       fetchServices();
     });
 
-
     // Order by select
     filterForm.elements["order-by"].addEventListener("change", (e) => {
       orderby = e.target.value;
@@ -373,56 +372,60 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-    searchForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const value = searchForm.elements["search"].value.trim();
-        if (value !== "") {
-            window.location.href = `../pages/home.php?search=${encodeURIComponent(value)}`;
-        }
-    });
+  searchForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const value = searchForm.elements["search"].value.trim();
+    if (value !== "") {
+      window.location.href = `../pages/home.php?search=${encodeURIComponent(
+        value
+      )}`;
+    }
+  });
 
-    prevPageButton.addEventListener("click", () => {
-        if (page > 1) {
-        page--;
-        window.scrollTo(0, 0);
-        fetchServices();
-        }
-    });
+  prevPageButton.addEventListener("click", () => {
+    if (page > 1) {
+      page--;
+      window.scrollTo(0, 0);
+      fetchServices();
+    }
+  });
 
-    nextPageButton.addEventListener("click", () => {
-        page++;
-        window.scrollTo(0, 0);
-        fetchServices();
-    });
+  nextPageButton.addEventListener("click", () => {
+    page++;
+    window.scrollTo(0, 0);
+    fetchServices();
+  });
 
-    clearFiltersButton.addEventListener("click", () => {
-        search = null;
-        category = null;
-        location = null;
-        provider = null;
-        min_price = null;
-        max_price = null;
-        min_rating = null;
-        max_rating = null;
-        orderby = "created_at-desc";
-        page = 1; 
+  clearFiltersButton.addEventListener("click", () => {
+    search = null;
+    category = null;
+    location = null;
+    provider = null;
+    min_price = null;
+    max_price = null;
+    min_rating = null;
+    max_rating = null;
+    orderby = "created_at-desc";
+    page = 1;
 
-        filterForm.elements["min-price"].value = 0;
-        filterForm.elements["max-price"].value = 1000;
-        filterForm.elements["min-price-number"].value = "";
-        filterForm.elements["max-price-number"].value = "";
+    filterForm.elements["min-price"].value = 0;
+    filterForm.elements["max-price"].value = 1000;
+    filterForm.elements["min-price-number"].value = "";
+    filterForm.elements["max-price-number"].value = "";
 
-        filterForm.elements["min-rating"].value = 1;
-        filterForm.elements["max-rating"].value = 5;
-        filterForm.elements["min-rating-number"].value = "";
-        filterForm.elements["max-rating-number"].value = "";
+    filterForm.elements["min-rating"].value = 1;
+    filterForm.elements["max-rating"].value = 5;
+    filterForm.elements["min-rating-number"].value = "";
+    filterForm.elements["max-rating-number"].value = "";
 
-        filterForm.elements["search"].value = "";
-        filterForm.elements["order-by"].value = "created_at-desc";
+    filterForm.elements["search"].value = "";
+    filterForm.elements["order-by"].value = "created_at-desc";
 
-        filterForm.querySelectorAll('input[name="categories"]').forEach(cb => cb.checked = false);
-        fetchServices();
-    });
+    filterForm
+      .querySelectorAll('input[name="categories"]')
+      .forEach((cb) => (cb.checked = false));
+    fetchServices();
+  });
 
     fetchCategories();
     fetchServices();
