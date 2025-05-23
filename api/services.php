@@ -80,6 +80,7 @@ $page = isset($_GET['page']) ? (int) $_GET['page'] : null;
 // Represents the number of services that will be returned per page
 $per_page = isset($_GET['per_page']) ? (int) $_GET['per_page'] : null;
 $my_services = isset($_GET['my_services']) && $_GET['my_services'] == '1';
+$created_services = isset($_GET['created_services']) && $_GET['created_services'] == '1';
 
 // Get user_id from session if available
 $user_id = null;
@@ -106,7 +107,11 @@ $filters = [
     'max_rating' => $max_rating
 ];
 
-if ($my_services && $user_id !== null) {
+if ($created_services && $user_id !== null) {
+    // Only show services the user created (provider)
+    $services = $service->getServicesCreatedByUser($user_id, $filters, $orderby, $page, $per_page);
+    $total = $service->countServicesCreatedByUser($user_id, $filters);
+} else if ($my_services && $user_id !== null) {
     // Only show services the user bought (from service_customer)
     $services = $service->getServicesBoughtByUser($user_id, $filters, $orderby, $page, $per_page);
     $total = $service->countServicesBoughtByUser($user_id, $filters);

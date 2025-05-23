@@ -47,7 +47,7 @@ try {
     $db = getDatabaseConnection();
     $service = new Service($db);
 
-    $service->createService($serviceTitle, $serviceDescription, $servicePrice, $serviceLocation, $userId, $serviceStatus, $serviceCategory, $imagePath);
+    $service->createService($serviceTitle, $serviceDescription, $servicePrice, $serviceLocation, $userId, $serviceCategory, $imagePath);
 
     $_SESSION['success'] = "Service created successfully!";
     header('Location: ../pages/home.php');

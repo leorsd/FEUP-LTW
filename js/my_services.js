@@ -423,6 +423,65 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchServices();
   });
 
+  // --- TOGGLE LOGIC FOR ORDERED/PROVIDED SERVICES ---
+  const orderedBtn = document.getElementById("ordered-services-btn");
+  const providedBtn = document.getElementById("provided-services-btn");
+  const orderedSection = document.getElementById("ordered-services-section");
+  const providedSection = document.getElementById("provided-services-section");
+
+  let currentTab = "ordered"; // default
+
+  function showOrderedServices() {
+    orderedBtn.classList.add("selected");
+    providedBtn.classList.remove("selected");
+    orderedSection.classList.remove("hide");
+    providedSection.classList.add("hide");
+    currentTab = "ordered";
+    // Switch API to fetch ordered services
+    build_api_query = function () {
+      let query = `/api/services.php?my_services=1&page=${page}&per_page=${per_page}&orderby=${orderby}`;
+      if (search) query += `&search=${encodeURIComponent(search)}`;
+      if (category) query += `&category=${encodeURIComponent(category)}`;
+      if (location) query += `&location=${encodeURIComponent(location)}`;
+      if (min_price !== null && min_price !== "" && min_price !== undefined)
+        query += `&min_price=${encodeURIComponent(min_price)}`;
+      if (max_price !== null && max_price !== "" && max_price !== undefined)
+        query += `&max_price=${encodeURIComponent(max_price)}`;
+      if (min_rating) query += `&min_rating=${encodeURIComponent(min_rating)}`;
+      if (max_rating) query += `&max_rating=${encodeURIComponent(max_rating)}`;
+      if (status) query += `&status=${encodeURIComponent(status)}`;
+      return query;
+    };
+    fetchServices();
+  }
+
+  function showProvidedServices() {
+    providedBtn.classList.add("selected");
+    orderedBtn.classList.remove("selected");
+    providedSection.classList.remove("hide");
+    orderedSection.classList.add("hide");
+    currentTab = "provided";
+    // Switch API to fetch provided (created) services
+    build_api_query = function () {
+      let query = `/api/services.php?created_services=1&page=${page}&per_page=${per_page}&orderby=${orderby}`;
+      if (search) query += `&search=${encodeURIComponent(search)}`;
+      if (category) query += `&category=${encodeURIComponent(category)}`;
+      if (location) query += `&location=${encodeURIComponent(location)}`;
+      if (min_price !== null && min_price !== "" && min_price !== undefined)
+        query += `&min_price=${encodeURIComponent(min_price)}`;
+      if (max_price !== null && max_price !== "" && max_price !== undefined)
+        query += `&max_price=${encodeURIComponent(max_price)}`;
+      if (min_rating) query += `&min_rating=${encodeURIComponent(min_rating)}`;
+      if (max_rating) query += `&max_rating=${encodeURIComponent(max_rating)}`;
+      // status filter is not used for provided services
+      return query;
+    };
+    fetchServices();
+  }
+
+  orderedBtn.addEventListener("click", showOrderedServices);
+  providedBtn.addEventListener("click", showProvidedServices);
+
   fetchCategories();
   fetchStatuses();
   fetchServices();

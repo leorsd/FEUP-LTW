@@ -279,4 +279,64 @@ class Service
             'status' => $status ?: null
         ];
     }
+
+    /**
+     * Get all services created by a user (provider)
+     */
+    public function getServicesCreatedByUser(int $user_id, array $filters, string $orderby, ?int $page = null, ?int $per_page = null): array
+    {
+        $params = [];
+        $query = 'SELECT service.*, service_category.name AS category_name, user.username AS provider_username, user.profile_picture AS provider_image
+                  FROM service
+                  LEFT JOIN service_category ON service.category = service_category.id
+                  LEFT JOIN user ON service.creator_id = user.id
+                  WHERE service.creator_id = :user_id';
+        $params['user_id'] = $user_id;
+        $extraWhere = $this->buildFilters($filters, $params);
+        if ($extraWhere) {
+            $query .= ' AND ' . substr($extraWhere, 7);
+        }
+        $query .= match ($orderby) {
+            'price-asc' => ' ORDER BY service.price ASC',
+            'price-desc' => ' ORDER BY service.price DESC',
+            'rating-asc' => ' ORDER BY service.rating ASC',
+            'rating-desc' => ' ORDER BY service.rating DESC',
+            'created_at-asc' => ' ORDER BY service.created_at ASC',
+            default => ' ORDER BY service.created_at DESC',
+        };
+        if ($page !== null && $per_page !== null) {
+            $offset = ($page - 1) * $per_page;
+            $query .= ' LIMIT :limit OFFSET :offset';
+            $params['limit'] = $per_page;
+            $params['offset'] = $offset;
+        }
+        $stmt = $this->db->prepare($query);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(is_int($key) ? $key + 1 : ":$key", $value);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Count all services created by a user (provider)
+     */
+    public function countServicesCreatedByUser(int $user_id, array $filters = []): int
+    {
+        $params = [];
+        $query = 'SELECT COUNT(*) FROM service
+                  LEFT JOIN user ON service.creator_id = user.id
+                  WHERE service.creator_id = :user_id';
+        $params['user_id'] = $user_id;
+        $extraWhere = $this->buildFilters($filters, $params);
+        if ($extraWhere) {
+            $query .= ' AND ' . substr($extraWhere, 7);
+        }
+        $stmt = $this->db->prepare($query);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(is_int($key) ? $key + 1 : ":$key", $value);
+        }
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
+    }
 }
