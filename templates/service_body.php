@@ -43,7 +43,7 @@ function draw_service_body()
         </section>
         <section id="service-reviews">
             <h2>Reviews</h2>
-            <div id="reviews-form">
+            <div id="reviews-form" style="display:none;">
                 <h3>Leave a Review</h3>
                 <form id="review-form">
                     <label for="review-text">Review:</label>

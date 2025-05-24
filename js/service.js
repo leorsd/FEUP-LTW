@@ -94,6 +94,18 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         reviewsList.innerHTML += "<p>No reviews yet.</p>";
       }
+
+      // Show/hide reviews form based on context
+      const reviewsForm = document.getElementById("reviews-form");
+      const myServicesContext =
+        localStorage.getItem("my_services") || "customer";
+      if (reviewsForm) {
+        if (myServicesContext === "customer") {
+          reviewsForm.style.display = "block";
+        } else {
+          reviewsForm.style.display = "none";
+        }
+      }
     } catch (error) {
       document.getElementById(
         "service-main"
