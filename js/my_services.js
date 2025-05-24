@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  localStorage.setItem("my_services", "customer");
   const searchForm = document.getElementById("search-bar");
   const clearFiltersButton = document.getElementById("clear-filters");
   const filterForm = document.getElementById("filter-form");
@@ -476,11 +477,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (typeof showProvidedServices === "function") showProvidedServices();
   }
 
-  userSectionBtn.addEventListener("click", showUserSection);
-  vendorSectionBtn.addEventListener("click", showVendorSection);
+  userSectionBtn.addEventListener("click", () => {
+    localStorage.setItem("my_services", "customer");
+    showUserSection();
+  });
+  vendorSectionBtn.addEventListener("click", () => {
+    localStorage.setItem("my_services", "vendor_services");
+    showVendorSection();
+  });
 
   // --- TOGGLE LOGIC FOR ORDERED/PROVIDED/SOLD SERVICES (now only inside vendor section) ---
-  const orderedBtn = document.getElementById("ordered-services-btn"); // now only in user section
   const providedBtn = document.getElementById("provided-services-btn");
   const soldBtn = document.getElementById("sold-services-btn");
   const orderedSection = document.getElementById("ordered-services-section");
@@ -519,7 +525,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showOrderedServices() {
-    if (orderedBtn) orderedBtn.classList.add("selected");
     if (providedBtn) providedBtn.classList.remove("selected");
     if (soldBtn) soldBtn.classList.remove("selected");
     if (orderedSection) orderedSection.classList.remove("hide");
@@ -580,12 +585,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Only add vendor section button listeners if present
   if (providedBtn && soldBtn) {
-    providedBtn.addEventListener("click", showProvidedServices);
-    soldBtn.addEventListener("click", showSoldServices);
-  }
-  // Only add user section button listener if present
-  if (orderedBtn) {
-    orderedBtn.addEventListener("click", showOrderedServices);
+    providedBtn.addEventListener("click", () => {
+      localStorage.setItem("my_services", "vendor_services");
+      showProvidedServices();
+    });
+    soldBtn.addEventListener("click", () => {
+      localStorage.setItem("my_services", "vendor_orders");
+      showSoldServices();
+    });
   }
 
   // Default: show user section
