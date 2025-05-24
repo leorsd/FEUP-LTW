@@ -66,5 +66,6 @@ INSERT INTO service_customer (service_id, customer_id, status, created_at) VALUE
 (2, 10, 2, '2025-05-13 11:00:00'), -- Quick Oil Change, in progress
 (3, 10, 1, '2025-05-14 12:00:00'), -- Engine Diagnostics, ordered
 (19, 1, 1, '2025-05-19 13:00:00'), -- Mobile Detailing, ordered
+(19, 2, 1, '2025-05-19 13:00:00'), -- Mobile Detailing, ordered
 (20, 2, 2, '2025-05-20 14:00:00'), -- Eco-Friendly Wash, in progress
 (21, 3, 3, '2025-05-21 15:00:00'); -- Express Interior Clean, completed

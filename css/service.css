@@ -162,4 +162,69 @@
             }
         }
     }
+
+    #provider-orders-block {
+        background: #f7f9fa;
+        border-radius: 8px;
+        padding: 1.5rem 1.5rem;
+        margin-top: 2rem;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+
+        h2 {
+            color: #3a4a5d;
+            margin-top: 0;
+            margin-bottom: 1.2rem;
+        }
+
+        #provider-orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+
+            .provider-order-card {
+                background: #f4f7fa;
+                border-radius: 8px;
+                padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+                display: flex;
+                flex-direction: column;
+                gap: 0.7rem;
+
+                .provider-order-header {
+                    font-size: 1.1rem;
+                    font-weight: 600;
+                    color: #2d8cff;
+                }
+
+                .provider-order-status {
+                    font-size: 1rem;
+                    color: #3a4a5d;
+                }
+
+                .provider-order-actions {
+                    display: flex;
+                    gap: 1rem;
+
+                    form {
+                        display: inline;
+                    }
+
+                    button {
+                        background: #2d8cff;
+                        color: #fff;
+                        border: none;
+                        border-radius: 6px;
+                        padding: 0.4rem 0.9rem;
+                        font-size: 1rem;
+                        cursor: pointer;
+                        transition: background 0.2s;
+
+                        &:hover {
+                            background: #1a6ed8;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

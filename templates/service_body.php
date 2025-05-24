@@ -35,6 +35,12 @@ function draw_service_body()
                 </div>
             </section>
         </div>
+        <section id="provider-orders-block" style="display:none;">
+            <h2>Orders for this Service</h2>
+            <div id="provider-orders-list">
+                <!-- Provider order management will be rendered by JS -->
+            </div>
+        </section>
         <section id="service-reviews">
             <h2>Reviews</h2>
             <div id="reviews-form">

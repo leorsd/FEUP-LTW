@@ -447,4 +447,28 @@ class Service
         $stmt = $this->db->prepare('UPDATE service_customer SET status = ? WHERE service_id = ? AND customer_id = ?');
         return $stmt->execute([$statusId, $serviceId, $customerId]);
     }
+
+    /**
+     * Get the current status ID for a service order
+     */
+    public function getOrderStatusId(int $serviceId, int $customerId): ?int
+    {
+        $stmt = $this->db->prepare('SELECT status FROM service_customer WHERE service_id = ? AND customer_id = ?');
+        $stmt->execute([$serviceId, $customerId]);
+        $status = $stmt->fetchColumn();
+        return $status !== false ? (int) $status : null;
+    }
+
+    /**
+     * Check if a status transition is valid (allow 1->2, 1->3, 2->3)
+     */
+    public function isValidStatusTransition(int $currentStatusId, int $newStatusId): bool
+    {
+        $valid = [
+            1 => [2, 3], // Ordered -> In Progress or Completed
+            2 => [3],    // In Progress -> Completed
+            3 => []      // Completed -> (no further)
+        ];
+        return isset($valid[$currentStatusId]) && in_array($newStatusId, $valid[$currentStatusId], true);
+    }
 }

@@ -40,7 +40,7 @@ $current_user_id = (int)$userInfo['id'];
 
 $serviceObj = new Service($db);
 $service = $serviceObj->getServiceById($service_id);
-debug_log('Service: ' . json_encode($service));
+// debug_log('Service: ' . json_encode($service));
 
 if (!$service || $service['creator_id'] != $current_user_id) {
     debug_log('Not authorized: user ' . $current_user_id . ' is not creator of service ' . $service_id);
@@ -68,10 +68,19 @@ if (!$service || $service['creator_id'] != $current_user_id) {
     exit();
 }
 
+// Get current order status ID
+$currentStatusId = $serviceObj->getOrderStatusId($service_id, $customer_id);
+if (!$serviceObj->isValidStatusTransition($currentStatusId, $status_id)) {
+  debug_log('Invalid status transition: ' . $currentStatusId . ' -> ' . $status_id);
+  $_SESSION['order_error'] = 'Invalid status transition.';
+  header('Location: ../pages/service.php?id=' . $service_id);
+  exit();
+}
+
 // Refactor: move update logic to Service class
 $updated = $serviceObj->updateOrderStatus($service_id, $customer_id, $status_id);
 if ($updated) {
-    debug_log('Status updated successfully');
+  // debug_log('Status updated successfully');
     $_SESSION['order_msg'] = 'Order status updated successfully!';
 } else {
     debug_log('Failed to update status');
