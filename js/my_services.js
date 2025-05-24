@@ -110,6 +110,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const serviceItem = document.createElement("a");
         serviceItem.href = `service.php?id=${service.id}`;
         serviceItem.classList.add("service-item");
+        // Store customer_id for vendor_orders context
+        if (
+          localStorage.getItem("my_services") === "vendor_orders" &&
+          service.customer_id
+        ) {
+          serviceItem.addEventListener("click", function () {
+            localStorage.setItem(
+              "vendor_orders_customer_id",
+              service.customer_id
+            );
+          });
+        }
         serviceItem.innerHTML = `
                 <img src="${service.image}" alt="${
           service.title

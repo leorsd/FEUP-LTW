@@ -104,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderServiceOrder(service) {
     const orderDiv = document.getElementById("service-order");
     orderDiv.innerHTML = "";
-    // Provider order management block
     const providerOrdersBlock = document.getElementById(
       "provider-orders-block"
     );
@@ -113,95 +112,178 @@ document.addEventListener("DOMContentLoaded", () => {
       providerOrdersBlock.style.display = "none";
       providerOrdersList.innerHTML = "";
     }
-    // If user is the provider, show orders block below service card
-    if (service.provider_id && CURRENT_USER_ID == service.provider_id) {
+    const myServicesContext = localStorage.getItem("my_services") || "customer";
+    // CUSTOMER: default UI, do nothing special
+    if (myServicesContext === "customer") {
+      return;
+    }
+    // PROVIDER: show all orders for this service
+    if (
+      myServicesContext === "vendor_services" &&
+      service.provider_id &&
+      CURRENT_USER_ID == service.provider_id
+    ) {
       if (Array.isArray(service.orders) && service.orders.length > 0) {
-        if (providerOrdersBlock && providerOrdersList) {
-          providerOrdersBlock.style.display = "block";
-          providerOrdersList.innerHTML = "";
-          service.orders.forEach((order, idx) => {
-            let statusText = order.status_name || "Unknown";
-            let actionsHtml = "";
-            if (order.status_name === "Ordered") {
-              actionsHtml = `
-                <form class="status-update-form" data-idx="${idx}" style="margin-top:0.7em;">
-                  <input type="hidden" name="service_id" value="${service.id}">
-                  <input type="hidden" name="customer_id" value="${
-                    order.customer_id
-                  }">
-                  <input type="hidden" name="status" value="2">
-                  <input type="hidden" name="csrf_token" value="${
-                    service.csrf_token || ""
-                  }">
-                  <button type="submit">Mark as In Progress</button>
-                </form>
-                <form class="status-update-form" data-idx="${idx}" style="margin-top:0.7em; margin-left:0.7em;">
-                  <input type="hidden" name="service_id" value="${service.id}">
-                  <input type="hidden" name="customer_id" value="${
-                    order.customer_id
-                  }">
-                  <input type="hidden" name="status" value="3">
-                  <input type="hidden" name="csrf_token" value="${
-                    service.csrf_token || ""
-                  }">
-                  <button type="submit">Mark as Completed</button>
-                </form>
-              `;
-            } else if (order.status_name === "In Progress") {
-              actionsHtml = `
-                <form class="status-update-form" data-idx="${idx}" style="margin-top:0.7em;">
-                  <input type="hidden" name="service_id" value="${service.id}">
-                  <input type="hidden" name="customer_id" value="${
-                    order.customer_id
-                  }">
-                  <input type="hidden" name="status" value="3">
-                  <input type="hidden" name="csrf_token" value="${
-                    service.csrf_token || ""
-                  }">
-                  <button type="submit">Mark as Completed</button>
-                </form>
-              `;
-            }
-            providerOrdersList.innerHTML += `
-              <div class="provider-order-card">
-                <div class="provider-order-header">
-                  <strong>Customer:</strong> ${order.customer_username}
-                </div>
-                <div class="provider-order-status">
-                  <span><strong>Status:</strong> ${statusText}</span>
-                </div>
-                <div class="provider-order-actions">
-                  ${actionsHtml}
-                </div>
-              </div>
+        providerOrdersBlock.style.display = "block";
+        providerOrdersList.innerHTML = "";
+        service.orders.forEach((order, idx) => {
+          let statusText = order.status_name || "Unknown";
+          let actionsHtml = "";
+          if (order.status_name === "Ordered") {
+            actionsHtml = `
+              <form class="status-update-form" data-idx="${idx}" style="margin-top:0.7em;">
+                <input type="hidden" name="service_id" value="${service.id}">
+                <input type="hidden" name="customer_id" value="${
+                  order.customer_id
+                }">
+                <input type="hidden" name="status" value="2">
+                <input type="hidden" name="csrf_token" value="${
+                  service.csrf_token || ""
+                }">
+                <button type="submit">Mark as In Progress</button>
+              </form>
+              <form class="status-update-form" data-idx="${idx}" style="margin-top:0.7em; margin-left:0.7em;">
+                <input type="hidden" name="service_id" value="${service.id}">
+                <input type="hidden" name="customer_id" value="${
+                  order.customer_id
+                }">
+                <input type="hidden" name="status" value="3">
+                <input type="hidden" name="csrf_token" value="${
+                  service.csrf_token || ""
+                }">
+                <button type="submit">Mark as Completed</button>
+              </form>
             `;
-          });
-          // Attach event listeners for all forms
-          const forms = providerOrdersList.querySelectorAll(
-            ".status-update-form"
-          );
-          forms.forEach((form) => {
-            form.addEventListener("submit", async function (e) {
-              e.preventDefault();
-              const formData = new FormData(this);
-              const response = await fetch(
-                "../actions/action_update_status.php",
-                {
-                  method: "POST",
-                  body: formData,
-                }
-              );
-              if (response.ok) {
-                await loadServiceInfo();
-              } else {
-                alert("Failed to update status.");
+          } else if (order.status_name === "In Progress") {
+            actionsHtml = `
+              <form class="status-update-form" data-idx="${idx}" style="margin-top:0.7em;">
+                <input type="hidden" name="service_id" value="${service.id}">
+                <input type="hidden" name="customer_id" value="${
+                  order.customer_id
+                }">
+                <input type="hidden" name="status" value="3">
+                <input type="hidden" name="csrf_token" value="${
+                  service.csrf_token || ""
+                }">
+                <button type="submit">Mark as Completed</button>
+              </form>
+            `;
+          }
+          providerOrdersList.innerHTML += `
+            <div class="provider-order-card">
+              <div class="provider-order-header">
+                <strong>Customer:</strong> ${order.customer_username}
+              </div>
+              <div class="provider-order-status">
+                <span><strong>Status:</strong> ${statusText}</span>
+              </div>
+              <div class="provider-order-actions">
+                ${actionsHtml}
+              </div>
+            </div>
+          `;
+        });
+        // Attach event listeners for all forms
+        const forms = providerOrdersList.querySelectorAll(
+          ".status-update-form"
+        );
+        forms.forEach((form) => {
+          form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch(
+              "../actions/action_update_status.php",
+              {
+                method: "POST",
+                body: formData,
               }
-            });
+            );
+            if (response.ok) {
+              await loadServiceInfo();
+            } else {
+              alert("Failed to update status.");
+            }
           });
-        }
-      } else if (providerOrdersBlock && providerOrdersList) {
+        });
+      } else {
         providerOrdersBlock.style.display = "block";
         providerOrdersList.innerHTML = `<p>No orders for this service yet.</p>`;
+      }
+      return;
+    }
+    // PROVIDER: show only the order for a specific customer (vendor_orders)
+    if (
+      myServicesContext === "vendor_orders" &&
+      service.provider_id &&
+      CURRENT_USER_ID == service.provider_id
+    ) {
+      // Get customer_id from localStorage (set by my_services.js)
+      const customerId = localStorage.getItem("vendor_orders_customer_id");
+      providerOrdersBlock.style.display = "block";
+      providerOrdersList.innerHTML = "";
+      if (
+        Array.isArray(service.orders) &&
+        service.orders.length > 0 &&
+        customerId
+      ) {
+        const order = service.orders.find(
+          (o) => String(o.customer_id) === String(customerId)
+        );
+        if (order) {
+          let statusText = order.status_name || "Unknown";
+          let actionsHtml = "";
+          if (order.status_name === "Ordered") {
+            actionsHtml = `
+              <form class="status-update-form" style="margin-top:0.7em;">
+                <input type="hidden" name="service_id" value="${service.id}">
+                <input type="hidden" name="customer_id" value="${
+                  order.customer_id
+                }">
+                <input type="hidden" name="status" value="2">
+                <input type="hidden" name="csrf_token" value="${
+                  service.csrf_token || ""
+                }">
+                <button type="submit">Mark as In Progress</button>
+              </form>
+              <form class="status-update-form" style="margin-top:0.7em; margin-left:0.7em;">
+                <input type="hidden" name="service_id" value="${service.id}">
+                <input type="hidden" name="customer_id" value="${
+                  order.customer_id
+                }">
+                <input type="hidden" name="status" value="3">
+                <input type="hidden" name="csrf_token" value="${
+                  service.csrf_token || ""
+                }">
+                <button type="submit">Mark as Completed</button>
+              </form>
+            `;
+          } else if (order.status_name === "In Progress") {
+            actionsHtml = `
+              <form class="status-update-form" style="margin-top:0.7em;">
+                <input type="hidden" name="service_id" value="${service.id}">
+                <input type="hidden" name="customer_id" value="${
+                  order.customer_id
+                }">
+                <input type="hidden" name="status" value="3">
+                <input type="hidden" name="csrf_token" value="${
+                  service.csrf_token || ""
+                }">
+                <button type="submit">Mark as Completed</button>
+              </form>
+            `;
+          }
+          providerOrdersList.innerHTML = `
+            <div class="order-card">
+              <p><strong>Customer:</strong> ${order.customer_username}</p>
+              <p><strong>Status:</strong> ${statusText}</p>
+              ${actionsHtml}
+            </div>
+          `;
+        } else {
+          providerOrdersList.innerHTML = `<p>No order found for this customer.</p>`;
+        }
+      } else {
+        providerOrdersList.innerHTML = `<p>No order found for this customer.</p>`;
       }
       return;
     }
