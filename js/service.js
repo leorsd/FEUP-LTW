@@ -115,6 +115,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const myServicesContext = localStorage.getItem("my_services") || "customer";
     // CUSTOMER: default UI, do nothing special
     if (myServicesContext === "customer") {
+      if (service.has_ordered) {
+        orderDiv.innerHTML = `<p>Status: ${
+          service.order_status || "Ordered"
+        }</p>`;
+      } else {
+        orderDiv.innerHTML = "";
+      }
       return;
     }
     // PROVIDER: show all orders for this service
