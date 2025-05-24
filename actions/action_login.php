@@ -33,7 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Set a success message
     $_SESSION['success'] = 'Login successful! Welcome back.';
-
+    // Generate new CSRF token on login
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     // Redirect to home page
     header('Location: ../pages/home.php');
   } else {

@@ -5,7 +5,15 @@ require_once(__DIR__ . '/../includes/db/connection.php');
 require_once(__DIR__ . '/../lib/service.php');
 require_once(__DIR__ . '/../lib/user.php');
 
-// CSRF token check (if you use CSRF tokens, add check here)
+// CSRF token check
+if (
+  !isset($_POST['csrf_token'], $_SESSION['csrf_token']) ||
+  !is_string($_SESSION['csrf_token']) ||
+  !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+) {
+  http_response_code(403);
+  exit('Invalid CSRF token');
+}
 
 if (!isset($_SESSION['user_info']['username'])) {
   $_SESSION['order_error'] = 'You must be logged in to order a service.';

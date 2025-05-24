@@ -21,9 +21,10 @@ if ($id !== null) {
     $serviceInfo = $service->getServiceById($id);
     if ($serviceInfo) {
         $serviceInfo['reviews'] = $review->getReviewsService($id);
+        $session_user_id = $_SESSION['user_info']['id'] ?? null;
         // Add per-user order info if logged in
-        if (isset($_SESSION['user_info']['id'])) {
-            $orderInfo = $service->getUserOrderInfo($id, (int) $_SESSION['user_info']['id']);
+        if ($session_user_id) {
+            $orderInfo = $service->getUserOrderInfo($id, (int) $session_user_id);
             $serviceInfo['has_ordered'] = $orderInfo['hasOrdered'];
             $serviceInfo['order_status'] = $orderInfo['status'];
         } else {
@@ -32,6 +33,12 @@ if ($id !== null) {
         }
         // Always include provider_id for frontend logic
         $serviceInfo['provider_id'] = $serviceInfo['creator_id'] ?? null;
+        // If logged-in user is provider, include all orders for this service
+        if ($session_user_id && $serviceInfo['creator_id'] == $session_user_id) {
+            $serviceInfo['orders'] = $service->getAllOrdersForService($id);
+        }
+        // Add CSRF token for forms
+        $serviceInfo['csrf_token'] = $_SESSION['csrf_token'] ?? null;
         echo json_encode($serviceInfo);
     } else {
         http_response_code(404);

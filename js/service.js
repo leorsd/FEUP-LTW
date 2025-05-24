@@ -104,9 +104,71 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderServiceOrder(service) {
     const orderDiv = document.getElementById("service-order");
     orderDiv.innerHTML = "";
-    // If user is the provider, don't show order/cancel
+    // If user is the provider
     if (service.provider_id && CURRENT_USER_ID == service.provider_id) {
-      orderDiv.innerHTML = "<p>You are the provider of this service.</p>";
+      if (Array.isArray(service.orders) && service.orders.length > 0) {
+        let html = `<h4>Orders for this service:</h4><ul class="orders-list">`;
+        service.orders.forEach((order, idx) => {
+          html += `<li>
+            <strong>Customer:</strong> ${order.customer_username} <br>
+            <form class="status-update-form" data-idx="${idx}" style="display:inline;">
+              <label for="status-select-${idx}"><strong>Status:</strong></label>
+              <select class="status-select" id="status-select-${idx}" name="status">
+                <option value="1" ${
+                  order.status_name === "Ordered" ? "selected" : ""
+                }>Ordered</option>
+                <option value="2" ${
+                  order.status_name === "In Progress" ? "selected" : ""
+                }>In Progress</option>
+                <option value="3" ${
+                  order.status_name === "Completed" ? "selected" : ""
+                }>Completed</option>
+              </select>
+              <input type="hidden" name="service_id" value="${service.id}">
+              <input type="hidden" name="customer_id" value="${
+                order.customer_id
+              }">
+              <input type="hidden" name="csrf_token" value="${
+                service.csrf_token || ""
+              }">
+              <button type="submit">Update Status</button>
+            </form>
+            <span id="current-status-${idx}" style="display:none;">${
+            order.status_name || "Unknown"
+          }</span>
+          </li>`;
+        });
+        html += `</ul>`;
+        orderDiv.innerHTML = html;
+        // Status update form logic
+        const forms = orderDiv.querySelectorAll(".status-update-form");
+        forms.forEach((form) => {
+          form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const idx = this.getAttribute("data-idx");
+            const formData = new FormData(this);
+            const response = await fetch(
+              "../actions/action_update_status.php",
+              {
+                method: "POST",
+                body: formData,
+              }
+            );
+            if (response.ok) {
+              // Optionally show a success message or update status text
+              const selectedText = this.querySelector(
+                "select option:checked"
+              ).textContent;
+              orderDiv.querySelector(`#current-status-${idx}`).textContent =
+                selectedText;
+            } else {
+              alert("Failed to update status.");
+            }
+          });
+        });
+      } else {
+        orderDiv.innerHTML = "<p>No orders for this service yet.</p>";
+      }
       return;
     }
     // If user has already ordered, show status and cancel option

@@ -73,6 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Auto-login after registration
     $_SESSION['user_info'] = $user->getUserInfo();
     $_SESSION['success'] = 'Registration successful! Welcome!';
+    // Generate new CSRF token on registration
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     header('Location: ../pages/home.php');
   } else {
     $_SESSION['error'] = 'An error occurred. Please try again.';

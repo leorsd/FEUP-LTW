@@ -421,4 +421,30 @@ class Service
         $stmt->execute();
         return (int) $stmt->fetchColumn();
     }
+
+    /**
+     * Get all orders for a service (for providers)
+     * Returns: array of [customer_id, customer_username, status_id, status_name]
+     */
+    public function getAllOrdersForService(int $service_id): array
+    {
+        $stmt = $this->db->prepare('
+            SELECT service_customer.customer_id, user.username AS customer_username, service_customer.status AS status_id, service_status.name AS status_name
+            FROM service_customer
+            JOIN user ON service_customer.customer_id = user.id
+            LEFT JOIN service_status ON service_customer.status = service_status.id
+            WHERE service_customer.service_id = :service_id
+        ');
+        $stmt->execute(['service_id' => $service_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Update the status of a service order (service_customer row)
+     */
+    public function updateOrderStatus(int $serviceId, int $customerId, int $statusId): bool
+    {
+        $stmt = $this->db->prepare('UPDATE service_customer SET status = ? WHERE service_id = ? AND customer_id = ?');
+        return $stmt->execute([$statusId, $serviceId, $customerId]);
+    }
 }

@@ -1,5 +1,4 @@
 <?php
-// filepath: /home/naldo/college/2.2/LTW/proj/actions/action_cancel_order.php
 declare(strict_types=1);
 session_start();
 require_once(__DIR__ . '/../includes/db/connection.php');
@@ -18,17 +17,26 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['service_id'])) {
     exit();
 }
 
+if (
+    !isset($_POST['csrf_token'], $_SESSION['csrf_token']) ||
+    !is_string($_SESSION['csrf_token']) ||
+    !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+) {
+    http_response_code(403);
+    exit('Invalid CSRF token');
+}
+
 $db = getDatabaseConnection();
-$service_id = (int)$_POST['service_id'];
-$user_id = (int)$_SESSION['user_info']['id'];
+$service_id = (int) $_POST['service_id'];
+$user_id = (int) $_SESSION['user_info']['id'];
 
 $service = new Service($db);
 $statusName = $service->getUserOrderStatus($service_id, $user_id);
 
 if ($statusName !== 'Ordered') {
-  $_SESSION['order_error'] = 'You can only cancel orders with status "Ordered".';
-  header('Location: ../pages/service.php?id=' . $service_id);
-  exit();
+    $_SESSION['order_error'] = 'You can only cancel orders with status "Ordered".';
+    header('Location: ../pages/service.php?id=' . $service_id);
+    exit();
 }
 
 // Remove the order from service_customer
