@@ -130,8 +130,10 @@ document.addEventListener("DOMContentLoaded", () => {
       service.provider_id &&
       CURRENT_USER_ID == service.provider_id
     ) {
+      providerOrdersBlock.style.display = "block";
+      providerOrdersBlock.querySelector("h2").textContent =
+        "Orders for this Service";
       if (Array.isArray(service.orders) && service.orders.length > 0) {
-        providerOrdersBlock.style.display = "block";
         providerOrdersList.innerHTML = "";
         service.orders.forEach((order, idx) => {
           let statusText = order.status_name || "Unknown";
@@ -224,9 +226,10 @@ document.addEventListener("DOMContentLoaded", () => {
       service.provider_id &&
       CURRENT_USER_ID == service.provider_id
     ) {
+      providerOrdersBlock.style.display = "block";
+      providerOrdersBlock.querySelector("h2").textContent = "Order";
       // Get customer_id from localStorage (set by my_services.js)
       const customerId = localStorage.getItem("vendor_orders_customer_id");
-      providerOrdersBlock.style.display = "block";
       providerOrdersList.innerHTML = "";
       if (
         Array.isArray(service.orders) &&
