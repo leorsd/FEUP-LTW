@@ -234,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
           let actionsHtml = "";
           if (order.status_name === "Ordered") {
             actionsHtml = `
-              <form class="status-update-form" style="margin-top:0.7em;">
+              <form class="status-update-form" data-idx="0">
                 <input type="hidden" name="service_id" value="${service.id}">
                 <input type="hidden" name="customer_id" value="${
                   order.customer_id
@@ -245,7 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }">
                 <button type="submit">Mark as In Progress</button>
               </form>
-              <form class="status-update-form" style="margin-top:0.7em; margin-left:0.7em;">
+              <form class="status-update-form" data-idx="0">
                 <input type="hidden" name="service_id" value="${service.id}">
                 <input type="hidden" name="customer_id" value="${
                   order.customer_id
@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
           } else if (order.status_name === "In Progress") {
             actionsHtml = `
-              <form class="status-update-form" style="margin-top:0.7em;">
+              <form class="status-update-form" data-idx="0">
                 <input type="hidden" name="service_id" value="${service.id}">
                 <input type="hidden" name="customer_id" value="${
                   order.customer_id
@@ -273,10 +273,16 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
           }
           providerOrdersList.innerHTML = `
-            <div class="order-card">
-              <p><strong>Customer:</strong> ${order.customer_username}</p>
-              <p><strong>Status:</strong> ${statusText}</p>
-              ${actionsHtml}
+            <div class="provider-order-card">
+              <div class="provider-order-header">
+                <strong>Customer:</strong> ${order.customer_username}
+              </div>
+              <div class="provider-order-status">
+                <span><strong>Status:</strong> ${statusText}</span>
+              </div>
+              <div class="provider-order-actions">
+                ${actionsHtml}
+              </div>
             </div>
           `;
         } else {
