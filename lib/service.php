@@ -351,24 +351,18 @@ class Service
     public function getServicesSoldByUser(int $user_id, array $filters, string $orderby, ?int $page = null, ?int $per_page = null): array
     {
         $params = [];
-        $query = 'SELECT service.*, service_category.name AS category_name, user.username AS provider_username, user.profile_picture AS provider_image, service_customer.status AS status_id, service_status.name AS status_name, service_customer.customer_id AS customer_id
+        $query = 'SELECT service.*, service_category.name AS category_name,
+                         provider.username AS provider_username, provider.profile_picture AS provider_image,
+                         customer.id AS customer_id, customer.username AS customer_username, customer.profile_picture AS customer_image,
+                         service_customer.status AS status_id, service_status.name AS status_name
                   FROM service_customer
                   JOIN service ON service_customer.service_id = service.id
                   LEFT JOIN service_category ON service.category = service_category.id
-                  LEFT JOIN user ON service.creator_id = user.id
+                  LEFT JOIN user AS provider ON service.creator_id = provider.id
+                  LEFT JOIN user AS customer ON service_customer.customer_id = customer.id
                   LEFT JOIN service_status ON service_customer.status = service_status.id
                   WHERE service.creator_id = :user_id';
         $params['user_id'] = $user_id;
-        // Apply status filter directly to service_customer.status
-        if (!empty($filters['status']) && is_array($filters['status'])) {
-            $placeholders = [];
-            foreach ($filters['status'] as $i => $statusId) {
-                $ph = ':status' . $i;
-                $placeholders[] = $ph;
-                $params['status' . $i] = $statusId;
-            }
-            $query .= ' AND service_customer.status IN (' . implode(', ', $placeholders) . ')';
-        }
         // Remove status from filters before passing to buildFilters
         $filters = array_diff_key($filters, ['status' => 1]);
         $extraWhere = $this->buildFilters($filters, $params);
@@ -437,38 +431,5 @@ class Service
         ');
         $stmt->execute(['service_id' => $service_id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * Update the status of a service order (service_customer row)
-     */
-    public function updateOrderStatus(int $serviceId, int $customerId, int $statusId): bool
-    {
-        $stmt = $this->db->prepare('UPDATE service_customer SET status = ? WHERE service_id = ? AND customer_id = ?');
-        return $stmt->execute([$statusId, $serviceId, $customerId]);
-    }
-
-    /**
-     * Get the current status ID for a service order
-     */
-    public function getOrderStatusId(int $serviceId, int $customerId): ?int
-    {
-        $stmt = $this->db->prepare('SELECT status FROM service_customer WHERE service_id = ? AND customer_id = ?');
-        $stmt->execute([$serviceId, $customerId]);
-        $status = $stmt->fetchColumn();
-        return $status !== false ? (int) $status : null;
-    }
-
-    /**
-     * Check if a status transition is valid (allow 1->2, 1->3, 2->3)
-     */
-    public function isValidStatusTransition(int $currentStatusId, int $newStatusId): bool
-    {
-        $valid = [
-            1 => [2, 3], // Ordered -> In Progress or Completed
-            2 => [3],    // In Progress -> Completed
-            3 => []      // Completed -> (no further)
-        ];
-        return isset($valid[$currentStatusId]) && in_array($newStatusId, $valid[$currentStatusId], true);
     }
 }

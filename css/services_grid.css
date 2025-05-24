@@ -1,151 +1,157 @@
-#services-grid-filters{
-    padding: 0 10rem;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 20% 80%;
-    grid-template-rows: auto;
-    grid-template-areas: "filters services";
+#services-grid-filters {
+  padding: 0 10rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 20% 80%;
+  grid-template-rows: auto;
+  grid-template-areas: "filters services";
 
-    #services-container{
-        grid-area: services;
+  #services-container {
+    grid-area: services;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    #services-list {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+      gap: 2rem;
+
+      .service-item {
+        text-decoration: none;
+        color: black;
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        border-radius: 10px;
+        padding: 1rem;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        gap: 1rem;
+
+        .service-image {
+          width: 100%;
+          aspect-ratio: 5 / 3;
+          object-fit: cover;
+          border-radius: 10px;
+        }
+
+        .provider-image {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin: 0 auto;
+        }
+
+        .customer-image {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin: 0 auto;
+        }
+
+        h3 {
+          font-size: 1.5rem;
+        }
+
+        p {
+          font-size: 1rem;
+        }
+
+        &:hover {
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+          transform: scale(1.02);
+          transition: all 0.2s ease-in-out;
+        }
+      }
+
+      .no-services {
+        grid-column: 1 / -1; /* span all columns */
+        display: flex;
+        height: 50vh;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+        color: grey;
+      }
+    }
+
+    #pagination {
+      padding: 2rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+
+      button {
+        background-color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover:not(:disabled) {
+          background-color: lightgrey;
+        }
+
+        &:disabled {
+          background-color: #e0e0e0;
+          color: #aaa;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  #filters {
+    grid-area: filters;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+
+    h3 {
+      margin: 1rem 0;
+      font-size: 1.75rem;
+    }
+
+    #filter-form {
+      display: flex;
+      flex-direction: column;
+      align-items: left;
+      gap: 1rem;
+
+      label {
+        font-weight: 600;
+      }
+
+      #form-categories {
         display: flex;
         flex-direction: column;
         gap: 1rem;
 
-        #services-list{
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-            gap: 2rem;
-
-            .service-item{
-                text-decoration: none;
-                color: black;
-                display: flex;
-                flex-direction: column;
-                background-color: white;
-                border-radius: 10px;
-                padding: 1rem;
-                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-                text-align: center;
-                gap: 1rem;
-
-                .service-image{
-                    width: 100%;
-                    aspect-ratio: 5 / 3;       
-                    object-fit: cover;         
-                    border-radius: 10px;
-                }
-
-                .provider-image{
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                    object-fit: cover;
-                    margin: 0 auto;
-                }
-
-                h3{
-                    font-size: 1.5rem;
-                }
-
-                p{
-                    font-size: 1rem;
-                }
-
-                &:hover{
-                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-                    transform: scale(1.02);
-                    transition: all 0.2s ease-in-out;
-                }
-            }
-
-            .no-services{
-                grid-column: 1 / -1; /* span all columns */
-                display: flex;
-                height: 50vh;
-                justify-content: center;
-                align-items: center;
-                font-size: 2rem;
-                color: grey;
-            }
+        label {
+          font-weight: 400;
         }
 
-        #pagination{
-            padding: 2rem 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
+        .category {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
 
-            button{
-                background-color: white;
-                border: none;
-                padding: 0.5rem 1rem;
-                border-radius: 5px;
-                cursor: pointer;
-
-                &:hover:not(:disabled){
-                    background-color: lightgrey;
-                }
-
-                &:disabled{
-                    background-color: #e0e0e0;
-                    color: #aaa;
-                    cursor: not-allowed;
-                }
-            }
+          input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+          }
         }
+      }
+
+      #location,
+      #provider {
+        width: 50%;
+      }
     }
-
-
-    #filters{
-        grid-area:filters;
-        display: flex;
-        flex-direction: column;
-        align-items: left;
-
-        h3{
-            margin: 1rem 0;
-            font-size: 1.75rem;
-        }
-        
-
-        #filter-form{
-            display: flex;
-            flex-direction: column;
-            align-items: left;
-            gap: 1rem; 
-
-            label{
-                font-weight: 600;
-            }  
-
-            #form-categories{
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-
-                label{
-                    font-weight: 400;
-                }
-
-                .category{
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-
-                    input[type="checkbox"]{
-                        width: 20px;
-                        height: 20px;
-                    }
-                }
-            }
-
-            #location,#provider{
-                width: 50%;
-            }
-        }
-    }
-
+  }
 }

@@ -31,8 +31,9 @@ if ($id !== null) {
             $serviceInfo['has_ordered'] = false;
             $serviceInfo['order_status'] = null;
         }
-        // Always include provider_id for frontend logic
-        $serviceInfo['provider_id'] = $serviceInfo['creator_id'] ?? null;
+
+        // Note: service info has a creator_id field that is the user ID of the provider
+
         // If logged-in user is provider, include all orders for this service
         if ($session_user_id && $serviceInfo['creator_id'] == $session_user_id) {
             $serviceInfo['orders'] = $service->getAllOrdersForService($id);

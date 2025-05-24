@@ -107,6 +107,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const showStatus =
           (currentTab === "ordered" || currentTab === "sold") &&
           service.status_name !== undefined;
+        const showProvider =
+          localStorage.getItem("my_services") !== "vendor_services" &&
+          localStorage.getItem("my_services") !== "vendor_orders";
+        const showCustomer =
+          localStorage.getItem("my_services") === "vendor_orders" &&
+          service.customer_username;
         const serviceItem = document.createElement("a");
         serviceItem.href = `service.php?id=${service.id}`;
         serviceItem.classList.add("service-item");
@@ -128,15 +134,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }" class="service-image">
                 <h4>${service.title}</h4>
                 <p>Description: ${service.description}</p>
-                <img src="${
-                  service.provider_image
-                }" alt="profile image" class="provider-image">
-                <p>Provider: ${service.provider_username}</p>
+                ${
+                  showProvider
+                    ? `<img src="${service.provider_image}" alt="profile image" class="provider-image">
+    <p>Provider: ${service.provider_username}</p>`
+                    : ""
+                }
                 <p>Category: ${service.category_name}</p>
                 <p>Location: ${service.location}</p>
                 ${showStatus ? `<p>Status: ${service.status_name}</p>` : ""}
                 <p>Price: $${service.price}</p>
                 <p>Rating: ${service.rating}</p>
+                ${
+                  showCustomer
+                    ? `<img src="${
+                        service.customer_image
+                          ? "../images/cache/" + service.customer_image
+                          : "../images/user.jpg"
+                      }" alt="customer image" class="customer-image">
+       <p>Customer: ${service.customer_username}</p>`
+                    : ""
+                }
             `;
         servicesList.appendChild(serviceItem);
       });

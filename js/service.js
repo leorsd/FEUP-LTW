@@ -139,8 +139,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // PROVIDER: show all orders for this service
     if (
       myServicesContext === "vendor_services" &&
-      service.provider_id &&
-      CURRENT_USER_ID == service.provider_id
+      service.creator_id &&
+      CURRENT_USER_ID == service.creator_id
     ) {
       providerOrdersBlock.style.display = "block";
       providerOrdersBlock.querySelector("h2").textContent =
@@ -235,8 +235,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // PROVIDER: show only the order for a specific customer (vendor_orders)
     if (
       myServicesContext === "vendor_orders" &&
-      service.provider_id &&
-      CURRENT_USER_ID == service.provider_id
+      service.creator_id &&
+      CURRENT_USER_ID == service.creator_id
     ) {
       providerOrdersBlock.style.display = "block";
       providerOrdersBlock.querySelector("h2").textContent = "Order";
