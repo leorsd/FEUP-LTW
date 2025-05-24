@@ -285,6 +285,28 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             </div>
           `;
+          // Attach event listeners for the forms (AJAX submit)
+          const forms = providerOrdersList.querySelectorAll(
+            ".status-update-form"
+          );
+          forms.forEach((form) => {
+            form.addEventListener("submit", async function (e) {
+              e.preventDefault();
+              const formData = new FormData(this);
+              const response = await fetch(
+                "../actions/action_update_status.php",
+                {
+                  method: "POST",
+                  body: formData,
+                }
+              );
+              if (response.ok) {
+                await loadServiceInfo();
+              } else {
+                alert("Failed to update status.");
+              }
+            });
+          });
         } else {
           providerOrdersList.innerHTML = `<p>No order found for this customer.</p>`;
         }
