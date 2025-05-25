@@ -91,7 +91,7 @@ CREATE TABLE
   );
 
 CREATE TABLE
-  service_customer (
+  service_order (
     id INTEGER PRIMARY KEY,
     service_id INTEGER REFERENCES service (id) ON DELETE CASCADE,
     customer_id INTEGER REFERENCES user (id) ON DELETE CASCADE,
