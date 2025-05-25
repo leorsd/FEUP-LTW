@@ -1,0 +1,156 @@
+@import url('utils.css');
+
+:root {
+  --admin-blue: #0088cc;
+  --admin-bg: #fff;
+  --admin-radius: 0.75rem;
+  --admin-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+main {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem 2vw;
+  background: var(--admin-bg);
+  border-radius: var(--admin-radius);
+  box-shadow: var(--admin-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+main h2 {
+  color: var(--admin-blue);
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+main section {
+  background: #f7f9fa;
+  border-radius: var(--admin-radius);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  padding: 1.5rem 1rem;
+  margin-bottom: 1.5rem;
+  max-height: none;
+  overflow: visible;
+  min-width: 0;
+}
+
+main section h3 {
+  color: var(--admin-blue);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+main form {
+  display: flex;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+main input[type="text"],
+main input[type="search"] {
+  padding: 0.5rem 1rem;
+  border: 1.5px solid #e0e7ef;
+  border-radius: 0.4rem;
+  font-size: 1rem;
+  background: #f7f9fa;
+  color: var(--admin-blue);
+  transition: border 0.2s;
+  min-width: 0;
+  flex: 1 1 120px;
+}
+main input[type="text"]:focus,
+main input[type="search"]:focus {
+  border-color: var(--admin-blue);
+  outline: none;
+}
+main form button {
+  background: var(--admin-blue);
+  color: #fff;
+  border: none;
+  border-radius: 0.4rem;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  min-width: 100px;
+}
+main form button:hover {
+  background: #005f8a;
+  color: #ffe082;
+  transform: scale(1.05);
+}
+
+main ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 250px;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+main ul li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 0.5rem;
+  margin-bottom: 0.7rem;
+  padding: 0.7rem 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  font-size: 1rem;
+  color: #222;
+  min-width: 0;
+  gap: 0.5rem;
+  word-break: break-word;
+}
+
+main ul li button {
+  background: var(--admin-blue);
+  color: #fff;
+  border: none;
+  border-radius: 0.4rem;
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  min-width: 80px;
+}
+main ul li button:hover {
+  background: #005f8a;
+  color: #ffe082;
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  main { padding: 1rem 1vw; }
+  main section { padding: 1rem 0.5rem; }
+  main ul li { flex-direction: column; align-items: stretch; gap: 0.5rem; }
+}
+
+@media (max-width: 700px) {
+  main { padding: 0.5rem 0.2rem; }
+  main h2 { font-size: 1.3rem; }
+  main section h3 { font-size: 1rem; }
+  main ul li { font-size: 0.97rem; padding: 0.5rem 0.5rem; }
+  main form { flex-direction: column; gap: 0.4rem; }
+  main ul { max-height: 300px; }
+}
+
+@media (max-width: 480px) {
+  main { padding: 0.2rem 0.1rem; }
+  main h2 { font-size: 1.1rem; }
+  main section { padding: 0.7rem 0.2rem; }
+  main ul li { font-size: 0.9rem; padding: 0.4rem 0.4rem; }
+  main form { flex-direction: column; gap: 0.3rem; }
+  main ul { max-height: 300px; }
+}

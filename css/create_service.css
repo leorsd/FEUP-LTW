@@ -1,7 +1,3 @@
-/*
-  Modern, utility-based, and fully responsive create_service.css for the Create Service page.
-  Uses utils.css for all layout, spacing, color, and typography. Only customizes unique widgets (category radios, file input, slider).
-*/
 @import url('utils.css');
 
 main#create-service-main, main:not([id]) {

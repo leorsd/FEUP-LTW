@@ -14,7 +14,6 @@
 #service-main h2 {
   text-align: center;
   font-size: 2rem;
-  padding: 2rem 0 1rem 0;
   color: #0088cc;
   font-weight: 700;
 }
@@ -23,22 +22,19 @@
   border-radius: 0.75rem;
   padding: 1.5rem 1rem;
   display: flex;
-  flex-wrap: wrap;
   gap: 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 #service-image {
-  width: 28rem;
-  max-width: 100%;
+  width: 45vw;
   object-fit: cover;
   border-radius: 0.75rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 #service-atributes {
+  margin-left: 2rem;
   display: flex;
   flex-direction: column;
+  align-items: left;
   gap: 1rem;
-  min-width: 220px;
 }
 #service-title {
   font-size: 1.5rem;
@@ -47,13 +43,11 @@
 }
 #service-description {
   font-size: 1rem;
-  color: #3a4a5d;
 }
 #service-provider {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: left;
 }
 #service-provider img {
   width: 4rem;
@@ -61,24 +55,19 @@
   border-radius: 50%;
   object-fit: cover;
   margin-right: 0.5rem;
-  border: 2px solid #e0e7ef;
 }
 #service-provider p {
   font-size: 1rem;
+  margin-left: 1rem;
   font-weight: 600;
   color: #222;
 }
 #service-price, #service-status, #service-location, #service-category {
   font-size: 1.1rem;
-  color: #3a4a5d;
-  font-weight: 600;
+  color:black;
+  font-weight: 400;
 }
 
-#service-reviews {
-  border-top: none;
-  margin-top: 2rem;
-  padding-top: 2rem;
-}
 #service-reviews h3 {
   margin-top: 0;
   color: #0088cc;
@@ -86,7 +75,7 @@
   font-weight: 700;
 }
 #reviews-form {
-  background: #f7f9fa;
+  background: #fff;
   border-radius: 0.75rem;
   padding: 1rem 1.2rem;
   margin-bottom: 1.5rem;
@@ -121,15 +110,15 @@
   background: #005f8a;
   transform: scale(1.04);
 }
+
 #reviews-list {
-  background: #f7f9fa;
+  background: #fff;
   border-radius: 0.75rem;
   padding: 1rem 1.2rem;
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
   margin-top: 1.5rem;
 }
 .review-item {
-  background: #fff;
   border-radius: 0.5rem;
   padding: 1rem;
   margin-bottom: 1.2rem;
@@ -156,7 +145,7 @@
 }
 
 #provider-orders-block {
-  background: #f7f9fa;
+  background: #fff;
   border-radius: 0.75rem;
   padding: 1.5rem 1.5rem;
   margin-top: 2rem;
