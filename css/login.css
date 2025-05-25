@@ -123,47 +123,19 @@ footer {
   display: none;
 }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
+/* Responsive: Hide image and show only form when page is narrow */
+@media (max-width: 1000px) {
   body {
-    grid-template-columns: 3fr 1fr;
-    grid-template-rows: 20% 80%;
+    grid-template-columns: 1fr;
     grid-template-areas:
-      "header image"
-      "form image";
+      "header"
+      "form";
   }
-  #login-background {
-    min-width: 0;
-    width: 100%;
-    min-height: 100vh;
-    transition: width 0.3s, opacity 0.3s;
-    opacity: 0.8;
-  }
-}
-@media (max-width: 800px) {
-  body {
-    grid-template-columns: 4fr 1fr;
-  }
-  #login-background {
-    opacity: 0.6;
-  }
-}
-@media (max-width: 640px) {
-  body {
-    grid-template-columns: 7fr 1fr;
-  }
-  #login-background {
-    opacity: 0.3;
-  }
-}
-@media (max-width: 480px) {
-  body {
-    grid-template-columns: 1fr 0fr;
-  }
-  #login-background {
+  #register-background {
+    display: none;
     width: 0;
     min-width: 0;
     opacity: 0;
-    display: none;
   }
 }
+

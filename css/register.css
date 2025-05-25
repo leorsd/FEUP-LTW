@@ -5,7 +5,6 @@ body {
   width: 100vw;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 20% 80%;
   grid-template-areas:
     "header image"
     "form image";
@@ -41,8 +40,8 @@ header h1 a {
   background: #fff;
   border-radius: 1rem;
   box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-  padding: 2.5rem 2rem 2rem 2rem;
-  margin: 2rem auto;
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem; /* reduced padding for less height */
+  margin: 2rem auto 1rem auto;           /* reduced bottom margin */
   min-width: 320px;
   max-width: 420px;
   width: 100%;
@@ -122,53 +121,23 @@ header h1 a {
   background: url('../images/login_register.jpg') center center/cover no-repeat;
   min-height: 100vh;
   min-width: 100%;
+  transition: opacity 0.3s, width 0.3s;
 }
 
-footer {
-  display: none;
-}
+footer { display: none; }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
+/* Responsive: Hide image and show only form when page is narrow */
+@media (max-width: 1000px) {
   body {
-    grid-template-columns: 3fr 1fr;
-    grid-template-rows: 20% 80%;
+    grid-template-columns: 1fr;
     grid-template-areas:
-      "header image"
-      "form image";
+      "header"
+      "form";
   }
   #register-background {
-    min-width: 0;
-    width: 100%;
-    min-height: 100vh;
-    transition: width 0.3s, opacity 0.3s;
-    opacity: 0.8;
-  }
-}
-@media (max-width: 800px) {
-  body {
-    grid-template-columns: 4fr 1fr;
-  }
-  #register-background {
-    opacity: 0.6;
-  }
-}
-@media (max-width: 640px) {
-  body {
-    grid-template-columns: 7fr 1fr;
-  }
-  #register-background {
-    opacity: 0.3;
-  }
-}
-@media (max-width: 480px) {
-  body {
-    grid-template-columns: 1fr 0fr;
-  }
-  #register-background {
+    display: none;
     width: 0;
     min-width: 0;
     opacity: 0;
-    display: none;
   }
 }

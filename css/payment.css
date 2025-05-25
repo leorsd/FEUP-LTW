@@ -1,7 +1,3 @@
-/*
-  Modern, utility-based, and fully responsive payment.css for the Payment page.
-  Uses utils.css for all layout, spacing, color, and typography. All rules are strictly scoped to the payment form and its main area to avoid global side effects.
-*/
 @import url('utils.css');
 
 main#payment-main, main:not([id]) {

@@ -4,6 +4,7 @@ function draw_change_password_body()
 {
   ?>
   <main id="profile-main">
+    <h2 class="profile-title">Change Password</h2>
     <section class="profile-section">
       <?php if (isset($_SESSION['change_password_msg'])): ?>
         <p style="color:green; text-align:center;"> <?php echo $_SESSION['change_password_msg']; unset($_SESSION['change_password_msg']); ?> </p>

@@ -5,6 +5,7 @@ function draw_edit_profile_body()
   $user_info = $_SESSION['user_info'] ?? [];
   ?>
   <main id="profile-main">
+    <h2 class="profile-title">Edit Profile</h2>
     <section class="profile-section">
       <?php if (isset($_SESSION['profile_msg'])): ?>
         <p style="color:green; text-align:center;"> <?php echo $_SESSION['profile_msg']; unset($_SESSION['profile_msg']); ?> </p>

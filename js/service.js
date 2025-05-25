@@ -29,12 +29,12 @@ document.addEventListener("DOMContentLoaded", () => {
       // Render service info
       document.getElementById("service-image").src = service.image;
       document.getElementById("service-title").innerHTML = `<h3>${service.title}</h3>`;
-      document.getElementById("service-description").innerHTML = `<p>${service.description}</p>`;
+      document.getElementById("service-description").innerHTML = `<p>Description: ${service.description}</p>`;
       document.getElementById("service-provider").innerHTML = `
         <img src="${service.provider_image}" alt="${service.provider_username}" class="provider-image">
         <p>${service.provider_username}</p>`;
       document.getElementById("service-category").innerHTML = `<p>Category: ${service.category_name}</p>`;
-      document.getElementById("service-price").innerHTML = `<p>Price: ${service.price}€/hour</p>`;
+      document.getElementById("service-price").innerHTML = `<p>Price: $${service.price}</p>`;
       document.getElementById("service-location").innerHTML = `<p>Location: ${service.location}</p>`;
       document.getElementById("service-rating").innerHTML = `<p>Rating: ${service.rating}</p>`;
 
