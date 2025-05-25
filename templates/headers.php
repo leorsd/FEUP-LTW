@@ -118,5 +118,24 @@ function draw_chat_header()
   <script src="../js/chat.js" defer></script>
   <?php
 }
+
+function draw_payment_header()
+{
+  ?>
+  <link rel="stylesheet" href="../css/payment.css">
+  <link rel="stylesheet" href="../css/headbar.css">
+  <script src="../js/headbar.js" defer></script>
+  <?php
+}
+
+function draw_edit_service_header()
+{
+  ?>
+  <link rel="stylesheet" href="../css/edit_service.css">
+  <link rel="stylesheet" href="../css/headbar.css">
+  <script src="../js/headbar.js" defer></script>
+  <script src="../js/edit_service.js" defer></script>
+  <?php
+}
 ?>
 
