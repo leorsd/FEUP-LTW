@@ -100,3 +100,12 @@ php -S localhost:9000
 ```
 
 This will start the web server at http://localhost:9000. You can open this in your browser to access the application.
+
+## Test Credentials
+
+The following credentials are provided for testing purposes (see database/seed.sql):
+
+- admin1/adminpass1
+- admin2/adminpass2
+- freelancer1/freelancerpass
+- user1/userpass
