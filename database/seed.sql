@@ -33,8 +33,10 @@ INSERT INTO service_category (id, name) VALUES
 
 INSERT INTO service_status (id, name) VALUES
 (1, 'Ordered'),
-(2, 'In Progress'),
-(3, 'Completed');
+(2, 'Waiting for Payment'),
+(3, 'In Progress'),
+(4, 'Completed'),
+(5, 'Rejected');
 
 
 INSERT INTO service (id, creator_id, title, description, price, location, created_at, category) VALUES

@@ -33,6 +33,9 @@ function draw_service_body()
                 <div id="service-order">
                     <!-- Order actions/status will be rendered by JS -->
                 </div>
+                <div id="service-buttons">
+                    <!-- Favorite actions will be rendered by JS -->
+                </div>
             </section>
         </div>
         <section id="provider-orders-block" style="display:none;">
@@ -43,7 +46,7 @@ function draw_service_body()
         </section>
         <section id="service-reviews">
             <h2>Reviews</h2>
-            <div id="reviews-form" style="display:none;">
+            <div id="reviews-form">
                 <h3>Leave a Review</h3>
                 <form id="review-form">
                     <label for="review-text">Review:</label>
