@@ -6,6 +6,8 @@ function draw_create_service_body()
   <main>
     <h2>Create a Service</h2>
     <form id="create-service-form" method="POST" enctype="multipart/form-data" action="../actions/action_create_service.php">
+      <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
+
       <div id="form-title">
         <label for="service-title">Service Title</label>
         <input type="text" id="service-title" name="service_title" placeholder="Title" required>

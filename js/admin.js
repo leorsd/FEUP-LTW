@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   async function adminApi(action, data) {
+    // Attach CSRF token from the page to all admin API requests
+    data = { ...data, csrf_token: document.querySelector('input[name="csrf_token"]')?.value || '' };
     const res = await fetch(`../api/admin.php?action=${action}&id=${encodeURIComponent(CURRENT_USER_ID)}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

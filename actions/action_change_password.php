@@ -11,13 +11,19 @@ if (!isset($_SESSION['user_info']['username'])) {
   header('Location: ../pages/change_password.php');
   exit();
 }
+// CSRF token check
+if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+  $_SESSION['change_password_error'] = 'Invalid CSRF token.';
+  header('Location: ../pages/change_password.php');
+  exit();
+}
 
 $user = new User($db);
-$user->setUserData($_SESSION['user_info']['username'], '', '');
+$user_id = $_SESSION['user_info']['id'];
 
 if (!empty($_POST['current_password']) && !empty($_POST['new_password']) && !empty($_POST['confirm_new_password'])) {
   // First, check if current password is correct
-  if (!$user->verifyPassword($_POST['current_password'])) {
+  if (!$user->verifyPassword($user_id, $_POST['current_password'])) {
     $_SESSION['change_password_error'] = 'Current password is incorrect.';
     header('Location: ../pages/change_password.php');
     exit();
@@ -35,7 +41,7 @@ if (!empty($_POST['current_password']) && !empty($_POST['new_password']) && !emp
     exit();
   }
   // All checks passed, update password
-  if ($user->updatePassword($_POST['current_password'], $_POST['new_password'])) {
+  if ($user->updatePassword($user_id, $_POST['current_password'], $_POST['new_password'])) {
     $_SESSION['change_password_msg'] = 'Password updated successfully!';
   }
 }

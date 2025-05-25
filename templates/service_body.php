@@ -49,6 +49,7 @@ function draw_service_body()
             <div id="reviews-form">
                 <h3>Leave a Review</h3>
                 <form id="review-form">
+                    <input type="hidden" id="csrf_token" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
                     <label for="review-text">Review:</label>
                     <textarea id="review-text" name="review-text" required></textarea>
                     <label for="review-rating">Rating:</label>

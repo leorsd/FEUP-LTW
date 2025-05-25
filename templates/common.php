@@ -4,6 +4,7 @@ declare(strict_types=1);
 function draw_initial_common_header(string $title)
 {
   $user_id = $_SESSION['user_info']['id'] ?? null;
+  $csrf_token = $_SESSION['csrf_token'] ?? '';
   ?>
   <!DOCTYPE html>
   <html lang="en">
@@ -13,7 +14,8 @@ function draw_initial_common_header(string $title)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title; ?></title>
     <script>
-      const CURRENT_USER_ID = <?= json_encode($user_id) ?>; // This will be used in the JavaScript code to identify the current user
+      const CURRENT_USER_ID = <?= json_encode($user_id) ?>;
+      const CSRF_TOKEN = <?= json_encode($csrf_token) ?>;
     </script>
   <?php }
 

@@ -10,6 +10,7 @@ function draw_register_body()
   </header>
   <div id="register-background"></div>
   <form action="../actions/action_register.php" method="POST" id="register-form">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
     <h2>Sign Up</h2>
     <?php if (isset($_SESSION['error'])): ?>
       <div class="register-error" style="color: #b00; margin-bottom: 1em; text-align: center;">

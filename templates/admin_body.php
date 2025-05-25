@@ -11,6 +11,7 @@ function draw_admin_body()
         <section>
             <h3>Categories</h3>
             <form id="admin-add-category-form" style="margin-bottom:1em;">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
                 <input type="text" name="category_name" placeholder="New category name" required>
                 <button type="submit">Add Category</button>
             </form>

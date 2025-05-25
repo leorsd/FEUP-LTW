@@ -11,6 +11,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
+// CSRF token check
+session_start();
+if (!isset($data['csrf_token']) || !isset($_SESSION['csrf_token']) || $data['csrf_token'] !== $_SESSION['csrf_token']) {
+    http_response_code(403);
+    echo json_encode(['error' => 'Invalid CSRF token']);
+    exit;
+}
 
 $service_id = isset($data['service_id']) ? (int)$data['service_id'] : null;
 $rating = isset($data['rating']) ? (int)$data['rating'] : null;

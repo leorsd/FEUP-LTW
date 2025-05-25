@@ -10,6 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     exit('Method Not Allowed');
 }
+// CSRF token check
+if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    $_SESSION['update_error'] = 'Invalid CSRF token.';
+    header("Location: ../pages/edit_service.php?service_id=$service_id");
+    exit();
+}
 
 $service_id = isset($_POST['service_id']) ? (int)$_POST['service_id'] : null;
 $user_id = $_SESSION['user_info']['id'] ?? null;

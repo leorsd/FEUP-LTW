@@ -12,6 +12,7 @@ function draw_edit_profile_body()
         <p style="color:red; text-align:center;"> <?php echo $_SESSION['profile_error']; unset($_SESSION['profile_error']); ?> </p>
       <?php endif; ?>
       <form action="../actions/action_update_profile.php" method="POST" enctype="multipart/form-data" class="edit-profile-form">
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
         <!-- <div class="edit-profile-row">
           <label>Email:</label>
           <input type="email" name="email" value="<?php echo htmlspecialchars((string)($user_info['email'] ?? '')); ?>" required>

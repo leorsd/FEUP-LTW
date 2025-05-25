@@ -66,10 +66,13 @@ document.addEventListener("DOMContentLoaded", () => {
         deleteBtn.className = "delete-service-btn";
         deleteBtn.onclick = async function () {
           if (confirm("Are you sure you want to delete this service? This action cannot be undone.")) {
+            const formData = new URLSearchParams();
+            formData.append("service_id", service.id);
+            formData.append("csrf_token", typeof CSRF_TOKEN !== 'undefined' ? CSRF_TOKEN : (document.getElementById('csrf_token')?.value || ''));
             const response = await fetch("../actions/action_delete_service.php", {
               method: "POST",
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: `service_id=${encodeURIComponent(service.id)}`,
+              body: formData.toString(),
             });
             if (response.redirected) {
               window.location.href = response.url;

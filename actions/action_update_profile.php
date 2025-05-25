@@ -11,6 +11,12 @@ if (!isset($_SESSION['user_info']['id'])) {
   header('Location: ../pages/edit_profile.php');
   exit();
 }
+// CSRF token check
+if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+  $_SESSION['profile_error'] = 'Invalid CSRF token.';
+  header('Location: ../pages/edit_profile.php');
+  exit();
+}
 
 $user_id = $_SESSION['user_info']['id'];
 $user = new User($db);

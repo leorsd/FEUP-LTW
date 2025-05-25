@@ -22,6 +22,13 @@ $action = $_GET['action'] ?? null;
 
 if ($action === 'add_category') {
     $data = json_decode(file_get_contents('php://input'), true);
+    // CSRF token check
+    session_start();
+    if (!isset($data['csrf_token']) || !isset($_SESSION['csrf_token']) || $data['csrf_token'] !== $_SESSION['csrf_token']) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Invalid CSRF token']);
+        exit();
+    }
     $name = trim($data['category_name'] ?? '');
     if ($name === '') {
         http_response_code(400);
@@ -36,6 +43,13 @@ if ($action === 'add_category') {
 
 if ($action === 'delete_category') {
     $data = json_decode(file_get_contents('php://input'), true);
+    // CSRF token check
+    session_start();
+    if (!isset($data['csrf_token']) || !isset($_SESSION['csrf_token']) || $data['csrf_token'] !== $_SESSION['csrf_token']) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Invalid CSRF token']);
+        exit();
+    }
     $id = (int)($data['category_id'] ?? 0);
     if (!$id) {
         http_response_code(400);
@@ -50,6 +64,13 @@ if ($action === 'delete_category') {
 
 if ($action === 'delete_user') {
     $data = json_decode(file_get_contents('php://input'), true);
+    // CSRF token check
+    session_start();
+    if (!isset($data['csrf_token']) || !isset($_SESSION['csrf_token']) || $data['csrf_token'] !== $_SESSION['csrf_token']) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Invalid CSRF token']);
+        exit();
+    }
     $id = (int)($data['user_id'] ?? 0);
     if (!$id) {
         http_response_code(400);
@@ -63,6 +84,13 @@ if ($action === 'delete_user') {
 
 if ($action === 'promote_admin') {
     $data = json_decode(file_get_contents('php://input'), true);
+    // CSRF token check
+    session_start();
+    if (!isset($data['csrf_token']) || !isset($_SESSION['csrf_token']) || $data['csrf_token'] !== $_SESSION['csrf_token']) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Invalid CSRF token']);
+        exit();
+    }
     $id = (int)($data['user_id'] ?? 0);
     if (!$id) {
         http_response_code(400);
@@ -76,6 +104,13 @@ if ($action === 'promote_admin') {
 
 if ($action === 'delete_service') {
     $data = json_decode(file_get_contents('php://input'), true);
+    // CSRF token check
+    session_start();
+    if (!isset($data['csrf_token']) || !isset($_SESSION['csrf_token']) || $data['csrf_token'] !== $_SESSION['csrf_token']) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Invalid CSRF token']);
+        exit();
+    }
     $id = (int)($data['service_id'] ?? 0);
     if (!$id) {
         http_response_code(400);

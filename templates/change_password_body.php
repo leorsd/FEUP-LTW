@@ -11,6 +11,7 @@ function draw_change_password_body()
         <p style="color:red; text-align:center;"> <?php echo $_SESSION['change_password_error']; unset($_SESSION['change_password_error']); ?> </p>
       <?php endif; ?>
       <form action="../actions/action_change_password.php" method="POST" class="profile-form">
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
         <label>
           Current Password:
           <input type="password" name="current_password" required>
