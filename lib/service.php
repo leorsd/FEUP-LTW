@@ -103,20 +103,21 @@ class Service
         ?int $per_page = null
     ): array {
         $params = [];
+        $where = [];
+        // Default SELECT and FROM for 'all' and 'created'
         $select = 'service.*, service_category.name AS category_name, user.username AS provider_username, user.profile_picture AS provider_image, COUNT(*) OVER() AS total_count';
         $from = 'service
             LEFT JOIN service_category ON service.category = service_category.id
             LEFT JOIN user ON service.creator_id = user.id';
-        $where = [];
 
-        // Context-specific joins and where
+        // Context-specific joins and SELECT
         if ($context === 'bought' && $user_id !== null) {
             $from = 'service_order
                 JOIN service ON service_order.service_id = service.id
                 LEFT JOIN service_category ON service.category = service_category.id
                 LEFT JOIN user ON service.creator_id = user.id
                 LEFT JOIN service_status ON service_order.status = service_status.id';
-            $select .= ', service_order.status AS status_id, service_status.name AS status_name';
+            $select = 'service.*, service_category.name AS category_name, user.username AS provider_username, user.profile_picture AS provider_image, service_order.status AS status_id, service_status.name AS status_name, COUNT(*) OVER() AS total_count';
             $where[] = 'service_order.customer_id = :user_id';
             $params['user_id'] = $user_id;
         } elseif ($context === 'sold' && $user_id !== null) {
@@ -126,7 +127,7 @@ class Service
                 LEFT JOIN user AS provider ON service.creator_id = provider.id
                 LEFT JOIN user AS customer ON service_order.customer_id = customer.id
                 LEFT JOIN service_status ON service_order.status = service_status.id';
-            $select .= ', customer.id AS customer_id, customer.username AS customer_username, customer.profile_picture AS customer_image, service_order.status AS status_id, service_status.name AS status_name';
+            $select = 'service.*, service_category.name AS category_name, provider.username AS provider_username, provider.profile_picture AS provider_image, customer.id AS customer_id, customer.username AS customer_username, customer.profile_picture AS customer_image, service_order.status AS status_id, service_status.name AS status_name, COUNT(*) OVER() AS total_count';
             $where[] = 'service.creator_id = :user_id';
             $params['user_id'] = $user_id;
         } elseif ($context === 'created' && $user_id !== null) {
@@ -141,19 +142,37 @@ class Service
             $params['favorites_owner'] = $filters['favorites_owner'];
         }
         if (!empty($filters['search'])) {
-            $where[] = '(service.title LIKE :search OR service.description LIKE :search OR service.location LIKE :search OR user.username LIKE :search)';
+            // Use correct alias for username in each context
+            if ($context === 'sold') {
+                $where[] = '(service.title LIKE :search OR service.description LIKE :search OR service.location LIKE :search OR provider.username LIKE :search)';
+            } else {
+                $where[] = '(service.title LIKE :search OR service.description LIKE :search OR service.location LIKE :search OR user.username LIKE :search)';
+            }
             $params['search'] = '%' . $filters['search'] . '%';
         }
         if (!empty($filters['provider'])) {
-            $where[] = 'user.username LIKE :provider';
+            // Use correct alias for provider in each context
+            if ($context === 'sold') {
+                $where[] = 'provider.username LIKE :provider';
+            } else {
+                $where[] = 'user.username LIKE :provider';
+            }
             $params['provider'] = '%' . $filters['provider'] . '%';
         }
         if (!empty($filters['provider_id'])) {
-            $where[] = 'user.id = :provider_id';
+            if ($context === 'sold') {
+                $where[] = 'provider.id = :provider_id';
+            } else {
+                $where[] = 'user.id = :provider_id';
+            }
             $params['provider_id'] = $filters['provider_id'];
         }
         if (!empty($filters['exclude_provider_id'])) {
-            $where[] = 'user.id != :exclude_provider_id';
+            if ($context === 'sold') {
+                $where[] = 'provider.id != :exclude_provider_id';
+            } else {
+                $where[] = 'user.id != :exclude_provider_id';
+            }
             $params['exclude_provider_id'] = $filters['exclude_provider_id'];
         }
         if (!empty($filters['category']) && is_array($filters['category'])) {
