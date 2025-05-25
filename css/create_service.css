@@ -1,153 +1,150 @@
-body{
-    height: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+/*
+  Modern, utility-based, and fully responsive create_service.css for the Create Service page.
+  Uses utils.css for all layout, spacing, color, and typography. Only customizes unique widgets (category radios, file input, slider).
+*/
+@import url('utils.css');
+
+main#create-service-main, main:not([id]) {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 2.5rem 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-main{
-    flex: 1 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    h2{
-        margin: 2rem 0;
-        font-size: 3rem;
-        font-weight: 600;
-    }
-
-    form{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2rem;
-        width: 35rem;
-
-        #form-title,#form-description,#form-location{
-            width: 100%;
-
-            label{
-                display: none;
-            }
-
-            input,textarea{
-                width: 100%;
-                height: 3rem;
-                padding: 1rem;
-                border: 1px solid darkgrey;
-                font-size: 1.2rem;
-                outline: none;
-
-                &:focus{
-                    border-color: black;
-                    box-shadow: 0 0 5px black;
-                }
-            }
-
-            textarea{
-                height: 8rem;
-                resize: none;
-            }
-        }
-
-
-        #form-price {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-
-            label{
-                display: none;
-            }
-
-            #service-price{
-                width: 8rem;
-                height: 3rem;
-                padding: 1rem;
-                border: 1px solid darkgrey;
-                font-size: 1.2rem;
-                outline: none;
-
-                &:focus{
-                    border-color: black;
-                    box-shadow: 0 0 5px black;
-                }
-            }
-
-            #price-slider{
-                width: 25rem;
-            }
-        }
-
-
-        #form-category {
-            input[type="radio"] {
-                position: absolute;
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
-            
-            label {
-                display: inline-block;
-                padding: 0.5rem 1.5rem;
-                margin: 0.25rem;
-                border: 2px solid darkgrey;
-                border-radius: 8px;
-                background: white;
-                color: #333;
-                cursor: pointer;
-                user-select: none;
-                font-size: 1rem;
-            }
-
-            input[type="radio"]:checked + label {
-                background: #222;
-                color: #fff;
-                border-color: #222;
-            }
-        }
-
-
-        #form-image{
-            width: 100%;
-
-            label{
-                display: none;;
-            }
-
-            input[type="file"]{
-                width: 100%;
-                height: 4rem;
-                padding: 1rem;
-                background-color: white;
-                border: 1px solid darkgrey;
-                font-size: 1.2rem;
-                outline: none;
-            }
-        }
-
-        button{
-            width: 100%;
-            height: 3rem;
-            background-color: #444;
-            color: white;
-            font-size: 1.5rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-
-            &:hover{
-                background-color: black;
-                transition: all 0.2s ease-in-out;
-            }
-        }
-    }
+main#create-service-main h2, main:not([id]) > h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary, #0088cc);
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
 
-footer{
-    margin-top: 1rem;
-    display: flex;
-    justify-content: center;
+#create-service-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+#create-service-form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#create-service-form label {
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.2rem;
+}
+
+#create-service-form input[type="text"],
+#create-service-form input[type="number"],
+#create-service-form textarea {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--color-border, #e0e7ef);
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  background: #f7f9fa;
+  transition: border 0.2s;
+}
+#create-service-form input[type="text"]:focus,
+#create-service-form input[type="number"]:focus,
+#create-service-form textarea:focus {
+  border-color: var(--color-primary, #0088cc);
+  outline: none;
+}
+
+#create-service-form textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+/* Price slider */
+#form-price {
+  gap: 0.3rem;
+}
+#form-price #price-slider {
+  width: 100%;
+  margin-top: 0.2rem;
+  accent-color: var(--color-primary, #0088cc);
+}
+
+/* Category radio buttons */
+#form-category {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+}
+#form-category input[type="radio"] {
+  display: none;
+}
+#form-category label {
+  display: inline-block;
+  padding: 0.4rem 1.1rem;
+  border: 2px solid var(--color-border, #e0e7ef);
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #222;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  user-select: none;
+}
+#form-category input[type="radio"]:checked + label {
+  background: var(--color-primary, #0088cc);
+  color: #fff;
+  border-color: var(--color-primary, #0088cc);
+}
+
+/* File input */
+#form-image input[type="file"] {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.7rem 1rem;
+  background: #fff;
+  border: 1px solid var(--color-border, #e0e7ef);
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  outline: none;
+}
+
+#create-service-form button[type="submit"] {
+  margin-top: 1.2rem;
+  padding: 0.7rem 0;
+  width: 100%;
+  background: var(--color-primary, #0088cc);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+#create-service-form button[type="submit"]:hover {
+  background: #005f99;
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  main#create-service-main, main:not([id]) { max-width: 95vw; padding: 2rem 0.5rem; }
+}
+@media (max-width: 768px) {
+  main#create-service-main, main:not([id]) { padding: 1.2rem 0.2rem; }
+  main#create-service-main h2, main:not([id]) > h2 { font-size: 1.3rem; }
+}
+@media (max-width: 480px) {
+  main#create-service-main, main:not([id]) { padding: 0.5rem 0.1rem; }
+  main#create-service-main h2, main:not([id]) > h2 { font-size: 1.1rem; }
+  #create-service-form button[type="submit"] { font-size: 1rem; }
 }

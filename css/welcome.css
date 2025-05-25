@@ -1,28 +1,28 @@
+@import url('utils.css');
+
 body {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 100vh;
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("../images/home-background.jpg");
-  background-size: cover;
-  background-position: center;
+    url("../images/home-background.jpg") center/cover no-repeat;
   overflow: hidden;
 }
-
 
 header {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 6rem;
+  height: 5rem;
   background: rgba(0, 0, 0, 0.4);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10rem;
+  padding: 0 6vw;
   box-sizing: border-box;
+  z-index: 10;
 }
 
 header .left,
@@ -35,7 +35,7 @@ header .right {
 
 header .left {
   justify-content: flex-start;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
@@ -45,77 +45,70 @@ header .center {
   align-items: center;
   justify-content: center;
   gap: 1vw;
+}
 
-  button {
-    border: none;
-  }
+header .center button {
+  border: none;
+  background: none;
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0.2rem 1rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s, color 0.2s;
+}
 
-  #hire-button {
-    cursor: pointer;
-    background-color: inherit;
-    color: #fff;
-    font-size: 1.6rem;
-  }
+header .center .selected {
+  border-bottom: 3px solid #ff6363;
+  font-weight: 700;
+}
 
-  #bar {
-    cursor: default;
-    user-select: none;
-    pointer-events: none;
-    font-size: 1.6rem;
-    margin: 0 1rem;
-  }
-
-  #offer-button {
-    cursor: pointer;
-    background-color: inherit;
-    color: #fff;
-    font-size: 1.6rem;
-  }
-
-  .selected {
-    transition: all 0.1s ease;
-    border-bottom: 3px solid #ff6363;
-  }
+header .center #bar {
+  cursor: default;
+  user-select: none;
+  pointer-events: none;
+  font-size: 1.3rem;
+  margin: 0 1rem;
 }
 
 header .right {
   justify-content: flex-end;
   gap: 1rem;
+}
 
-  a#register-button,
-  a#login-button{
-    font-size: 1.5rem;
-    padding: 0.5vw 2vw;
-    border-radius: 4px;
-    font-weight: bold;
-    text-decoration: none;
-    display: inline-block;
-    transition: background 0.2s, color 0.2s;
-  }
+header .right a#register-button,
+header .right a#login-button {
+  font-size: 1.1rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
 
-  a#register-button {
-    background-color: inherit;
-    color: #fff;
-  }
+header .right a#register-button {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid #fff;
+}
 
-  a#login-button {
-    background-color: #0088cc;
-    color: #fff;
-  }
+header .right a#login-button {
+  background: #0088cc;
+  color: #fff;
+  border: none;
+}
 
-  a#login-button:hover {
-    transform: scale(1.05);
-    transition: all 0.3s ease;
-  }
-  a#register-button:hover {
-    transform: scale(1.05);
-    transition: all 0.3s ease;
-  }
+header .right a#login-button:hover,
+header .right a#register-button:hover {
+  transform: scale(1.05);
+  background: #005f8a;
+  color: #fff;
 }
 
 main {
   flex: 1 1 auto;
-  margin-top: 25vh;
+  margin-top: 20vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -123,45 +116,105 @@ main {
 }
 
 section {
-  padding: 2rem 10rem;
+  padding: 2rem 8vw;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 section h1 {
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: #fff;
   text-align: center;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
 }
 
 section p {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: #fff;
   text-align: center;
-  margin: 0;
+  margin: 0 0 1.5rem 0;
 }
 
 section .btn {
-  font-size: 1.5rem;
-  background: #0088bb;
+  font-size: 1.2rem;
+  background: #0088cc;
   color: #fff;
-  padding: 12px 25px;
+  padding: 0.75rem 2rem;
   text-decoration: none;
-  border-radius: 4px;
-  margin-top: 10vh;
+  border-radius: 0.5rem;
+  margin-top: 2rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: background 0.2s, transform 0.2s;
 }
 
 section .btn:hover {
-  background: #0077bb;
+  background: #005f8a;
+  transform: scale(1.04);
 }
 
 footer {
   color: #fff;
   display: flex;
   justify-content: center;
+  background: none;
+  font-size: 0.95rem;
+  margin-top: 2rem;
 }
 
 .hide {
   opacity: 0;
+  pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  header {
+    padding: 0 2vw;
+  }
+
+  section {
+    padding: 2rem 2vw;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    height: auto;
+    padding: 0.5rem 1vw;
+  }
+
+  main {
+    margin-top: 10vh;
+  }
+
+  section {
+    padding: 1rem 1vw;
+  }
+
+  section h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 0.2rem 0.5vw;
+  }
+
+  section {
+    padding: 0.5rem 0.2vw;
+  }
+
+  section h1 {
+    font-size: 1.1rem;
+  }
+
+  section .btn {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
 }

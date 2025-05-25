@@ -1,0 +1,149 @@
+@import url('utils.css');
+
+body {
+  min-height: 100vh;
+  background: #f7f9fa;
+  display: flex;
+  flex-direction: column;
+}
+
+main#profile-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.edit-profile-section {
+  background: #fcfcfd;
+  border-radius: 1rem;
+  border: 1.5px solid #e0e7ef;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  padding: 2.5em 2em 2em 2em;
+  max-width: 440px;
+  margin: 2.5em auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2em;
+}
+
+.edit-profile-form {
+  background: #f9fafb;
+  border-radius: 0.75rem;
+  border: 1.5px solid #e0e7ef;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  padding: 2em 1.5em 1.5em 1.5em;
+  margin-top: 6em;
+  gap: 1.3em;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+.edit-profile-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1em;
+  justify-content: space-between;
+  width: 100%;
+}
+.edit-profile-row label {
+  min-width: 110px;
+  font-weight: 600;
+  color: #0088cc;
+  letter-spacing: 0.01em;
+}
+.edit-profile-row input[type="text"],
+.edit-profile-row input[type="email"],
+.edit-profile-row input[type="number"],
+.edit-profile-row textarea {
+  flex: 1 1 0;
+  padding: 0.6em 0.9em;
+  border-radius: 0.5rem;
+  border: 1.5px solid #e0e7ef;
+  font-size: 1em;
+  background: #fff;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.edit-profile-row input[type="text"]:focus,
+.edit-profile-row input[type="email"]:focus,
+.edit-profile-row input[type="number"]:focus,
+.edit-profile-row textarea:focus {
+  border: 1.5px solid #0088cc;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0,136,204,0.08);
+}
+.edit-profile-row textarea {
+  min-height: 48px;
+  resize: vertical;
+}
+.edit-profile-row input[type="file"] {
+  border: none;
+  background: none;
+  font-size: 1em;
+  padding: 0.2em 0;
+}
+.edit-profile-form .profile-btn {
+  margin-top: 1.5em;
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 0.7em 0;
+  background: #0088cc;
+  color: #fff;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.edit-profile-form .profile-btn:hover {
+  background: #005f8a;
+  color: #fff;
+  transform: scale(1.04);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.edit-profile-form a {
+  display: block;
+  margin: 1.2em auto 0 auto;
+  text-align: center;
+  color: #0088cc;
+  font-weight: 600;
+  text-decoration: underline;
+  font-size: 1em;
+  transition: color 0.2s;
+}
+.edit-profile-form a:hover {
+  color: #005f8a;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  background: none;
+  color: #888;
+  font-size: 0.95rem;
+  margin-top: auto;
+  padding: 1em 0 0.5em 0;
+  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  min-height: 48px;
+}
+
+@media (max-width: 768px) {
+  .edit-profile-section { max-width: 98vw; padding: 1.5em 0.5em; }
+  .edit-profile-form { padding: 1em 0.2em; }
+  .edit-profile-row label { min-width: 80px; font-size: 0.98em; }
+}
+@media (max-width: 480px) {
+  .edit-profile-section { padding: 0.5em 0.1em; }
+  .edit-profile-form { padding: 0.5em 0.1em; }
+  .edit-profile-form .profile-btn { font-size: 0.95rem; padding: 0.5em 0; }
+}

@@ -1,81 +1,170 @@
-body{
-    display: flex;
-    flex-direction: column;
+/* Modern, responsive, utility-based home.css. Uses utils.css for most classes. */
+@import url('utils.css');
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f7f9fa;
 }
 
-#create-service-section{
-    background-color: rgb(104, 104, 104);
-    margin: 0;
-    padding: 2rem 15rem;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    a{
-        text-decoration: none;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        font-size: 1.5rem;
-        padding: 0.5rem 1rem;
-        height: 3rem;
-        width: 15rem;
-        border-radius: 10px;
-        background-color: rgb(0, 0, 0);
-
-        &:hover{
-            transform: scale(1.1);
-            transition: all 0.3s ease;
-        }
-    }
+#create-service-section {
+  background: linear-gradient(90deg, #0088cc 60%, #222 100%);
+  color: #fff;
+  padding: 2rem 8vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.create-service-button {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1.5rem;
+  border: none;
+  cursor: pointer;
+  background: #0088cc;
+  color: #fff;
+  min-width: 200px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.create-service-button:hover {
+  transform: scale(1.05);
+  background: #005f8a;
 }
 
-#default-searches{
-    background-color: lightgrey;
-
-    #categories-list{
-        padding: 1rem 10rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    ul {
-        list-style: none;
-    
-        li .category-button{
-            color: black;
-            display: inline-block;
-            border: none;
-            background-color: inherit;
-            font-size: 1.2rem;
-
-            &:hover{
-                transform: scale(1.2);
-                transition: all 0.3s ease;
-            }
-        }    
-    }
+#default-searches {
+  background: #e0e7ef;
+  padding: 1rem 0;
+}
+#categories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  padding: 1rem 4vw;
+}
+.category-button {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  background: #e0e7ef;
+  color: #222;
+  min-width: 120px;
+  margin: 0.25rem 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.category-button:hover {
+  background: #cfd8dc;
+  transform: scale(1.08);
 }
 
-#main-content{
-    padding: 1rem 0rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    h2{
-        margin: 1.5rem 0;
-        font-size: 2rem;
-    }
+#main-content {
+  padding: 2rem 0 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#main-content h2 {
+  margin: 1.5rem 0 1rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0088cc;
 }
 
-footer{
-    margin: 0.5rem;
-    display: flex;
-    justify-content: center;
+footer {
+  margin: 0.5rem 0 0 0;
+  display: flex;
+  justify-content: center;
+  background: none;
+  color: #888;
+  font-size: 0.95rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  #create-service-section { padding: 2rem 2vw; flex-direction: column; gap: 1rem; }
+  #categories-list { padding: 1rem 2vw; }
+}
+@media (max-width: 768px) {
+  #create-service-section { flex-direction: column; padding: 1.5rem 1vw; }
+  #categories-list { flex-direction: column; gap: 0.5rem; }
+  #main-content { padding: 1rem 0; }
+}
+@media (max-width: 480px) {
+  #create-service-section { padding: 1rem 0.5rem; }
+  .create-service-button { min-width: 120px; font-size: 1rem; }
+  #main-content h2 { font-size: 1.2rem; }
+}
+
+/* Service grid and cards (delegated to services_grid.css, but add fallback) */
+.service-item {
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 220px;
+  max-width: 340px;
+  margin: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.service-item:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+  transform: translateY(-2px) scale(1.02);
+}
+.service-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.provider-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0.5rem 0;
+}
+.favorite-btn, .contact-btn {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  background: #ffe082;
+  color: #222;
+  margin: 0.25rem 0.5rem 0.25rem 0;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.favorite-btn:hover, .contact-btn:hover {
+  background: #ffd54f;
+}
+.favorite-btn[disabled] { opacity: 0.5; pointer-events: none; }
+
+.no-services {
+  text-align: center;
+  color: #888;
+  padding: 2rem 0;
+  font-size: 1.1rem;
 }
 
 

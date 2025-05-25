@@ -1,0 +1,178 @@
+/*
+  Modern, utility-based, and fully responsive edit_service.css for the Edit Service page.
+  Uses utils.css for all layout, spacing, color, and typography. Only customizes unique widgets (category radios, file input, slider).
+  All rules are strictly scoped to the edit service form and its main area to avoid global side effects.
+*/
+@import url('utils.css');
+
+main#edit-service-main, main:not([id]) {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 2.5rem 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+main#edit-service-main h2, main:not([id]) > h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary, #0088cc);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+#create-service-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+#create-service-form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#create-service-form label {
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.2rem;
+}
+
+#create-service-form input[type="text"],
+#create-service-form input[type="number"],
+#create-service-form textarea {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--color-border, #e0e7ef);
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  background: #f7f9fa;
+  transition: border 0.2s;
+}
+#create-service-form input[type="text"]:focus,
+#create-service-form input[type="number"]:focus,
+#create-service-form textarea:focus {
+  border-color: var(--color-primary, #0088cc);
+  outline: none;
+}
+
+#create-service-form textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+/* Price slider */
+#form-price {
+  gap: 0.3rem;
+}
+#form-price #price-slider {
+  width: 100%;
+  margin-top: 0.2rem;
+  accent-color: var(--color-primary, #0088cc);
+}
+
+/* Category radio buttons */
+#form-category {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+}
+#form-category input[type="radio"] {
+  display: none;
+}
+#form-category label {
+  display: inline-block;
+  padding: 0.4rem 1.1rem;
+  border: 2px solid var(--color-border, #e0e7ef);
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #222;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  user-select: none;
+  position: relative;
+  outline: none;
+}
+#form-category input[type="radio"]:checked + label,
+#form-category label.selected {
+  background: var(--color-primary, #0088cc);
+  color: #fff;
+  border-color: var(--color-primary, #0088cc);
+  box-shadow: 0 2px 8px rgba(0,136,204,0.10);
+  transform: scale(1.04);
+  font-weight: 700;
+  z-index: 1;
+  outline: 2.5px solid #0088cc;
+}
+#form-category label > input[type="radio"]:checked {
+  /* Remove default radio appearance for clarity */
+  accent-color: var(--color-primary, #0088cc);
+}
+#form-category label > input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+#form-category label:has(> input[type="radio"]:checked) {
+  background: var(--color-primary, #0088cc);
+  color: #fff;
+  border-color: var(--color-primary, #0088cc);
+  box-shadow: 0 2px 8px rgba(0,136,204,0.10);
+  transform: scale(1.04);
+  font-weight: 700;
+  z-index: 1;
+  outline: 2.5px solid #0088cc;
+}
+
+/* File input */
+#form-image input[type="file"] {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.7rem 1rem;
+  background: #fff;
+  border: 1px solid var(--color-border, #e0e7ef);
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  outline: none;
+}
+
+#create-service-form button[type="submit"] {
+  margin-top: 1.2rem;
+  padding: 0.7rem 0;
+  width: 100%;
+  background: var(--color-primary, #0088cc);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+#create-service-form button[type="submit"]:hover {
+  background: #005f99;
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  main#edit-service-main, main:not([id]) { max-width: 95vw; padding: 2rem 0.5rem; }
+}
+@media (max-width: 768px) {
+  main#edit-service-main, main:not([id]) { padding: 1.2rem 0.2rem; }
+  main#edit-service-main h2, main:not([id]) > h2 { font-size: 1.3rem; }
+}
+@media (max-width: 480px) {
+  main#edit-service-main, main:not([id]) { padding: 0.5rem 0.1rem; }
+  main#edit-service-main h2, main:not([id]) > h2 { font-size: 1.1rem; }
+  #create-service-form button[type="submit"] { font-size: 1rem; }
+}
