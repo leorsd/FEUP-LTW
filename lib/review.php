@@ -21,7 +21,7 @@ class Review
             return false; // No completed status defined
         }
         $checkStmt = $this->db->prepare(
-            'SELECT COUNT(*) FROM service_customer WHERE service_id = ? AND customer_id = ? AND status = ?'
+            'SELECT COUNT(*) FROM service_order WHERE service_id = ? AND customer_id = ? AND status = ?'
         );
         $checkStmt->execute([$service_id, $reviewer_id, $completedStatusId]);
         $canReview = $checkStmt->fetchColumn() > 0;
