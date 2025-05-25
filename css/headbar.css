@@ -1,97 +1,266 @@
+@import url("utils.css");
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: rgb(238, 238, 238);
+  font-family: "Arial", sans-serif;
+  background-color: rgb(238, 238, 238);
 }
 
 header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: black;
-    padding: 1rem 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #0088cc 60%, #222 100%);
+  padding: 1rem 8vw;
+  min-height: 4.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  border-bottom: 1.5px solid #e0e7ef;
+  z-index: 20;
+  position: relative;
+  flex-wrap: wrap;
+  gap: 1.2rem;
 }
-
+#logo {
+  flex: 0 1 auto;
+  margin-right: 1.5rem;
+}
 #logo a {
-    text-decoration: none;
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: white;
+  text-decoration: none;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+#logo a:hover {
+  color: #ffe082;
 }
 
-#search-bar{
-    flex: 1;
-    display: flex;
-    justify-content: center;
-
-    input{
-        width: 30rem;
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
-        border: none;
-        background-color: white;
-
-        &:focus{
-            outline: none;
-            border: 2px solid grey; 
-        }
-    }
-
-    button {
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
-        font-weight: 700;
-        border: none;
-        background-color: darkgrey; 
-        cursor: pointer;
-        color: white;
-
-        &:hover {
-            background-color: grey; 
-            transition: background-color 0.3s ease;
-        }
-
-    }
+#search-bar {
+  flex: 1 1 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 2vw;
+  max-width: 600px;
+  width: 100%;
+  min-width: 180px;
+}
+#search-bar input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1.5px solid #e0e7ef;
+  border-radius: 0.5rem 0 0 0.5rem;
+  background: #fff;
+  transition: border 0.2s;
+  height: 2.6rem;
+  box-sizing: border-box;
+}
+#search-bar input:focus {
+  outline: none;
+  border: 2px solid #0088cc;
+}
+#search-bar button {
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: #ffe082;
+  color: #222;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  height: 2.6rem;
+  box-sizing: border-box;
+  margin-left: -0.1rem;
+}
+#search-bar button:hover {
+  background: #ffd54f;
+  color: #0088cc;
 }
 
+nav {
+  flex: 0 1 auto;
+}
 nav ul {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 3rem;
-    font-size: 1.4rem;
-    margin: 0;
-    padding: 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  font-size: 1.1rem;
+  margin: 0;
+  padding: 0;
+}
+nav ul li a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: color 0.2s, transform 0.2s;
+}
+nav ul li a img.profile-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 0.2rem;
+  border: 2px solid #e0e7ef;
+  background: #fff;
+  transition: transform 0.2s, border 0.2s;
+}
+nav ul li a img.profile-avatar:hover {
+  transform: scale(1.1);
+  border: 2px solid #ffe082;
+}
+nav ul li a:hover {
+  color: #ffe082;
+  transform: scale(1.08);
 }
 
-nav ul li a {
-    display: flex; 
+/* Responsive adjustments */
+@media (max-width: 1124px) {
+  #search-bar {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 1vw;
+  }
+  nav {
+    width: 100%;
+    margin: 0.5rem 0 0.2rem 0;
+  }
+  nav ul {
+    width: 100%;
+    justify-content: space-between;
+    gap: 2.5rem;
+    font-size: 1.25rem;
+    padding: 0 1vw;
+  }
+  nav ul li {
+    flex: 1 1 0;
+    text-align: center;
+  }
+  nav ul li a {
+    font-size: 1.15rem;
+    padding: 0.3rem 0.2rem;
+  }
+}
+@media (max-width: 1024px) {
+  header {
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding: 1rem 2vw;
+    gap: 1rem;
+  }
+  #logo {
+    margin-right: 0.7rem;
+  }
+  nav ul {
+    gap: 1.2rem;
+  }
+}
+@media (max-width: 768px) {
+  header {
     flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    color: white;
-
-    img{
-        width: 3rem;
-        height: 3rem;
-        object-fit: cover;
-        border-radius: 50%;
-        font-size: 1rem;
-
-        &:hover {
-            transform: scale(1.1);
-            transition: transform 0.3s ease;
-        }
-    }
-
-
-    &:hover {
-        transform: scale(1.1);
-        transition: transform 0.3s ease;; 
-    }
+    align-items: stretch;
+    gap: 0.7rem;
+    padding: 0.7rem 1vw;
+  }
+  #logo {
+    margin: 0 auto 0.2rem auto;
+    text-align: center;
+  }
+  #logo a {
+    font-size: 1.3rem;
+    justify-content: center;
+  }
+  #search-bar {
+    flex: 1 1 50px;
+    height: auto;
+    min-height: 0;
+    margin: 0.2rem 0 0.2rem 0;
+    max-width: 100%;
+    width: 100%;
+  }
+  #search-bar input,
+  #search-bar button {
+    height: 2.2rem;
+    font-size: 0.97rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
+  nav {
+    width: 100%;
+    margin: 0 auto;
+  }
+  nav ul {
+    gap: 0.7rem;
+    font-size: 1rem;
+    justify-content: center;
+    width: 100%;
+  }
+  nav ul {
+    gap: 1.2rem;
+    font-size: 1.1rem;
+    padding: 0 0.5vw;
+  }
+  nav ul li a {
+    font-size: 1.05rem;
+  }
+}
+@media (max-width: 640px) {
+  header {
+    padding: 0.3rem 0.5vw;
+    gap: 0.4rem;
+  }
+  #logo a {
+    font-size: 1.1rem;
+  }
+  #search-bar {
+    max-width: 100%;
+    width: 100%;
+    margin: 0.3rem 0;
+  }
+  nav ul {
+    gap: 0.7rem;
+    font-size: 1rem;
+    padding: 0 0.2vw;
+  }
+  nav ul li a {
+    font-size: 0.97rem;
+  }
+}
+@media (max-width: 480px) {
+  header {
+    padding: 0.1rem 0.2vw;
+    gap: 0.2rem;
+  }
+  #logo a {
+    font-size: 0.95rem;
+  }
+  #search-bar input,
+  #search-bar button {
+    font-size: 0.9rem;
+    height: 2.1rem;
+    padding: 0.3rem 0.5rem;
+  }
+  nav ul {
+    gap: 0.3rem;
+    font-size: 0.92rem;
+    padding: 0;
+  }
+  nav ul li a {
+    font-size: 0.92rem;
+  }
 }

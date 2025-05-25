@@ -1,167 +1,350 @@
+@import url("utils.css");
+
 body {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("../images/home-background.jpg");
-  background-size: cover;
-  background-position: center;
-  overflow: hidden;
+  background: linear-gradient(rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
+    url("../images/home-background.jpg") center/cover no-repeat fixed;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  color: #222;
 }
 
-
 header {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 6rem;
-  background: rgba(0, 0, 0, 0.4);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 10rem;
-  box-sizing: border-box;
+  justify-content: center;
+  padding: 0 3vw;
+  min-height: 4.5rem;
+  z-index: 10;
+  position: relative;
+  border-bottom: 1.5px solid #e0e7ef;
 }
 
 header .left,
+header .center,
 header .right {
-  flex: 1 1 0;
   display: flex;
   align-items: center;
-  min-width: 0;
 }
 
 header .left {
+  flex: 1 1 0;
   justify-content: flex-start;
-  font-size: 1.7rem;
-  font-weight: bold;
 }
 
 header .center {
   flex: 0 1 auto;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 1vw;
-
-  button {
-    border: none;
-  }
-
-  #hire-button {
-    cursor: pointer;
-    background-color: inherit;
-    color: #fff;
-    font-size: 1.6rem;
-  }
-
-  #bar {
-    cursor: default;
-    user-select: none;
-    pointer-events: none;
-    font-size: 1.6rem;
-    margin: 0 1rem;
-  }
-
-  #offer-button {
-    cursor: pointer;
-    background-color: inherit;
-    color: #fff;
-    font-size: 1.6rem;
-  }
-
-  .selected {
-    transition: all 0.1s ease;
-    border-bottom: 3px solid #ff6363;
-  }
+  gap: 1.5rem;
 }
 
 header .right {
+  flex: 1 1 0;
   justify-content: flex-end;
   gap: 1rem;
+}
 
-  a#register-button,
-  a#login-button{
-    font-size: 1.5rem;
-    padding: 0.5vw 2vw;
-    border-radius: 4px;
-    font-weight: bold;
-    text-decoration: none;
-    display: inline-block;
-    transition: background 0.2s, color 0.2s;
-  }
+.logo {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #0088cc;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
 
-  a#register-button {
-    background-color: inherit;
-    color: #fff;
-  }
+header .center button {
+  background: none;
+  border: none;
+  color: #0088cc;
+  font-size: 1.15rem;
+  font-weight: 600;
+  padding: 0.4em 1.2em;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+}
 
-  a#login-button {
-    background-color: #0088cc;
-    color: #fff;
-  }
+header .center button.selected {
+  background: #e0e7ef;
+  color: #005f8a;
+  box-shadow: 0 2px 8px rgba(0, 136, 204, 0.08);
+}
 
-  a#login-button:hover {
-    transform: scale(1.05);
-    transition: all 0.3s ease;
-  }
-  a#register-button:hover {
-    transform: scale(1.05);
-    transition: all 0.3s ease;
-  }
+header .center button:hover {
+  background: #e0e7ef;
+  color: #005f8a;
+  transform: scale(1.04);
+}
+
+header .center #bar {
+  color: #b0b8c1;
+  font-size: 1.2rem;
+  margin: 0 0.5rem;
+}
+
+#register-button,
+#login-button {
+  font-size: 1.08rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+}
+
+#register-button {
+  background: #e0e7ef;
+  color: #0088cc;
+  border: none;
+}
+
+#register-button:hover {
+  background: #0088cc;
+  color: #fff;
+}
+
+#login-button {
+  background: #0088cc;
+  color: #fff;
+  border: none;
+}
+
+#login-button:hover {
+  background: #005f8a;
+  color: #fff;
 }
 
 main {
   flex: 1 1 auto;
-  margin-top: 25vh;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 0;
+  min-height: 0;
 }
 
 section {
-  padding: 2rem 10rem;
+  background: #fff; /* solid white */
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+  padding: 2.5em 2em 2em 2em;
+  max-width: 700px;
+  width: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1.5em;
+  animation: fadeIn 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 section h1 {
-  font-size: 3rem;
-  color: #fff;
+  font-size: 2.1rem;
+  color: #0088cc;
   text-align: center;
+  font-weight: 800;
+  margin-bottom: 0.7em;
+  letter-spacing: 0.01em;
 }
 
 section p {
-  font-size: 1.5rem;
-  color: #fff;
+  font-size: 1.13rem;
+  color: #444;
   text-align: center;
-  margin: 0;
+  margin: 0 0 0.7em 0;
 }
 
 section .btn {
-  font-size: 1.5rem;
-  background: #0088bb;
+  font-size: 1.1rem;
+  background: #0088cc;
   color: #fff;
-  padding: 12px 25px;
+  padding: 0.75rem 2.2rem;
   text-decoration: none;
-  border-radius: 4px;
-  margin-top: 10vh;
+  border-radius: 0.5rem;
+  margin-top: 1.2rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 136, 204, 0.08);
+  transition: background 0.18s, transform 0.18s;
+  border: none;
+  display: inline-block;
 }
 
 section .btn:hover {
-  background: #0077bb;
+  background: #005f8a;
+  transform: scale(1.04);
 }
 
 footer {
-  color: #fff;
+  color: #888;
   display: flex;
   justify-content: center;
+  background: none;
+  font-size: 0.95rem;
+  margin-top: auto;
+  padding: 1em 0 0.5em 0;
+  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  min-height: 48px;
 }
 
 .hide {
-  opacity: 0;
+  display: none !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  body {
+    font-size: 1rem;
+    padding: 0;
+  }
+  header {
+    flex-direction: column;
+    min-height: unset;
+    padding: 0.5rem 1vw;
+    align-items: stretch;
+  }
+  header .left,
+  header .center,
+  header .right {
+    justify-content: center;
+    flex: unset;
+    width: 100%;
+    margin-bottom: 0.2em;
+  }
+  section {
+    max-width: 98vw;
+    padding: 1.5em 0.5em;
+  }
+  footer {
+    font-size: 0.93rem;
+    padding: 0.7em 0 0.4em 0;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 0.97rem;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+  }
+  main {
+    padding-top: 1em;
+  }
+  section {
+    padding: 1em 0.2em;
+    gap: 1em;
+  }
+  section h1 {
+    font-size: 1.1rem;
+  }
+  section .btn {
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    min-width: 140px;
+    max-width: 90vw;
+  }
+  footer {
+    font-size: 0.9rem;
+    padding: 0.5em 0 0.3em 0;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 0.95rem;
+    padding: 0;
+  }
+  header {
+    flex-direction: column;
+    min-height: unset;
+    padding: 0.4rem 0.5vw;
+    align-items: stretch;
+  }
+  header .left,
+  header .center,
+  header .right {
+    justify-content: center;
+    flex: unset;
+    width: 100%;
+    margin-bottom: 0.2em;
+  }
+  .logo {
+    font-size: 1.1rem;
+  }
+  main {
+    padding-top: 0.5em;
+  }
+  section {
+    padding: 0.5em 0.1em;
+    max-width: 100vw;
+    align-items: center;
+    text-align: center;
+    gap: 0.7em;
+  }
+  section h1 {
+    font-size: 1rem;
+  }
+  section .btn {
+    font-size: 0.92rem;
+    padding: 0.45rem 0.7rem;
+    min-width: 120px;
+    max-width: 95vw;
+  }
+  footer {
+    font-size: 0.85rem;
+    padding: 0.4em 0 0.2em 0;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 0.93rem;
+    padding: 0;
+  }
+  header {
+    padding: 0.2rem 0.5vw;
+  }
+  section {
+    padding: 0.5em 0.1em;
+    gap: 0.5em;
+  }
+  section h1 {
+    font-size: 0.98rem;
+  }
+  section .btn {
+    min-width: 100px;
+    max-width: 98vw;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.5rem;
+  }
+  footer {
+    font-size: 0.8rem;
+    padding: 0.2em 0 0.1em 0;
+    text-align: center;
+  }
+  /* Show only h1, .btn, and the second p in section */
+  section > *:not(h1):not(.btn):not(p:nth-of-type(2)) {
+    display: none !important;
+  }
 }

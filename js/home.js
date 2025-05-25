@@ -24,14 +24,16 @@ document.addEventListener("DOMContentLoaded", () => {
       page: filters.page,
       per_page: filters.per_page,
       user_id: CURRENT_USER_ID,
-      exclude_provider_id: CURRENT_USER_ID
+      exclude_provider_id: CURRENT_USER_ID,
     });
     if (filters.search) params.append("search", filters.search);
     if (filters.provider) params.append("provider", filters.provider);
     if (filters.category) params.append("category", filters.category);
     if (filters.location) params.append("location", filters.location);
-    if (filters.min_price !== null && filters.min_price !== "") params.append("min_price", filters.min_price);
-    if (filters.max_price !== null && filters.max_price !== "") params.append("max_price", filters.max_price);
+    if (filters.min_price !== null && filters.min_price !== "")
+      params.append("min_price", filters.min_price);
+    if (filters.max_price !== null && filters.max_price !== "")
+      params.append("max_price", filters.max_price);
     if (filters.min_rating) params.append("min_rating", filters.min_rating);
     if (filters.max_rating) params.append("max_rating", filters.max_rating);
     return `/api/services_get.php?${params.toString()}`;
@@ -56,22 +58,36 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       services.forEach((service) => {
-        service.image = service.image ? `../images/cache/${service.image}` : "../images/service.png";
-        service.provider_image = service.provider_image ? `../images/cache/${service.provider_image}` : "../images/user.jpg";
-        service.rating = service.rating ? service.rating.toFixed(1) : "Not rated yet";
+        service.image = service.image
+          ? `../images/cache/${service.image}`
+          : "../images/service.png";
+        service.provider_image = service.provider_image
+          ? `../images/cache/${service.provider_image}`
+          : "../images/user.jpg";
+        service.rating = service.rating
+          ? service.rating.toFixed(1)
+          : "Not rated yet";
 
         const serviceItem = document.createElement("a");
         serviceItem.href = `service.php?id=${service.id}&user_id=${CURRENT_USER_ID}`;
         serviceItem.classList.add("service-item");
         serviceItem.innerHTML = `
-          <img src="${service.image}" alt="${service.title}" class="service-image">
+          <img src="${service.image}" alt="${
+          service.title
+        }" class="service-image">
           <h4>${service.title}</h4>
           <p>Description: ${service.description}</p>
-          <img src="${service.provider_image}" alt="profile image" class="provider-image">
+          <img src="${
+            service.provider_image
+          }" alt="profile image" class="provider-image">
           <p>Provider: ${service.provider_username}</p>
           <p>Category: ${service.category_name}</p>
           <p>Location: ${service.location}</p>
-          ${service.status_name !== undefined ? `<p>Status: ${service.status_name}</p>` : ""}
+          ${
+            service.status_name !== undefined
+              ? `<p>Status: ${service.status_name}</p>`
+              : ""
+          }
           <p>Price: $${service.price}</p>
           <p>Rating: ${service.rating}</p>
         `;
@@ -161,6 +177,10 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".category-button").forEach((btn) => {
         btn.addEventListener("click", function (e) {
           e.preventDefault();
+          document
+            .querySelectorAll(".category-button")
+            .forEach((b) => b.classList.remove("selected"));
+          this.classList.add("selected");
           filterForm
             .querySelectorAll('input[name="categories"]')
             .forEach((cb) => (cb.checked = false));

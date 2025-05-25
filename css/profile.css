@@ -1,9 +1,10 @@
+@import url("utils.css");
+
 body {
-  height: 100%;
-  box-sizing: border-box;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: #f7f9fa;
 }
 
 #profile-main {
@@ -13,152 +14,151 @@ body {
 footer {
   display: flex;
   justify-content: center;
+  background: none;
+  color: #888;
+  font-size: 0.95rem;
 }
 
-.profile-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2em;
-  max-width: 400px;
-  margin: 0 auto;
-  width: 100%;
-}
-.profile-form label {
-  display: flex;
-  flex-direction: column;
-  font-weight: bold;
-  color: #333;
-}
-.profile-form input[type="text"],
-.profile-form input[type="email"],
-.profile-form input[type="number"],
-.profile-form input[type="password"],
-.profile-form textarea {
-  margin-top: 0.3em;
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 1em;
-}
-.profile-form textarea {
-  min-height: 60px;
-  resize: vertical;
-}
-.profile-btn,
-.change-password-btn {
-  background: #0088cc;
-  color: #fff;
-  padding: 0.7em 2em;
-  border-radius: 6px;
-  border: none;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 1em;
-  transition: background 0.2s, color 0.2s;
-  text-decoration: none;
-  display: inline-block;
-  text-align: center;
-}
-.profile-btn:hover,
-.change-password-btn:hover {
-  background: #0077bb;
-  color: #fff;
-}
-.change-password-btn {
-  background: #ffbe4f;
-  color: #222;
-}
-
-.change-password-btn:hover {
-  background: #ffa600;
-  color: #222;
-}
-
-.profile-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: #fff;
-}
-.profile-section {
-  background: rgba(255, 255, 255, 0.97);
-  border-radius: 14px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-  padding: 2.5em 2em 2em 2em;
-  max-width: 420px;
-  margin: 2em auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: unset;
-  height: auto;
-  margin: 2em auto 0 auto;
-  padding-top: 1.5em;
-  padding-bottom: 1.5em;
-}
-.profile-attributes {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1.5em 0;
-  width: 100%;
-}
-.profile-attributes li {
-  margin-bottom: 0.7em;
-  font-size: 1.1em;
-  color: #222;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Change password page tweaks */
+/* --- Modernized Profile Page Styles --- */
+.profile-section,
 .change-password-section {
-  background: rgba(255, 255, 255, 0.97);
-  border-radius: 14px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  background: #fcfcfd;
+  border-radius: 1rem;
+  border: 1.5px solid #e0e7ef;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
   padding: 2.5em 2em 2em 2em;
-  max-width: 420px;
-  margin: 2em auto;
+  max-width: 440px;
+  margin: 2.5em auto 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 2em;
 }
 
 .profile-top-row {
   display: flex;
   align-items: center;
-  gap: 1.5em;
+  gap: 1.7em;
   width: 100%;
-  margin-bottom: 1.2em;
+  margin-bottom: 1.5em;
   justify-content: center;
+}
+.profile-image {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  border: 2.5px solid #ffe082;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 .profile-username-block {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 0.3em;
 }
 .profile-username {
-  font-size: 2rem;
+  font-size: 2.1rem;
   font-weight: 700;
   color: #0088cc;
   background: #f7f7f7;
-  border-radius: 8px;
-  padding: 0.3em 1em;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  padding: 0.35em 1.2em;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  letter-spacing: 0.01em;
 }
 .profile-actions-row {
   display: flex;
-  gap: 1em;
+  gap: 1.2em;
   justify-content: center;
-  margin-bottom: 1.5em;
+  margin-bottom: 1.7em;
+}
+.profile-btn,
+.change-password-btn,
+.logout-btn {
+  background: #0088cc;
+  color: #fff;
+  padding: 0.7em 2.1em;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1em;
+  transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+.profile-btn:hover,
+.change-password-btn:hover,
+.logout-btn:hover {
+  background: #005f8a;
+  color: #fff;
+  transform: scale(1.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.change-password-btn {
+  background: #ffbe4f;
+  color: #222;
+}
+.change-password-btn:hover {
+  background: #ffa600;
+  color: #222;
+}
+.logout-btn {
+  background: #ff5a5f;
+  color: #fff;
+  padding: 0.7em 2.1em;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1em;
+  transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+.logout-btn:hover {
+  background: #c82333;
+  color: #fff;
+  transform: scale(1.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-attributes {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.7em 0;
+  width: 100%;
+  border-top: 1.5px solid #e0e7ef;
+  padding-top: 1.2em;
+  gap: 0.7em;
+  display: flex;
+  flex-direction: column;
+}
+.profile-attributes li {
+  font-size: 1.1em;
+  color: #222;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5em 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.profile-attributes li:last-child {
+  border-bottom: none;
 }
 
 .edit-profile-form {
   display: flex;
   flex-direction: column;
-  gap: 1.2em;
+  gap: 1.3em;
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
@@ -178,15 +178,122 @@ footer {
 .edit-profile-row input[type="text"],
 .edit-profile-row input[type="email"],
 .edit-profile-row input[type="number"],
-.edit-profile-row textarea {
+.edit-profile-row textarea,
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form input[type="number"],
+.profile-form input[type="password"],
+.profile-form textarea {
   flex: 1 1 0;
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  padding: 0.6em 0.9em;
+  border-radius: 0.5rem;
+  border: 1.5px solid #e0e7ef;
   font-size: 1em;
+  background: #f7f9fa;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
-.edit-profile-row textarea {
-  min-height: 40px;
+.edit-profile-row input[type="text"]:focus,
+.edit-profile-row input[type="email"]:focus,
+.edit-profile-row input[type="number"]:focus,
+.edit-profile-row textarea:focus,
+.profile-form input[type="text"]:focus,
+.profile-form input[type="email"]:focus,
+.profile-form input[type="number"]:focus,
+.profile-form input[type="password"]:focus,
+.profile-form textarea:focus {
+  border: 1.5px solid #0088cc;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0, 136, 204, 0.08);
+}
+.edit-profile-row textarea,
+.profile-form textarea {
+  min-height: 48px;
   resize: vertical;
 }
 
+/* Section spacing */
+.profile-section + .change-password-section {
+  margin-top: 2.5em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .profile-section,
+  .change-password-section {
+    max-width: 98vw;
+    padding: 1.2em 0.5em;
+  }
+  .profile-username {
+    font-size: 1.3rem;
+  }
+  .profile-top-row {
+    flex-direction: column;
+    gap: 1em;
+  }
+}
+@media (max-width: 640px) {
+  body {
+    font-size: 0.98rem;
+  }
+  .profile-section,
+  .change-password-section {
+    padding: 0.5em 0.1em;
+    max-width: 100vw;
+  }
+  .profile-username {
+    font-size: 1rem;
+  }
+  .profile-image {
+    width: 64px;
+    height: 64px;
+  }
+  .profile-btn,
+  .change-password-btn,
+  .logout-btn {
+    padding: 0.5em 1em;
+    font-size: 0.95rem;
+  }
+  .profile-top-row {
+    flex-direction: column;
+    gap: 0.7em;
+  }
+  .profile-actions-row {
+    flex-direction: column;
+    gap: 0.7em;
+    width: 100%;
+  }
+  .profile-actions-row .profile-btn,
+  .profile-actions-row .change-password-btn {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+  .profile-attributes li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2em;
+  }
+}
+@media (max-width: 480px) {
+  .profile-section,
+  .change-password-section {
+    padding: 0.5em 0.1em;
+  }
+  .profile-username {
+    font-size: 1rem;
+  }
+  .profile-image {
+    width: 64px;
+    height: 64px;
+  }
+  .profile-actions-row .profile-btn,
+  .profile-actions-row .change-password-btn {
+    width: 80%;
+    max-width: 400px;
+  }
+}
