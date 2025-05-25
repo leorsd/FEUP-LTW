@@ -70,6 +70,12 @@ body {
   background: #cfd8dc;
   transform: scale(1.08);
 }
+.category-button.selected, .category-button.active {
+  background: #0088cc;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0,136,204,0.10);
+  transform: scale(1.08);
+}
 
 #main-content {
   padding: 2rem 0 1rem 0;

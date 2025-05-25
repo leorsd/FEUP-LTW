@@ -4,150 +4,173 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("../images/home-background.jpg") center/cover no-repeat;
-  overflow: hidden;
+  background: linear-gradient(rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)), url("../images/home-background.jpg") center/cover no-repeat fixed;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  color: #222;
 }
 
 header {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 5rem;
-  background: rgba(0, 0, 0, 0.4);
-  color: #fff;
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 6vw;
-  box-sizing: border-box;
+  justify-content: center;
+  padding: 0 3vw;
+  min-height: 4.5rem;
   z-index: 10;
+  position: relative;
+  border-bottom: 1.5px solid #e0e7ef;
 }
 
-header .left,
-header .right {
-  flex: 1 1 0;
+header .left, header .center, header .right {
   display: flex;
   align-items: center;
-  min-width: 0;
 }
 
 header .left {
+  flex: 1 1 0;
   justify-content: flex-start;
-  font-size: 1.5rem;
-  font-weight: bold;
 }
 
 header .center {
   flex: 0 1 auto;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 1vw;
-}
-
-header .center button {
-  border: none;
-  background: none;
-  color: #fff;
-  font-size: 1.3rem;
-  cursor: pointer;
-  padding: 0.2rem 1rem;
-  border-radius: 0.5rem;
-  transition: background 0.2s, color 0.2s;
-}
-
-header .center .selected {
-  border-bottom: 3px solid #ff6363;
-  font-weight: 700;
-}
-
-header .center #bar {
-  cursor: default;
-  user-select: none;
-  pointer-events: none;
-  font-size: 1.3rem;
-  margin: 0 1rem;
+  gap: 1.5rem;
 }
 
 header .right {
+  flex: 1 1 0;
   justify-content: flex-end;
   gap: 1rem;
 }
 
-header .right a#register-button,
-header .right a#login-button {
-  font-size: 1.1rem;
+.logo {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #0088cc;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+header .center button {
+  background: none;
+  border: none;
+  color: #0088cc;
+  font-size: 1.15rem;
+  font-weight: 600;
+  padding: 0.4em 1.2em;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+}
+
+header .center button.selected {
+  background: #e0e7ef;
+  color: #005f8a;
+  box-shadow: 0 2px 8px rgba(0, 136, 204, 0.08);
+}
+
+header .center button:hover {
+  background: #e0e7ef;
+  color: #005f8a;
+  transform: scale(1.04);
+}
+
+header .center #bar {
+  color: #b0b8c1;
+  font-size: 1.2rem;
+  margin: 0 0.5rem;
+}
+
+#register-button,
+#login-button {
+  font-size: 1.08rem;
   padding: 0.5rem 1.5rem;
   border-radius: 0.5rem;
   font-weight: 600;
   text-decoration: none;
   display: inline-block;
-  transition: background 0.2s, color 0.2s, transform 0.2s;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
 }
 
-header .right a#register-button {
-  background: transparent;
+#register-button {
+  background: #e0e7ef;
+  color: #0088cc;
+  border: none;
+}
+
+#register-button:hover {
+  background: #0088cc;
   color: #fff;
-  border: 1.5px solid #fff;
 }
 
-header .right a#login-button {
+#login-button {
   background: #0088cc;
   color: #fff;
   border: none;
 }
 
-header .right a#login-button:hover,
-header .right a#register-button:hover {
-  transform: scale(1.05);
+#login-button:hover {
   background: #005f8a;
   color: #fff;
 }
 
 main {
   flex: 1 1 auto;
-  margin-top: 20vh;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 0;
+  min-height: 0;
 }
 
 section {
-  padding: 2rem 8vw;
+  background: #fff; /* solid white */
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.10);
+  padding: 2.5em 2em 2em 2em;
+  max-width: 700px;
+  width: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1.5em;
+  animation: fadeIn 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 section h1 {
-  font-size: 2.5rem;
-  color: #fff;
+  font-size: 2.1rem;
+  color: #0088cc;
   text-align: center;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.7em;
+  letter-spacing: 0.01em;
 }
 
 section p {
-  font-size: 1.2rem;
-  color: #fff;
+  font-size: 1.13rem;
+  color: #444;
   text-align: center;
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 0.7em 0;
 }
 
 section .btn {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   background: #0088cc;
   color: #fff;
-  padding: 0.75rem 2rem;
+  padding: 0.75rem 2.2rem;
   text-decoration: none;
   border-radius: 0.5rem;
-  margin-top: 2rem;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: background 0.2s, transform 0.2s;
+  margin-top: 1.2rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 136, 204, 0.08);
+  transition: background 0.18s, transform 0.18s;
+  border: none;
+  display: inline-block;
 }
 
 section .btn:hover {
@@ -156,47 +179,74 @@ section .btn:hover {
 }
 
 footer {
-  color: #fff;
+  color: #888;
   display: flex;
   justify-content: center;
   background: none;
   font-size: 0.95rem;
-  margin-top: 2rem;
+  margin-top: auto;
+  padding: 1em 0 0.5em 0;
+  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  min-height: 48px;
 }
 
 .hide {
-  opacity: 0;
-  pointer-events: none;
+  display: none !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   header {
-    padding: 0 2vw;
+    padding: 0 1vw;
   }
 
   section {
-    padding: 2rem 2vw;
+    max-width: 98vw;
+    padding: 1.5em 0.5em;
   }
 }
 
 @media (max-width: 768px) {
   header {
     flex-direction: column;
-    height: auto;
+    min-height: unset;
     padding: 0.5rem 1vw;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+
+  header .left, header .center, header .right {
+    justify-content: center;
+    flex: unset;
+  }
+
+  .logo {
+    font-size: 1.3rem;
   }
 
   main {
-    margin-top: 10vh;
+    padding-top: 1.5em;
   }
 
   section {
-    padding: 1rem 1vw;
+    padding: 1em 0.2em;
   }
 
   section h1 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 }
 
@@ -206,7 +256,7 @@ footer {
   }
 
   section {
-    padding: 0.5rem 0.2vw;
+    padding: 0.5em 0.1em;
   }
 
   section h1 {
@@ -214,7 +264,7 @@ footer {
   }
 
   section .btn {
-    font-size: 1rem;
+    font-size: 0.95rem;
     padding: 0.5rem 1rem;
   }
 }
