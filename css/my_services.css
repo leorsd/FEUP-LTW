@@ -109,3 +109,13 @@ footer {
   #main-role-toggle button, #my-services-toggle button { padding: 0.5rem 1rem; font-size: 0.95rem; }
   .favorite-btn, .contact-btn { padding: 0.4rem 1rem; font-size: 0.95rem; }
 }
+@media (max-width: 1024px) {
+  .my-services-section, .my-services-list, .card { max-width: 98vw; padding: 1em 0.5em; }
+  .card { min-width: 0; }
+}
+@media (max-width: 640px) {
+  body { font-size: 0.98rem; }
+  .my-services-section, .my-services-list, .card { padding: 0.5em 0.1em; max-width: 100vw; }
+  .card { font-size: 0.95rem; }
+  .my-services-list { flex-direction: column; gap: 0.5em; }
+}

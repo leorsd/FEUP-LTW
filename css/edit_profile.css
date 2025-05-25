@@ -137,10 +137,23 @@ footer {
   min-height: 48px;
 }
 
+@media (max-width: 1024px) {
+  .edit-profile-section, .edit-profile-form { max-width: 98vw; padding: 1.2em 0.5em; }
+  .edit-profile-form { margin-top: 2em; }
+  .edit-profile-row label { min-width: 80px; font-size: 0.98em; }
+}
 @media (max-width: 768px) {
   .edit-profile-section { max-width: 98vw; padding: 1.5em 0.5em; }
   .edit-profile-form { padding: 1em 0.2em; }
   .edit-profile-row label { min-width: 80px; font-size: 0.98em; }
+}
+@media (max-width: 640px) {
+  body { font-size: 0.98rem; }
+  .edit-profile-section { padding: 0.5em 0.1em; max-width: 100vw; }
+  .edit-profile-form { padding: 0.5em 0.1em; max-width: 100vw; }
+  .edit-profile-form .profile-btn { font-size: 0.95rem; padding: 0.5em 0; }
+  .edit-profile-row { flex-direction: column; align-items: flex-start; gap: 0.5em; }
+  .edit-profile-row label { min-width: 0; font-size: 0.95em; }
 }
 @media (max-width: 480px) {
   .edit-profile-section { padding: 0.5em 0.1em; }

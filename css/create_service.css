@@ -138,10 +138,18 @@ main#create-service-main h2, main:not([id]) > h2 {
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   main#create-service-main, main:not([id]) { max-width: 95vw; padding: 2rem 0.5rem; }
+  .create-service-section, .create-service-form, .card { max-width: 98vw; padding: 1em 0.5em; }
+  .card { min-width: 0; }
 }
 @media (max-width: 768px) {
   main#create-service-main, main:not([id]) { padding: 1.2rem 0.2rem; }
   main#create-service-main h2, main:not([id]) > h2 { font-size: 1.3rem; }
+}
+@media (max-width: 640px) {
+  body { font-size: 0.98rem; }
+  .create-service-section, .create-service-form, .card { padding: 0.5em 0.1em; max-width: 100vw; }
+  .card { font-size: 0.95rem; }
+  .create-service-form { flex-direction: column; gap: 0.5em; }
 }
 @media (max-width: 480px) {
   main#create-service-main, main:not([id]) { padding: 0.5rem 0.1rem; }

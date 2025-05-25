@@ -122,12 +122,18 @@ nav ul li a:hover {
   header { padding: 1rem 2vw; }
   #search-bar { max-width: 260px; }
   nav ul { gap: 1.2rem; }
+  .headbar { flex-direction: column; gap: 0.5em; padding: 0.5em 0.5em; }
 }
 @media (max-width: 768px) {
   header { flex-direction: column; align-items: stretch; padding: 0.5rem 1vw; }
   #logo a { font-size: 1.3rem; }
   #search-bar { margin: 0.5rem 0; max-width: 100%; }
   nav ul { gap: 0.7rem; font-size: 1rem; }
+}
+@media (max-width: 640px) {
+  .headbar { flex-direction: column; gap: 0.3em; padding: 0.3em 0.1em; }
+  .headbar-logo { font-size: 1.1rem; }
+  .headbar-nav { flex-direction: column; gap: 0.2em; }
 }
 @media (max-width: 480px) {
   header { padding: 0.2rem 0.5vw; }

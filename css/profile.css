@@ -215,13 +215,19 @@ footer {
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
-  .profile-section, .change-password-section { max-width: 98vw; padding: 1.5em 0.5em; }
+  .profile-section, .change-password-section { max-width: 98vw; padding: 1.2em 0.5em; }
   .profile-username { font-size: 1.3rem; }
-}
-@media (max-width: 768px) {
-  .profile-section, .change-password-section { padding: 1em 0.2em; }
-  .profile-username { font-size: 1.1rem; }
   .profile-top-row { flex-direction: column; gap: 1em; }
+}
+@media (max-width: 640px) {
+  body { font-size: 0.98rem; }
+  .profile-section, .change-password-section { padding: 0.5em 0.1em; max-width: 100vw; }
+  .profile-username { font-size: 1rem; }
+  .profile-image { width: 64px; height: 64px; }
+  .profile-btn, .change-password-btn, .logout-btn { padding: 0.5em 1em; font-size: 0.95rem; }
+  .profile-top-row { flex-direction: column; gap: 0.7em; }
+  .profile-actions-row { flex-direction: column; gap: 0.7em; }
+  .profile-attributes li { flex-direction: column; align-items: flex-start; gap: 0.2em; }
 }
 @media (max-width: 480px) {
   .profile-section, .change-password-section { padding: 0.5em 0.1em; }
