@@ -286,21 +286,23 @@ function setupFilterListeners(filterForm, prevPageButton, nextPageButton, pageSp
 
 // Collapsible filter sections logic
 function setupCollapsibleFilterSections() {
-  const isSmallScreen = () => window.innerWidth <= 1024;
-  const filterSections = document.querySelectorAll('#filter-form .filter-section');
+  const isSmallScreen = () => window.innerWidth <= 768;
+  const filterSections = document.querySelectorAll(
+    "#filter-form .filter-section"
+  );
 
   function setSectionState(section, open) {
     if (open) {
-      section.classList.add('open');
-      section.querySelector('.filter-section-controls').style.display = '';
+      section.classList.add("open");
+      section.querySelector(".filter-section-controls").style.display = "";
     } else {
-      section.classList.remove('open');
-      section.querySelector('.filter-section-controls').style.display = 'none';
+      section.classList.remove("open");
+      section.querySelector(".filter-section-controls").style.display = "none";
     }
   }
 
   function updateSectionsOnResize() {
-    filterSections.forEach(section => {
+    filterSections.forEach((section) => {
       if (isSmallScreen()) {
         setSectionState(section, false); // collapsed by default
       } else {
@@ -310,13 +312,13 @@ function setupCollapsibleFilterSections() {
   }
 
   // Add click listeners to all filter-section-labels
-  filterSections.forEach(section => {
-    const label = section.querySelector('.filter-section-label');
+  filterSections.forEach((section) => {
+    const label = section.querySelector(".filter-section-label");
     if (label) {
-      label.style.cursor = 'pointer';
-      label.addEventListener('click', function () {
+      label.style.cursor = "pointer";
+      label.addEventListener("click", function () {
         if (!isSmallScreen()) return;
-        const isOpen = section.classList.contains('open');
+        const isOpen = section.classList.contains("open");
         setSectionState(section, !isOpen);
       });
     }
@@ -324,7 +326,7 @@ function setupCollapsibleFilterSections() {
 
   // Initial state
   updateSectionsOnResize();
-  window.addEventListener('resize', updateSectionsOnResize);
+  window.addEventListener("resize", updateSectionsOnResize);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -335,7 +337,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Only enable this toggle for small screens
   function isSmallScreen() {
-    return window.innerWidth <= 1024;
+    return window.innerWidth <= 768;
   }
 
   function setPanelState(collapsed) {

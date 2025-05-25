@@ -1,14 +1,14 @@
-@import url('utils.css');
+@import url("utils.css");
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: rgb(238, 238, 238);
+  font-family: "Arial", sans-serif;
+  background-color: rgb(238, 238, 238);
 }
 
 header {
@@ -18,10 +18,16 @@ header {
   background: linear-gradient(90deg, #0088cc 60%, #222 100%);
   padding: 1rem 8vw;
   min-height: 4.5rem;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
   border-bottom: 1.5px solid #e0e7ef;
   z-index: 20;
   position: relative;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+#logo {
+  flex: 0 1 auto;
+  margin-right: 1.5rem;
 }
 #logo a {
   text-decoration: none;
@@ -39,15 +45,18 @@ header {
 }
 
 #search-bar {
-  flex: 1;
+  flex: 1 1 320px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 2vw;
-  max-width: 420px;
+  max-width: 600px;
+  width: 100%;
+  min-width: 180px;
 }
 #search-bar input {
-  width: 19rem;
+  width: 100%;
+  min-width: 0;
   padding: 0.5rem 1rem;
   font-size: 1rem;
   border: 1.5px solid #e0e7ef;
@@ -80,6 +89,9 @@ header {
   color: #0088cc;
 }
 
+nav {
+  flex: 0 1 auto;
+}
 nav ul {
   list-style: none;
   display: flex;
@@ -118,25 +130,137 @@ nav ul li a:hover {
 }
 
 /* Responsive adjustments */
+@media (max-width: 1124px) {
+  #search-bar {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 1vw;
+  }
+  nav {
+    width: 100%;
+    margin: 0.5rem 0 0.2rem 0;
+  }
+  nav ul {
+    width: 100%;
+    justify-content: space-between;
+    gap: 2.5rem;
+    font-size: 1.25rem;
+    padding: 0 1vw;
+  }
+  nav ul li {
+    flex: 1 1 0;
+    text-align: center;
+  }
+  nav ul li a {
+    font-size: 1.15rem;
+    padding: 0.3rem 0.2rem;
+  }
+}
 @media (max-width: 1024px) {
-  header { padding: 1rem 2vw; }
-  #search-bar { max-width: 260px; }
-  nav ul { gap: 1.2rem; }
-  .headbar { flex-direction: column; gap: 0.5em; padding: 0.5em 0.5em; }
+  header {
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding: 1rem 2vw;
+    gap: 1rem;
+  }
+  #logo {
+    margin-right: 0.7rem;
+  }
+  nav ul {
+    gap: 1.2rem;
+  }
 }
 @media (max-width: 768px) {
-  header { flex-direction: column; align-items: stretch; padding: 0.5rem 1vw; }
-  #logo a { font-size: 1.3rem; }
-  #search-bar { margin: 0.5rem 0; max-width: 100%; }
-  nav ul { gap: 0.7rem; font-size: 1rem; }
+  header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.7rem;
+    padding: 0.7rem 1vw;
+  }
+  #logo {
+    margin: 0 auto 0.2rem auto;
+    text-align: center;
+  }
+  #logo a {
+    font-size: 1.3rem;
+    justify-content: center;
+  }
+  #search-bar {
+    flex: 1 1 50px;
+    height: auto;
+    min-height: 0;
+    margin: 0.2rem 0 0.2rem 0;
+    max-width: 100%;
+    width: 100%;
+  }
+  #search-bar input,
+  #search-bar button {
+    height: 2.2rem;
+    font-size: 0.97rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
+  nav {
+    width: 100%;
+    margin: 0 auto;
+  }
+  nav ul {
+    gap: 0.7rem;
+    font-size: 1rem;
+    justify-content: center;
+    width: 100%;
+  }
+  nav ul {
+    gap: 1.2rem;
+    font-size: 1.1rem;
+    padding: 0 0.5vw;
+  }
+  nav ul li a {
+    font-size: 1.05rem;
+  }
 }
 @media (max-width: 640px) {
-  .headbar { flex-direction: column; gap: 0.3em; padding: 0.3em 0.1em; }
-  .headbar-logo { font-size: 1.1rem; }
-  .headbar-nav { flex-direction: column; gap: 0.2em; }
+  header {
+    padding: 0.3rem 0.5vw;
+    gap: 0.4rem;
+  }
+  #logo a {
+    font-size: 1.1rem;
+  }
+  #search-bar {
+    max-width: 100%;
+    width: 100%;
+    margin: 0.3rem 0;
+  }
+  nav ul {
+    gap: 0.7rem;
+    font-size: 1rem;
+    padding: 0 0.2vw;
+  }
+  nav ul li a {
+    font-size: 0.97rem;
+  }
 }
 @media (max-width: 480px) {
-  header { padding: 0.2rem 0.5vw; }
-  #logo a { font-size: 1.1rem; }
-  nav ul { gap: 0.3rem; font-size: 0.95rem; }
+  header {
+    padding: 0.1rem 0.2vw;
+    gap: 0.2rem;
+  }
+  #logo a {
+    font-size: 0.95rem;
+  }
+  #search-bar input,
+  #search-bar button {
+    font-size: 0.9rem;
+    height: 2.1rem;
+    padding: 0.3rem 0.5rem;
+  }
+  nav ul {
+    gap: 0.3rem;
+    font-size: 0.92rem;
+    padding: 0;
+  }
+  nav ul li a {
+    font-size: 0.92rem;
+  }
 }
