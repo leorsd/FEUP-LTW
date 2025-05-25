@@ -1,7 +1,32 @@
 @import url('utils.css');
 
+body {
+  min-height: 100vh;
+  background: #f7f9fa;
+  display: flex;
+  flex-direction: column;
+}
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+h2 {
+  margin: 2.5em 0 0.5em 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0088cc;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
 #chat-container {
-  max-width: 600px;
+  max-width: 100%;
+  width: 900px;
   margin: 2rem auto;
   background: #fff;
   border-radius: 1rem;
@@ -10,6 +35,9 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+#chat-container {
+  margin-top: 0;
 }
 #chat-header {
   display: flex;
@@ -95,11 +123,31 @@ img {
   object-fit: cover;
 }
 
+/* Footer styles */
+footer {
+  display: flex;
+  justify-content: center;
+  background: none;
+  color: #888;
+  font-size: 0.95rem;
+  margin-top: auto;
+  padding: 1em 0 0.5em 0;
+  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  min-height: 48px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   #chat-container { padding: 1rem 0.2rem; }
+  h2 { font-size: 1.3rem; margin-top: 1.2em; }
 }
 @media (max-width: 480px) {
   #chat-container { padding: 0.5rem 0.1rem; }
   #form-submit-button { padding: 0.5rem 0.7rem; font-size: 0.95rem; }
+  h2 { font-size: 1.1rem; margin-top: 0.7em; }
+}
+@media (max-width: 1024px) {
+  #chat-container { width: 98vw; min-width: 0; }
 }
