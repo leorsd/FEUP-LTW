@@ -84,7 +84,7 @@ function draw_services_grid(array $options = []) {
         <?php endif; ?>
         <?php if ($category_filter): ?>
           <label for="category">Category</label>
-          <div id="form-categories"></div>
+          <div id="form-categories" name="category"></div>
         <?php endif; ?>
         <?php if ($location_filter): ?>
           <label for="location">Location</label>
@@ -95,8 +95,8 @@ function draw_services_grid(array $options = []) {
           <input type="text" id="provider" name="provider" placeholder="Enter provider username">
         <?php endif; ?>
         <?php if ($status_filter): ?>
-          <label for="status">Status</label>
-          <div id="form-statuses"></div>
+          <label for="status" id="form-statuses-title">Status</label>
+          <div id="form-statuses" name="status"></div>
         <?php endif; ?>
         <?php if ($price_filter): ?>
           <label for="price-range">Price</label>
