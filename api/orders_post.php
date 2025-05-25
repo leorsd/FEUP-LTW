@@ -29,6 +29,20 @@ $orderObj = new Order($db);
 
 $exists = $orderObj->getOrder($service_id, $customer_id);
 
+// Check if status_id is -1 for deletion
+if ($status_id === -1) {
+    if ($exists) {
+        $deleted = $orderObj->cancelOrder($service_id, $customer_id);
+        $msg = $deleted ? ['success' => true, 'message' => 'Order deleted.'] : ['error' => 'Could not delete order.'];
+        http_response_code($deleted ? 200 : 500);
+        echo json_encode($msg);
+    } else {
+        http_response_code(404);
+        echo json_encode(['error' => 'Order not found.']);
+    }
+    exit();
+}
+
 if ($exists) {
     $ok = $orderObj->updateOrderStatus($service_id, $customer_id, $status_id);
     $msg = $ok ? ['success' => true, 'message' => 'Order updated.'] : ['error' => 'Could not update order.'];

@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     if (filters.search) params.append("search", filters.search);
     if (filters.status) params.append("status", filters.status);
+    if (filters.provider) params.append("provider", filters.provider);
     if (filters.category) params.append("category", filters.category);
     if (filters.location) params.append("location", filters.location);
     if (filters.min_price) params.append("min_price", filters.min_price);

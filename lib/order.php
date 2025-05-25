@@ -118,27 +118,11 @@ class Order {
         ]);
     }
 
-    // Check if a user has ordered a service
-    public function hasUserOrderedService(int $serviceId, int $userId): bool {
-        $stmt = $this->db->prepare('SELECT 1 FROM service_order WHERE service_id = ? AND customer_id = ?');
-        $stmt->execute([$serviceId, $userId]);
-        return (bool) $stmt->fetchColumn();
-    }
-
-    // Get the status name for a user's order
+    // Get the status name for a user's order or null if not found
     public function getUserOrderStatus(int $serviceId, int $userId): ?string {
         $stmt = $this->db->prepare('SELECT service_status.name FROM service_order JOIN service_status ON service_order.status = service_status.id WHERE service_order.service_id = ? AND service_order.customer_id = ?');
         $stmt->execute([$serviceId, $userId]);
         return $stmt->fetchColumn() ?: null;
-    }
-
-    // Get order info: hasOrdered (bool) and status (string|null)
-    public function getUserOrderInfo(int $serviceId, int $userId): array {
-        $status = $this->getUserOrderStatus($serviceId, $userId);
-        return [
-            'hasOrdered' => $status !== false && $status !== null,
-            'status' => $status ?: null
-        ];
     }
 }
 ?>

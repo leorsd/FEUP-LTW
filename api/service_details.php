@@ -34,12 +34,15 @@ $reviews = $reviewObj->getReviewsService($service_id);
 // Optionally, get order info for this user and service
 $order_info = null;
 if ($user_id) {
-    $order_info = $orderObj->getUserOrderInfo($service_id, $user_id);
+    $order_info = $orderObj->getUserOrderStatus($service_id, $user_id);
     $service['is_favorite'] = $serviceObj->isFavorite($user_id, $service_id);
 }
+
+$orders = $orderObj->getOrdersByService($service_id);
 
 echo json_encode([
     'service' => $service,
     'reviews' => $reviews,
-    'order_info' => $order_info
+    'order_info' => $order_info,
+    'orders' => $orders
 ]);

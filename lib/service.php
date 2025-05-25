@@ -34,6 +34,31 @@ class Service
         ]);
     }
 
+    public function updateService(int $serviceId, int $userId, array $fields): bool
+    {
+        // Only allow certain fields to be updated
+        $allowed = ['title', 'description', 'price', 'location', 'category', 'image'];
+        $set = [];
+        $params = [];
+
+        foreach ($fields as $key => $value) {
+            if (in_array($key, $allowed, true)) {
+                $set[] = "$key = :$key";
+                $params[$key] = $value;
+            }
+        }
+
+        if (empty($set)) return false;
+
+        // Ensure only the creator can update
+        $params['service_id'] = $serviceId;
+        $params['user_id'] = $userId;
+
+        $sql = "UPDATE service SET " . implode(', ', $set) . " WHERE id = :service_id AND creator_id = :user_id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($params);
+    }
+
     public function getServiceById(int $id): ?array
     {
         $stmt = $this->db->prepare(
