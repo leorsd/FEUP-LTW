@@ -127,6 +127,14 @@ class User
       return null;
     }
 
+    public function verifyPasswordId(int $id, string $password): bool
+    {
+      $stmt = $this->db->prepare('SELECT password FROM user WHERE id = :id');
+      $stmt->execute(['id' => $id]);
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+      return $result && password_verify($password, $result['password']);
+    }
+
     // Get user info (e.g., profile data)
     public function getUserInfo(int $id): array
     {
@@ -201,7 +209,7 @@ class User
     // Update password (after verifying current password)
     public function updatePassword(int $id, string $currentPassword, string $newPassword): bool
     {
-      if (!$this->verifyPassword($id, $currentPassword))
+      if (!$this->verifyPasswordId($id, $currentPassword))
         return false;
       $hashed = password_hash($newPassword, PASSWORD_DEFAULT);
       $stmt = $this->db->prepare('UPDATE user SET password = :password WHERE id = :id');
