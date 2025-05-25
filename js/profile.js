@@ -1,8 +1,31 @@
-/*dummy code for now*/
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    // Fetch user profile data from API
+    const response = await fetch(`../api/user.php?id=${CURRENT_USER_ID}`);
+    if (!response.ok) throw new Error("Failed to load profile data.");
+    const user = await response.json();
 
-// Example: Add simple interactivity or profile widgets
-document.addEventListener("DOMContentLoaded", () => {
-  // Example: Notification popup, chart rendering, etc.
-  // For now, just a friendly console message:
-  console.log("Profile loaded!");
+    // Fill profile fields
+    document.getElementById("profile-image").src = user.profile_picture
+      ? `../images/cache/${user.profile_picture}`
+      : "../images/user.jpg";
+    document.getElementById("profile-username").textContent = user.username || "";
+    document.getElementById("profile-email").textContent = user.email || "";
+    document.getElementById("profile-phone").textContent = user.phone || "";
+    document.getElementById("profile-age").textContent = user.age || "";
+    document.getElementById("profile-location").textContent = user.location || "";
+    document.getElementById("profile-bio").textContent = user.bio || "";
+
+    // If user is admin, add admin panel button
+    if (user.is_admin) {
+      const adminBtn = document.createElement("a");
+      adminBtn.href = "admin.php";
+      adminBtn.className = "profile-btn admin-panel-btn";
+      adminBtn.textContent = "Admin Panel";
+      document.querySelector(".profile-bottom-row").appendChild(adminBtn);
+    }
+  } catch (err) {
+    document.getElementById("profile-messages").textContent =
+      "Could not load profile: " + err.message;
+  }
 });

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once(__DIR__ . '/../includes/db/connection.php');
+require_once(__DIR__ . '/../lib/service.php');
 
 session_start();
 
@@ -20,33 +21,41 @@ if (!$service_id || !$user_id) {
 }
 
 $db = getDatabaseConnection();
+$service = new Service($db);
+
+// Get service info using the Service class
+$serviceData = $service->getServiceById($service_id);
+
+if (!$serviceData) {
+    $_SESSION['delete_error'] = "Service not found.";
+    header("Location: ../pages/my_services.php");
+    exit();
+}
 
 // Check if the user is the creator of the service
-$stmt = $db->prepare("SELECT creator_id FROM service WHERE id = ?");
-$stmt->execute([$service_id]);
-$creator_id = $stmt->fetchColumn();
-
-if ($creator_id != $user_id) {
+if ($serviceData['creator_id'] != $user_id) {
     $_SESSION['delete_error'] = "You are not authorized to delete this service.";
     header("Location: ../pages/my_services.php");
     exit();
 }
 
-// Check for active orders
-$stmt = $db->prepare("SELECT COUNT(*) FROM service_order WHERE service_id = ? AND status IN (1,2,3)");
-$stmt->execute([$service_id]);
-$active_orders = $stmt->fetchColumn();
-
-if ($active_orders > 0) {
+// Check for active orders (using getServices with context 'sold' and status filter)
+$orders = $service->getServices(
+    'sold',
+    $user_id,
+    ['status' => [1, 2, 3], 'service_id' => $service_id]
+);
+if ($orders['total'] > 0) {
     $_SESSION['delete_error'] = "Cannot delete service with active orders.";
     header("Location: ../pages/my_services.php");
     exit();
 }
 
-// Delete the service
-$stmt = $db->prepare("DELETE FROM service WHERE id = ?");
-$stmt->execute([$service_id]);
-
-$_SESSION['delete_success'] = "Service deleted successfully.";
+// Delete the service using the Service class method
+if ($service->deleteService($service_id)) {
+    $_SESSION['delete_success'] = "Service deleted successfully.";
+} else {
+    $_SESSION['delete_error'] = "Failed to delete service.";
+}
 header("Location: ../pages/my_services.php");
 exit();

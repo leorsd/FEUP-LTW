@@ -138,5 +138,15 @@ function draw_edit_service_header()
   <?php
 }
 
+function draw_admin_header()
+{
+  ?>
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/headbar.css">
+  <script src="../js/headbar.js" defer></script>
+  <script src="../js/admin.js" defer></script>
+  <?php
+}
+
 ?>
 

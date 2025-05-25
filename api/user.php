@@ -6,27 +6,20 @@ require_once(__DIR__ . '/../lib/user.php');
 
 header('Content-Type: application/json');
 
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Missing or invalid user id']);
-    exit();
-}
-
 $db = getDatabaseConnection();
 $user = new User($db);
 
-$id = (int)$_GET['id'];
-$userInfo = $user->getUserInfo($id);
+$id = isset($_GET['id']) && is_numeric($_GET['id']) ? (int)$_GET['id'] : null;
+$search = isset($_GET['search']) ? trim($_GET['search']) : null;
+
+if ($id === null) {
+    $userInfo = $user->getAllUsers($search);
+} else {
+    $userInfo = $user->getUserInfo($id);
+}
 
 if ($userInfo) {
-    // Only return basic info
-    $basicInfo = [
-        'id' => $userInfo['id'],
-        'username' => $userInfo['username'],
-        'email' => $userInfo['email'],
-        'profile_picture' => $userInfo['profile_picture'] ?? null
-    ];
-    echo json_encode($basicInfo);
+    echo json_encode($userInfo);
 } else {
     http_response_code(404);
     echo json_encode(['error' => 'User not found']);
