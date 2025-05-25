@@ -4,20 +4,18 @@ session_start();
 require_once(__DIR__ . '/../includes/db/connection.php');
 require_once(__DIR__ . '/../lib/user.php');
 
-
 $db = getDatabaseConnection();
 
-if (!isset($_SESSION['user_info']['username'])) {
+if (!isset($_SESSION['user_info']['id'])) {
   $_SESSION['profile_error'] = 'You must be logged in.';
   header('Location: ../pages/edit_profile.php');
   exit();
 }
 
+$user_id = $_SESSION['user_info']['id'];
 $user = new User($db);
-$user->setUserData($_SESSION['user_info']['username'], '', '');
 
 $fields = [];
-// $allowed = ['email', 'phone', 'age', 'location', 'bio'];
 $allowed = ['phone', 'age', 'location', 'bio'];
 foreach ($allowed as $field) {
   if (isset($_POST[$field])) {
@@ -35,7 +33,7 @@ if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] ===
     $new_name = $_SESSION['user_info']['username'] . '_' . time() . '.' . $ext;
     $dest = __DIR__ . '/../images/cache/' . $new_name;
     if (move_uploaded_file($tmp_name, $dest)) {
-      $user->updateProfilePicture($new_name);
+      $user->updateProfilePicture($user_id, $new_name);
     }
   }
 }
@@ -67,16 +65,14 @@ if (isset($fields['bio']) && strlen($fields['bio']) > 1000) {
 
 // Update profile fields
 if (!empty($fields)) {
-  $user->updateProfile($fields);
+  $user->updateProfile($user_id, $fields);
 }
 
 // Refresh session user info
-$_SESSION['user_info'] = $user->getUserInfo();
+$_SESSION['user_info'] = $user->getUserInfo($user_id);
 if (!isset($_SESSION['profile_msg']) && !isset($_SESSION['profile_error'])) {
   $_SESSION['profile_msg'] = 'Profile updated successfully!';
 }
 
 header('Location: ../pages/profile.php');
 exit();
-?>
-

@@ -66,10 +66,22 @@ class User
       return $stmt->fetchColumn() > 0;
     }
 
-    public function getAllUsernames(): array
+    public function getAllUsers(?string $search = null): array
     {
-      $stmt = $this->db->query('SELECT username FROM user ORDER BY username ASC');
-      return $stmt->fetchAll(PDO::FETCH_COLUMN);
+      if ($search !== null && $search !== '') {
+        $stmt = $this->db->prepare('SELECT * FROM user WHERE username LIKE :search');
+        $stmt->execute(['search' => '%' . $search . '%']);
+      } else {
+        $stmt = $this->db->query('SELECT * FROM user');
+      }
+      $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+      foreach ($users as &$user) {
+        $adminStmt = $this->db->prepare('SELECT 1 FROM admin WHERE user_id = :id');
+        $adminStmt->execute(['id' => $user['id']]);
+        $user['is_admin'] = (bool)$adminStmt->fetchColumn();
+      }
+      return $users;
     }
 
     // Register a new user, password is passed as argument
@@ -118,9 +130,21 @@ class User
     // Get user info (e.g., profile data)
     public function getUserInfo(int $id): array
     {
+      // Get user info from user table
       $stmt = $this->db->prepare('SELECT * FROM user WHERE id = :id');
       $stmt->execute(['id' => $id]);
-      return $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+      $user = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+
+      // Check if user is admin (exists in admin table)
+      if ($user) {
+        $adminStmt = $this->db->prepare('SELECT 1 FROM admin WHERE user_id = :id');
+        $adminStmt->execute(['id' => $id]);
+        $user['is_admin'] = (bool)$adminStmt->fetchColumn();
+      } else {
+        $user['is_admin'] = false;
+      }
+
+      return $user;
     }
 
     // Update user profile fields (except password and profile_picture)
@@ -185,6 +209,29 @@ class User
         'password' => $hashed,
         'id' => $id
       ]);
+    }
+
+    public function deleteUser(int $id): bool
+    {
+      $stmt = $this->db->prepare('DELETE FROM user WHERE id = :id');
+      return $stmt->execute(['id' => $id]);
+    }
+
+    public function promoteToAdmin(int $id): bool
+    {
+      $stmt = $this->db->prepare('SELECT 1 FROM admin WHERE user_id = :id');
+      $stmt->execute(['id' => $id]);
+      if ($stmt->fetchColumn()) return true; 
+
+      $stmt = $this->db->prepare('INSERT INTO admin (user_id) VALUES (:id)');
+      return $stmt->execute(['id' => $id]);
+    }
+
+    public function isAdmin(int $id): bool
+    {
+      $stmt = $this->db->prepare('SELECT 1 FROM admin WHERE user_id = :id');
+      $stmt->execute(['id' => $id]);
+      return (bool)$stmt->fetchColumn();
     }
   }
 ?>
