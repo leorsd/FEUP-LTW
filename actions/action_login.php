@@ -7,9 +7,8 @@ require_once(__DIR__ . '/../includes/db/connection.php');
 require_once(__DIR__ . '/../lib/user.php');
 
 // Establish the database connection
-$db = getDatabaseConnection(); // Get the PDO object from the function
+$db = getDatabaseConnection();
 
-// Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $username = $_POST['username'];
   $password = $_POST['password'];
@@ -21,29 +20,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     exit();
   }
 
-  // Create a new User object
   $user = new User($db);
 
-  // Set user data for authentication
-  $user->setUserData($username, "", "");
+  // Verify password and get user ID if correct
+  $user_id = $user->verifyPassword($username, $password);
 
-  // Check if user exists and verify the password (password is passed directly)
-  if ($user->userExists() && $user->verifyPassword($password)) {
-    $_SESSION['user_info'] = $user->getUserInfo(); // Store additional user info if needed
+  if ($user_id !== null) {
+    $_SESSION['user_info'] = $user->getUserInfo($user_id);
 
-    // Set a success message
     $_SESSION['success'] = 'Login successful! Welcome back.';
-    // Generate new CSRF token on login
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-    // Redirect to home page
     header('Location: ../pages/home.php');
   } else {
-    // Authentication failed, set the error and redirect back to login page
     $_SESSION['error'] = 'Invalid username or password.';
     header('Location: ' . $_SERVER['HTTP_REFERER']);
   }
   exit();
 }
-
 ?>
-

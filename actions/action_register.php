@@ -6,7 +6,7 @@ require_once(__DIR__ . '/../includes/db/connection.php');
 require_once(__DIR__ . '/../lib/user.php');
 
 // Establish the database connection
-$db = getDatabaseConnection(); // Get the PDO object from the function
+$db = getDatabaseConnection();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $username = $_POST['username'];
@@ -29,51 +29,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     exit();
   }
 
-  // Create a new User object
   $user = new User($db);
 
-  // Set user data with validation and catch errors
-  try {
-    $user->setUserData($username, $email, $phone);
-  } catch (InvalidArgumentException $e) {
-    $_SESSION['error'] = $e->getMessage();
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
-    exit();
-  }
-
-  // Password validation feedback
+  // Validate password
   if (!User::validatePassword($password)) {
     $_SESSION['error'] = 'Password must be at least 8 characters, contain at least one letter and one number.';
     header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit();
   }
 
-  if ($user->userExists()) {
+  // Check if username, email, or phone already exists
+  if ($user->usernameExists($username)) {
     $_SESSION['error'] = 'Username is already taken. Please choose another one.';
     header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit();
   }
-
-  // Check if email is already registered
-  if ($user->emailExists()) {
+  if ($user->emailExists($email)) {
     $_SESSION['error'] = 'Email is already registered. Please use another one.';
     header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit();
   }
-
-  // Check if phone number is already registered
-  if ($user->phoneExists()) {
+  if ($user->phoneExists($phone)) {
     $_SESSION['error'] = 'Phone number is already registered. Please use another one.';
     header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit();
   }
 
-  // Register user (password is passed directly)
-  if ($user->register($password)) {
+  // Register user and get new user ID
+  $user_id = $user->register($username, $email, $phone, $password);
+  if ($user_id !== null) {
     // Auto-login after registration
-    $_SESSION['user_info'] = $user->getUserInfo();
+    $_SESSION['user_info'] = $user->getUserInfo($user_id);
     $_SESSION['success'] = 'Registration successful! Welcome!';
-    // Generate new CSRF token on registration
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     header('Location: ../pages/home.php');
   } else {
@@ -83,6 +70,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   exit();
 }
-
 ?>
-
