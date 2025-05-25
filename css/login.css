@@ -126,52 +126,44 @@ footer {
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   body {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr 1fr;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 20% 80%;
     grid-template-areas:
-      "header"
-      "form"
-      "image";
+      "header image"
+      "form image";
   }
   #login-background {
-    min-height: 200px;
-    height: 30vh;
-  }
-  .login-section, .login-form, .card {
-    max-width: 98vw;
-    padding: 1em 0.5em;
-  }
-  .card {
     min-width: 0;
+    width: 100%;
+    min-height: 100vh;
+    transition: width 0.3s, opacity 0.3s;
+    opacity: 0.8;
   }
 }
-@media (max-width: 768px) {
-  #login-form {
-    padding: 1.5rem 1rem;
-    min-width: 220px;
-    max-width: 95vw;
+@media (max-width: 800px) {
+  body {
+    grid-template-columns: 4fr 1fr;
   }
-  header h1 { font-size: 2rem; }
+  #login-background {
+    opacity: 0.6;
+  }
 }
 @media (max-width: 640px) {
   body {
-    font-size: 0.98rem;
+    grid-template-columns: 7fr 1fr;
   }
-  #login-form {
-    padding: 0.5em 0.1em;
+  #login-background {
+    opacity: 0.3;
+  }
+}
+@media (max-width: 480px) {
+  body {
+    grid-template-columns: 1fr 0fr;
+  }
+  #login-background {
+    width: 0;
     min-width: 0;
-    max-width: 100vw;
-  }
-  header h1 { font-size: 1.3rem; }
-  .login-section, .login-form, .card {
-    padding: 0.5em 0.1em;
-    max-width: 100vw;
-  }
-  .card {
-    font-size: 0.95rem;
-  }
-  .login-form {
-    flex-direction: column;
-    gap: 0.5em;
+    opacity: 0;
+    display: none;
   }
 }
