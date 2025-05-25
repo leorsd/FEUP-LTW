@@ -55,17 +55,11 @@ INSERT INTO service (id, creator_id, title, description, price, location, create
 (15, 6, 'Custom Vinyl Wrap', 'Custom vinyl wrap for your car.', 800.00, 'Industrial Area', '2025-05-15 13:00:00', 6),
 (16, 7, 'Car Audio Installation', 'Installation of car audio systems.', 250.00, 'Tech Park', '2025-05-16 14:00:00', 7),
 (17, 8, 'Navigation System Upgrade', 'Upgrade your car navigation system.', 600.00, 'City Center', '2025-05-17 15:00:00', 8),
-(18, 9, 'Leather Seat Cleaning', 'Professional leather seat cleaning service.', 120.00, 'Downtown', '2025-05-18 16:00:00', 9),
-(19, 10, 'Mobile Detailing', 'On-site car detailing at your convenience.', 80.00, 'Suburbs', '2025-05-19 10:00:00', 1),
-(20, 10, 'Eco-Friendly Wash', 'Eco-friendly car wash using minimal water.', 35.00, 'Uptown', '2025-05-20 11:00:00', 1),
-(21, 10, 'Express Interior Clean', 'Quick interior cleaning for busy schedules.', 45.00, 'Downtown', '2025-05-21 12:00:00', 9);
+(18, 9, 'Leather Seat Cleaning', 'Professional leather seat cleaning service.', 120.00, 'Downtown', '2025-05-18 16:00:00', 9);
 
 
-INSERT INTO service_customer (service_id, customer_id, status, created_at) VALUES
-(1, 10, 3, '2025-05-12 10:00:00'), -- Premium Car Wash, completed
-(2, 10, 2, '2025-05-13 11:00:00'), -- Quick Oil Change, in progress
-(3, 10, 1, '2025-05-14 12:00:00'), -- Engine Diagnostics, ordered
-(19, 1, 1, '2025-05-19 13:00:00'), -- Mobile Detailing, ordered
-(19, 2, 1, '2025-05-19 13:00:00'), -- Mobile Detailing, ordered
-(20, 2, 2, '2025-05-20 14:00:00'), -- Eco-Friendly Wash, in progress
-(21, 3, 3, '2025-05-21 15:00:00'); -- Express Interior Clean, completed
+INSERT INTO service_order (service_id, customer_id, status, created_at) VALUES
+(16, 1, 1, '2025-05-19 13:00:00'), -- Mobile Detailing, ordered
+(17, 2, 1, '2025-05-19 13:00:00'), -- Mobile Detailing, ordered
+(18, 2, 2, '2025-05-20 14:00:00'), -- Eco-Friendly Wash, in progress
+(18, 3, 3, '2025-05-21 15:00:00'); -- Express Interior Clean, completed
