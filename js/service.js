@@ -21,8 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const orderInfo = data.order_info || null;
       const allOrders = data.orders || [];
 
-      console.log("Service data:", service);
-
       // Set images
       service.image = service.image ? `../images/cache/${service.image}` : "../images/service.png";
       service.provider_image = service.provider_image ? `../images/cache/${service.provider_image}` : "../images/user.jpg";
@@ -130,7 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
           e.stopPropagation();
           window.location.href = `chat.php?user=${service.creator_id}`;
         });
-
         renderOrderSection(service, orderInfo);
       }
 
@@ -155,6 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderOrderSection(service, orderInfo) {
     const orderDiv = document.getElementById("service-order");
     orderDiv.innerHTML = "";
+
 
     // If status is not set, show the order button
     if (!orderInfo) {
@@ -287,7 +285,6 @@ document.addEventListener("DOMContentLoaded", () => {
       reviewsList.innerHTML += "<p>No reviews yet.</p>";
     }
   }
-
 
   const reviewForm = document.getElementById("reviews-form");
   if (reviewForm) {

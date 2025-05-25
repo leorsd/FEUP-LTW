@@ -137,5 +137,6 @@ function draw_edit_service_header()
   <script src="../js/edit_service.js" defer></script>
   <?php
 }
+
 ?>
 

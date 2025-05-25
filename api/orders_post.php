@@ -43,7 +43,6 @@ if ($status_id === -1) {
     exit();
 }
 
-
 if ($exists) {
     $ok = $orderObj->updateOrderStatus($service_id, $customer_id, $status_id);
     $msg = $ok ? ['success' => true, 'message' => 'Order updated.'] : ['error' => 'Could not update order.'];
