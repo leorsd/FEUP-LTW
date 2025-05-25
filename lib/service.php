@@ -59,6 +59,12 @@ class Service
         return $stmt->execute($params);
     }
 
+    public function deleteService(int $serviceId): bool
+    {
+        $stmt = $this->db->prepare('DELETE FROM service WHERE id = :id');
+        return $stmt->execute(['id' => $serviceId]);
+    }
+
     public function getServiceById(int $id): ?array
     {
         $stmt = $this->db->prepare(
