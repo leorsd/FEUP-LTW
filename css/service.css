@@ -1,3 +1,7 @@
+.hide {
+  display: none;
+}
+
 #service-main {
     padding: 1rem 20rem;
     display: flex;

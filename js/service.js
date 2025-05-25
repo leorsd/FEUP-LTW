@@ -18,8 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const service = data.service;
       const reviews = data.reviews || [];
-      const orderInfo = data.order_info || {};
+      const orderInfo = data.order_info || null;
       const allOrders = data.orders || [];
+
+      console.log("Service data:", service);
 
       // Set images
       service.image = service.image ? `../images/cache/${service.image}` : "../images/service.png";
@@ -40,16 +42,110 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // If current user is the provider, show all orders and allow status updates
       if (service.creator_id == CURRENT_USER_ID) {
+
+        const hasActiveOrders = allOrders.some(order =>
+          order.status_name === "Ordered" ||
+          order.status_name === "In Progress" ||
+          order.status_name === "Waiting for Payment"
+        );
+
+        // Show edit button or make fields editable
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Edit Service";
+        editBtn.className = "edit-service-btn";
+        editBtn.onclick = function () {
+          if (hasActiveOrders) {
+            alert("You cannot edit the service while there are active orders.");
+          }else{
+            window.location.href = `edit_service.php?service_id=${service.id}`;
+          }
+        };
+        document.getElementById("service-buttons").innerHTML = "";
+        document.getElementById("service-buttons").appendChild(editBtn);
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete Service";
+        deleteBtn.className = "delete-service-btn";
+        deleteBtn.onclick = async function () {
+          if (confirm("Are you sure you want to delete this service? This action cannot be undone.")) {
+            const response = await fetch("../actions/action_delete_service.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: `service_id=${encodeURIComponent(service.id)}`,
+            });
+            if (response.redirected) {
+              window.location.href = response.url;
+            } else if (response.ok) {
+              window.location.href = "my_services.php"; // fallback
+            } else {
+              alert("Failed to delete service.");
+            }
+          }
+        };
+        document.getElementById("service-buttons").appendChild(deleteBtn);
+
+
         renderProviderOrders(allOrders, service);
+
       } else {
+        const serviceButtons = document.getElementById("service-buttons");
+        serviceButtons.innerHTML = "";
+        const favBtn = document.createElement("button");
+        favBtn.className = "favorite-btn";
+        favBtn.dataset.serviceId = service.id;
+        favBtn.textContent = service.is_favorite
+          ? "💔 Remove from Favorites"
+          : "❤️ Add to Favorites";
+        serviceButtons.appendChild(favBtn);
+
+        favBtn.addEventListener("click", async function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          try {
+            const response = await fetch("../api/favorites.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                user_id: CURRENT_USER_ID,
+                service_id: service.id,
+              }),
+            });
+            const result = await response.json();
+            favBtn.textContent = result.favorited
+              ? "💔 Remove from Favorites"
+              : "❤️ Add to Favorites";
+            loadServiceInfo();
+          } catch {
+            alert("Failed to toggle favorite.");
+          }
+        });
+
+        const contactBtn = document.createElement("button");
+        contactBtn.className = "contact-btn";
+        contactBtn.textContent = "Contact Provider";
+        serviceButtons.appendChild(contactBtn);
+
+        contactBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = `chat.php?user=${service.creator_id}`;
+        });
+
         renderOrderSection(service, orderInfo);
       }
 
       renderReviews(reviews);
 
+      // Review form submit
       const reviewsForm = document.getElementById("reviews-form");
       if (reviewsForm) {
-        reviewsForm.style.display = (service.creator_id != CURRENT_USER_ID) ? "block" : "none";
+
+        // Only show if user is not provider AND order status is "Completed"
+        if (service.creator_id != CURRENT_USER_ID && orderInfo === "Completed") {
+          reviewsForm.classList.remove("hide");
+        } else {
+          reviewsForm.classList.add("hide");
+        }
       }
     } catch (error) {
       serviceMain.innerHTML = `<p>Service not found.<br><span style='color:#b00;'>${error.message}</span></p>`;
@@ -60,24 +156,50 @@ document.addEventListener("DOMContentLoaded", () => {
     const orderDiv = document.getElementById("service-order");
     orderDiv.innerHTML = "";
 
-    if (orderInfo.hasOrdered) {
-      let cancelBtn = "";
-      if (orderInfo.status === "Ordered") {
-        cancelBtn = `<button id="cancel-order-btn">Cancel Order</button>`;
-      }
-      orderDiv.innerHTML = `<p>Status: ${orderInfo.status || "Ordered"}</p>${cancelBtn}`;
-      if (cancelBtn) {
-        document.getElementById("cancel-order-btn").onclick = async () => {
-          await updateOrCreateOrder(service.id, CURRENT_USER_ID, 0); // 0 or a status for "cancelled"
-          await loadServiceInfo();
-        };
-      }
-    } else {
+    // If status is not set, show the order button
+    if (!orderInfo) {
       orderDiv.innerHTML = `<button id="order-service-btn">Order Service</button>`;
       document.getElementById("order-service-btn").onclick = async () => {
         await updateOrCreateOrder(service.id, CURRENT_USER_ID, 1); // 1 = Ordered
         await loadServiceInfo();
       };
+      return;
+    }
+
+    let buttons = "";
+
+    if (orderInfo === "Ordered") {
+      buttons = `<button id="cancel-order-btn">Cancel Order</button>`;
+    } else if (orderInfo === "Waiting for Payment") {
+      buttons = `
+        <button id="pay-order-btn">Pay</button>
+        <button id="cancel-order-btn">Cancel Order</button>
+      `;
+    }else if (orderInfo === "In Progress") {
+      buttons = `<button id="cancel-order-btn">Cancel Order</button>`;
+    } else if (orderInfo === "Completed" || orderInfo === "Cancelled" || orderInfo === "Rejected") {
+      buttons = `<button id="cancel-order-btn">Delete Order</button>`;
+    }
+
+    orderDiv.innerHTML = `<p>Status: ${orderInfo}</p>${buttons}`;
+
+    if (orderInfo === "Waiting for Payment") {
+      const payBtn = document.getElementById("pay-order-btn");
+      if (payBtn) {
+        payBtn.onclick = async () => {
+          window.location.href = `payment.php?service_id=${service.id}`;
+        };
+      }
+    }
+
+    if (orderInfo) {
+      const cancelBtn = document.getElementById("cancel-order-btn");
+      if (cancelBtn) {
+        cancelBtn.onclick = async () => {
+          await updateOrCreateOrder(service.id, CURRENT_USER_ID, -1); // -1 to delete the order
+          await loadServiceInfo();
+        };
+      }
     }
   }
 
@@ -97,12 +219,13 @@ document.addEventListener("DOMContentLoaded", () => {
       let actionsHtml = "";
       if (order.status_name === "Ordered") {
         actionsHtml = `
-          <button class="status-update-btn" data-customer="${order.customer_id}" data-status="2">Mark as In Progress</button>
-          <button class="status-update-btn" data-customer="${order.customer_id}" data-status="3">Mark as Completed</button>
+          <button class="status-update-btn" data-customer="${order.customer_id}" data-status="2">Accept order</button>
+          <button class="status-update-btn" data-customer="${order.customer_id}" data-status="5">Reject order</button>
         `;
       } else if (order.status_name === "In Progress") {
         actionsHtml = `
-          <button class="status-update-btn" data-customer="${order.customer_id}" data-status="3">Mark as Completed</button>
+          <button class="status-update-btn" data-customer="${order.customer_id}" data-status="4">Mark as Completed</button>
+          <button class="status-update-btn" data-customer="${order.customer_id}" data-status="5">Mark as Cancelled</button>
         `;
       }
       if (providerOrdersList) providerOrdersList.innerHTML += `
@@ -165,8 +288,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Review form submit
-  const reviewForm = document.getElementById("review-form");
+
+  const reviewForm = document.getElementById("reviews-form");
   if (reviewForm) {
     reviewForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -186,9 +309,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         form.reset();
         await loadServiceInfo();
-      } else {
+      }else {
         const errorText = await response.text();
-        alert(`Error: ${errorText}`);
+        alert(`Error submitting review: ${errorText}`);
       }
     });
   }
