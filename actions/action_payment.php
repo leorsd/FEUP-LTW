@@ -15,6 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $service_id  = isset($_POST['service_id']) ? (int)$_POST['service_id'] : null;
 $customer_id = $_SESSION['user_info']['id'] ?? null;
 
+if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    $_SESSION['payment_error'] = 'Invalid CSRF token.';
+    header("Location: ../pages/payment.php?service_id=$service_id");
+    exit();
+}
+
 // Simple validation for payment fields
 $cardholder = trim($_POST['cardholder'] ?? '');
 $cardnumber = preg_replace('/\D/', '', $_POST['cardnumber'] ?? '');

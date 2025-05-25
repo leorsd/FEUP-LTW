@@ -10,6 +10,12 @@ require_once(__DIR__ . '/../lib/user.php');
 $db = getDatabaseConnection();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  // CSRF token check
+  if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    $_SESSION['error'] = 'Invalid CSRF token.';
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    exit();
+  }
   $username = $_POST['username'];
   $password = $_POST['password'];
 
@@ -27,9 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   if ($user_id !== null) {
     $_SESSION['user_info'] = $user->getUserInfo($user_id);
-
     $_SESSION['success'] = 'Login successful! Welcome back.';
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     header('Location: ../pages/home.php');
   } else {
     $_SESSION['error'] = 'Invalid username or password.';

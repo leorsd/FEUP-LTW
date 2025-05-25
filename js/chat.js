@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }</span>
                     `;
                     chatMessages.appendChild(messageElement);
-                    msg_after_id = message.id; 
+                    msg_after_id = message.id;
                 });
             })
             .catch(error => {
@@ -91,25 +91,26 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         const messageText = messageInput.value.trim();
         if (messageText) {
-            fetch('../api/chat_post.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    sender_id: CURRENT_USER_ID,
-                    receiver_id: otherUserId,
-                    content: messageText
-                })
+            fetch("../api/chat_post.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                sender_id: CURRENT_USER_ID,
+                receiver_id: otherUserId,
+                content: messageText,
+                csrf_token: typeof CSRF_TOKEN !== "undefined" ? CSRF_TOKEN : "",
+              }),
             })
-            .then(response => response.json())
-            .then(data => {
-                messageInput.value = '';
+              .then((response) => response.json())
+              .then((data) => {
+                messageInput.value = "";
                 loadChat();
-            })
-            .catch(error => {
-                console.error('Error sending message:', error);
-            });
+              })
+              .catch((error) => {
+                console.error("Error sending message:", error);
+              });
         }
     });
 

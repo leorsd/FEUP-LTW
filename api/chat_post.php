@@ -14,6 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $data = json_decode(file_get_contents('php://input'), true);
 
+session_start();
+if (!isset($data['csrf_token']) || !isset($_SESSION['csrf_token']) || $data['csrf_token'] !== $_SESSION['csrf_token']) {
+    http_response_code(403);
+    echo json_encode(['error' => 'Invalid CSRF token']);
+    exit;
+}
+
 $sender_id = isset($data['sender_id']) ? (int)$data['sender_id'] : null;
 $receiver_id = isset($data['receiver_id']) ? (int)$data['receiver_id'] : null;
 $content = isset($data['content']) ? trim($data['content']) : '';

@@ -1,10 +1,15 @@
 <?php
 declare(strict_types=1);
+if (!isset($_SESSION))
+  session_start();
+if (!isset($_SESSION['csrf_token'])) {
+  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 
 function draw_initial_common_header(string $title)
 {
   $user_id = $_SESSION['user_info']['id'] ?? null;
-  $csrf_token = $_SESSION['csrf_token'] ?? '';
+  $csrf_token = $_SESSION['csrf_token'];
   ?>
   <!DOCTYPE html>
   <html lang="en">

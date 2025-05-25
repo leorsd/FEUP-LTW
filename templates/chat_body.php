@@ -14,6 +14,7 @@ function draw_chat_body()
         <!-- Messages will be dynamically loaded here -->
       </div>
       <form id="chat-form">
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
         <input name="message_content" id="form-content" placeholder="Type your message here..." required></input>
         <button id="form-submit-button">Send</button>
       </form>

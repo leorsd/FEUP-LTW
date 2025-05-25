@@ -6,7 +6,6 @@ require_once(__DIR__ . '/../lib/service.php');
 
 session_start();
 
-// CSRF token verification
 if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
     http_response_code(403);
     $_SESSION['delete_error'] = "Invalid CSRF token.";

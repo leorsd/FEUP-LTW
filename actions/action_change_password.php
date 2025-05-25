@@ -11,7 +11,6 @@ if (!isset($_SESSION['user_info']['username'])) {
   header('Location: ../pages/change_password.php');
   exit();
 }
-// CSRF token check
 if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
   $_SESSION['change_password_error'] = 'Invalid CSRF token.';
   header('Location: ../pages/change_password.php');

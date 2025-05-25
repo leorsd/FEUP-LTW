@@ -19,6 +19,7 @@ function draw_payment_body()
     <?php endif; ?>
     <form id="payment-form" class="payment-section" action="../actions/action_payment.php" method="POST">
       <input type="hidden" name="service_id" value="<?= htmlspecialchars($_GET['service_id'] ?? '') ?>">
+      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
       <h3>Payment Details</h3>
       <label>
         Cardholder Name:
