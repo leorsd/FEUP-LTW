@@ -1,20 +1,19 @@
 @import url("utils.css");
 
-#services-grid-filters {
-  padding: 0 6vw;
+section#services-grid {
   width: 100%;
-  display: grid;
-  grid-template-columns: 22% 1fr;
+  padding: 2rem 10rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
   gap: 2rem;
-  grid-template-areas: "filters services";
 }
 
 #filters {
-  grid-area: filters;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background: #fff;
   border-radius: 0.75rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   padding: 2rem 1.5rem;
@@ -22,18 +21,21 @@
   max-width: 320px;
   margin-top: 2rem;
 }
+
 #filters h3 {
   margin: 0 0 1.5rem 0;
   font-size: 1.7rem;
   color: #0088cc;
   font-weight: 700;
 }
+
 #filter-form {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
   width: 100%;
 }
+
 #filters label {
   font-weight: 600;
   color: #0088cc;
@@ -41,22 +43,22 @@
   font-size: 1rem;
   letter-spacing: 0.01em;
 }
-#form-categories {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-}
-#form-categories label {
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+
+#form-categories,
 #form-statuses {
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
 }
+
+#form-categories label,
+#form-statuses label {
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 #filters input[type="text"],
 #filters input[type="number"],
 #filters select {
@@ -69,6 +71,12 @@
   margin-bottom: 0.5rem;
   transition: border 0.2s;
 }
+
+#orderby-section select,
+#orderby-section select option {
+  color: #666 !important;
+}
+
 #filters input[type="text"]:focus,
 #filters input[type="number"]:focus,
 #filters select:focus {
@@ -81,19 +89,23 @@
   margin: 0.2rem 0 0.7rem 0;
   accent-color: #0088cc;
 }
+
 #filters .filter-checkboxes {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1.2rem;
   margin-bottom: 0.7rem;
 }
+
 #filters input[type="checkbox"] {
   accent-color: #0088cc;
   width: 1.1em;
   height: 1.1em;
   margin-right: 0.4em;
 }
-#filters button {
+
+#filters button,
+#clear-filters {
   background: #0088cc;
   color: #fff;
   border: none;
@@ -105,12 +117,17 @@
   margin-top: 0.5rem;
   transition: background 0.2s, color 0.2s, transform 0.2s;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  box-sizing: border-box;
 }
-#filters button:hover{
+
+#filters button:hover,
+#clear-filters:hover {
   background: #005f8a;
   color: #ffe082;
   transform: scale(1.03);
 }
+
 #services-container {
   width: 100%;
   max-width: 1200px;
@@ -121,6 +138,7 @@
   gap: 2.5rem;
   box-sizing: border-box;
 }
+
 #services-list {
   width: 100%;
   display: grid;
@@ -130,6 +148,7 @@
   align-items: stretch;
   box-sizing: border-box;
 }
+
 .service-item {
   display: flex;
   flex-direction: column;
@@ -147,11 +166,48 @@
   text-decoration: none;
   color: #222;
   box-sizing: border-box;
+
+  h4 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0088cc;
+    margin: 0.2rem 0 0.1rem 0;
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+    box-sizing: border-box;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #444;
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+  }
+
+  .favorite-btn, .contact-btn {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.2rem;
+    border-radius: 0.4rem;
+    text-align: center;
+    border: none;
+    background: #f7f9fa;
+    color: #0088cc;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      background: #0088cc;
+      color: #fff;
+    }
+  }
+
+  &:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+    transform: translateY(-2px) scale(1.02);
+  }
 }
-.service-item:hover {
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
-  transform: translateY(-2px) scale(1.02);
-}
+
 .service-image {
   width: 100%;
   max-width: 100%;
@@ -168,92 +224,62 @@
   object-fit: cover;
   align-self: flex-start;
 }
-.service-item h4 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #0088cc;
-  margin: 0.2rem 0 0.1rem 0;
-  padding-left: 0.7rem;
-  padding-right: 0.7rem;
-  box-sizing: border-box;
-}
-.service-item p {
-  font-size: 1rem;
-  color: #444;
-  padding-left: 0.7rem;
-  padding-right: 0.7rem;
-  box-sizing: border-box;
-}
-.service-item .favorite-btn,
-.service-item .contact-btn {
-  width: 100%;
-  min-width: 100px;
-  margin: 0.12rem 1% 0.12rem 0;
-  padding: 0.5rem 0.2rem;
-  font-size: 0.97rem;
-  border-radius: 0.4rem;
-  display: inline-block;
-  box-sizing: border-box;
-  text-align: center;
-  border: none;
-  background: #f7f9fa;
-  color: #0088cc;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.18s, color 0.18s;
-}
-.service-item .favorite-btn:hover,
-.service-item .contact-btn:hover {
-  background: #0088cc;
-  color: #fff;
-}
+
 .no-services {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 320px;
+  height: 50vh;
   width: 100%;
-  font-size: 1.4rem;
+  font-size: 2rem;
   color: #aaa;
   background: #f7f9fa;
-  border-radius: 0.75rem;
-  text-align: center;
-  margin: 2rem 0;
-  font-weight: 600;
-  letter-spacing: 0.01em;
 }
 
-/* Pagination styling */
 #pagination {
   padding: 2rem 0 0 0;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
-}
-#pagination button {
-  background: #fff;
-  border: 1.5px solid #e0e7ef;
-  padding: 0.5rem 1.2rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #0088cc;
-  transition: background 0.2s, color 0.2s;
-}
-#pagination button:hover:not(:disabled) {
-  background: #e0e7ef;
-  color: #005f8a;
-}
-#pagination button:disabled {
-  background: #f3f6fa;
-  color: #aaa;
-  cursor: not-allowed;
+
+  button {
+    background: #fff;
+    border: 1.5px solid #e0e7ef;
+    padding: 0.5rem 1.2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0088cc;
+    transition: background 0.2s, color 0.2s;
+
+    &:hover:not(:disabled) {
+      background: #e0e7ef;
+      color: #005f8a;
+    }
+
+    &:disabled {
+      background: #f3f6fa;
+      color: #aaa;
+      cursor: not-allowed;
+    }
+  }
 }
 
-/* --- MEDIA QUERIES --- */
+
 @media (max-width: 1024px) {
+  section#services-grid {
+    flex-direction: column;
+    gap: 1.2rem;
+    padding: 0 0.5vw;
+  }
+  #filters {
+    width: 100%;
+    max-width: 100vw;
+    margin-bottom: 1rem;
+    margin-top: 0;
+  }
   #services-container {
     max-width: 100vw;
     padding: 1.2rem 0.5rem;
@@ -261,7 +287,7 @@
   #services-list {
     grid-template-columns: 1fr;
     gap: 1.2rem;
-    padding-left: 1.5rem; /* Only left padding */
+    padding-left: 1.5rem;
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 2.5rem;
@@ -272,28 +298,22 @@
     padding: 1rem 0.5rem;
   }
 }
+
+/* Mobile: ≤ 768px */
 @media (max-width: 768px) {
-  #services-grid-filters {
-    display: flex;
+  section#services-grid {
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1rem;
     padding: 0 0.5vw;
   }
   #filters {
-    order: 1;
     width: 100%;
     max-width: 100vw;
     margin-bottom: 1rem;
-  }
-  #filters-toggle {
-    padding-top: 0;
-    padding-bottom: 2rem;
+    margin-top: 0;
   }
   #services-container {
-    order: 2;
     width: 100%;
-  }
-  #services-container {
     padding: 0.7rem 0.2rem 0 0.2rem;
   }
   #services-list {
@@ -307,7 +327,7 @@
     gap: 0.4rem;
   }
   .service-image {
-    height: 90px;
+    height: 180px;
   }
   .provider-image {
     width: 32px;
@@ -321,13 +341,7 @@
     font-size: 0.97rem;
     padding: 0.45rem 0.2rem;
   }
-  #filters h3 {
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    width: 100%;
-  }
+  #filters h3,
   .filter-section-label {
     text-align: center;
     justify-content: center;
@@ -347,38 +361,29 @@
     box-sizing: border-box;
     margin-top: 0.5rem;
   }
-}
-@media (max-width: 640px) {
-  #services-container {
-    padding: 0.5rem 0 0 0;
-    max-width: 100vw;
+  /* Make create service section smaller on mobile */
+  #create-service-section,
+  .create-service-form,
+  #create-service-section input,
+  #create-service-section textarea,
+  #create-service-section select {
+    font-size: 0.95rem !important;
+    padding: 0.4rem 0.6rem !important;
+    max-width: 100% !important;
   }
-  #services-list {
-    padding: 0 2vw;
-    gap: 0.7rem;
-  }
-  .service-item {
-    min-width: 0;
-    margin: 0.2rem 0;
-    font-size: 0.95rem;
-    padding: 0.5rem 0.1rem;
-    gap: 0.3rem;
-  }
-  .service-image {
-    /* height: 80px; */
-    max-width: 100%;
-  }
-  .provider-image {
-    width: 50px;
-    height: 50px;
-  }
-  #default-searches {
-    display: none;
+  #create-service-section h2,
+  #create-service-section h3 {
+    font-size: 1.1rem !important;
   }
 }
+
+/* Extra Small Mobile: ≤ 480px */
 @media (max-width: 480px) {
+  #default-searches {
+    display: none !important;
+  }
   #services-list {
-    gap: 0.3rem;
+    gap: 1rem;
     padding: 0 1vw;
   }
   .service-item {
@@ -386,11 +391,23 @@
     font-size: 0.9rem;
   }
   .service-image {
-    height: 80px;
+    height: 150px;
   }
   .provider-image {
-    width: 40px;
-    height: 40px;
+    width: 24px;
+    height: 24px;
+  }
+  /* Make create service section even smaller */
+  #create-service-section,
+  .create-service-form,
+  #create-service-section input,
+  #create-service-section textarea,
+  #create-service-section select {
+    font-size: 0.85rem !important;
+    padding: 0.3rem 0.4rem !important;
+  }
+  #create-service-section h2,
+  #create-service-section h3 {
+    font-size: 1rem !important;
   }
 }
-/* --- END SERVICES GRID REWRITE --- */

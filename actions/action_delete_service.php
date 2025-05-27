@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once(__DIR__ . '/../includes/db/connection.php');
 require_once(__DIR__ . '/../lib/service.php');
+require_once(__DIR__ . '/../lib/order.php');
 
 session_start();
 
@@ -15,6 +16,8 @@ if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['c
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
+    $_SESSION['delete_error'] = "Method Not Allowed.";
+    header("Location: ../pages/my_services.php");
     exit('Method Not Allowed');
 }
 
@@ -47,12 +50,10 @@ if ($serviceData['creator_id'] != $user_id) {
 }
 
 // Check for active orders (using getServices with context 'sold' and status filter)
-$orders = $service->getServices(
-    'sold',
-    $user_id,
-    ['status' => [1, 2, 3], 'service_id' => $service_id]
-);
-if ($orders['total'] > 0) {
+$orders = new Order($db);
+$orders = $orders->getOrdersByService($service_id, [1, 2, 3]); // Only active orders
+
+if (!empty($orders)) {
     $_SESSION['delete_error'] = "Cannot delete service with active orders.";
     header("Location: ../pages/my_services.php");
     exit();
