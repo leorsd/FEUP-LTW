@@ -37,9 +37,28 @@ class Order {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Get all orders for a service (for providers)
-    public function getOrdersByService(int $service_id): array {
-        return $this->fetchOrders("WHERE o.service_id = :service_id", [':service_id' => $service_id]);
+    public function getOrdersByService(int $service_id, ?array $status_ids = null): array {
+        $where = "WHERE o.service_id = :service_id";
+        $params = [':service_id' => $service_id];
+
+        if ($status_ids && count($status_ids) > 0) {
+            $in = implode(',', array_fill(0, count($status_ids), '?'));
+            $where .= " AND o.status IN ($in)";
+            $params = array_merge($params, $status_ids);
+            // Remove named param for service_id if using positional params
+            $params = array_values($params);
+        }
+
+        $select = "o.*, u.username AS customer_username, s.name AS status_name";
+        $sql = "SELECT $select
+                FROM service_order o
+                JOIN user u ON o.customer_id = u.id
+                LEFT JOIN service_status s ON o.status = s.id
+                $where
+                ORDER BY o.created_at DESC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Get all orders for a customer
