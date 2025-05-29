@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (providerOrdersList) providerOrdersList.innerHTML = "";
 
     if (!orders || orders.length === 0) {
-      if (providerOrdersList) providerOrdersList.innerHTML = `<p>No orders for this service yet.</p>`;
+      if (providerOrdersList) providerOrdersList.innerHTML = `<p id='no-orders'>No orders for this service yet.</p>`;
       return;
     }
 
@@ -270,7 +270,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderReviews(reviews) {
     const reviewsList = document.getElementById("reviews-list");
-    reviewsList.innerHTML = "<h3>All Reviews</h3>";
     if (reviews && reviews.length > 0) {
       reviews.forEach(review => {
         const reviewerImage = review.reviewer_image ? `../images/cache/${review.reviewer_image}` : "../images/user.jpg";
@@ -285,7 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reviewsList.appendChild(reviewDiv);
       });
     } else {
-      reviewsList.innerHTML += "<p>No reviews yet.</p>";
+      reviewsList.innerHTML += "<p id='no-reviews'>No reviews for this service yet.</p>";
     }
   }
 

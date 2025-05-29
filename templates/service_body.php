@@ -39,7 +39,7 @@ function draw_service_body()
             </section>
         </div>
         <section id="provider-orders-block" style="display:none;">
-            <h2>Orders for this Service</h2>
+            <h2>Orders</h2>
             <div id="provider-orders-list">
                 <!-- Provider order management will be rendered by JS -->
             </div>

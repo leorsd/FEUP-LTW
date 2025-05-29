@@ -112,13 +112,12 @@
 }
 
 #reviews-list {
-  background: #fff;
-  border-radius: 0.75rem;
-  padding: 1rem 1.2rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  padding: 1rem 1.5rem;
   margin-top: 1.5rem;
 }
+
 .review-item {
+  background-color: #fff;
   border-radius: 0.5rem;
   padding: 1rem;
   margin-bottom: 1.2rem;
@@ -145,17 +144,16 @@
 }
 
 #provider-orders-block {
-  background: #fff;
   border-radius: 0.75rem;
   padding: 1.5rem 1.5rem;
   margin-top: 2rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
+
 #provider-orders-block h2 {
   color: #0088cc;
   margin-top: 0;
   margin-bottom: 1.2rem;
-  font-size: 1.3rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 #provider-orders-list {
@@ -305,6 +303,34 @@
 .status-update-btn[disabled] {
   opacity: 0.5;
   pointer-events: none;
+}
+
+#no-orders {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #888;
+  margin-top: 2rem;
+}
+
+#no-reviews {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #888;
+  margin-top: 2rem;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  background: #f7f9fa;
+  color: #888;
+  font-size: 0.95rem;
+  margin-top: auto;
+  padding: 1em 0 0.5em 0;
+  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  min-height: 48px;
 }
 
 @media (max-width: 1440px) {
