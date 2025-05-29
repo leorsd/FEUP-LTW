@@ -158,7 +158,8 @@ class User
     // Update user profile fields (except password and profile_picture)
     public function updateProfile(int $id, array $fields): bool
     {
-      $allowed = ['phone', 'age', 'location', 'bio'];
+      // Now allow updating username and email as well
+      $allowed = ['phone', 'age', 'location', 'bio', 'email', 'username'];
       $set = [];
       $params = ['id' => $id];
       foreach ($allowed as $field) {
@@ -183,6 +184,16 @@ class User
               continue; // skip invalid bio
             $set[] = "bio = :bio";
             $params['bio'] = $fields[$field];
+          } else if ($field === 'email') {
+            if (!self::validateEmail($fields[$field]))
+              continue; // skip invalid email
+            $set[] = "email = :email";
+            $params['email'] = $fields[$field];
+          } else if ($field === 'username') {
+            if (!self::validateUsername($fields[$field]))
+              continue; // skip invalid username
+            $set[] = "username = :username";
+            $params['username'] = $fields[$field];
           } else {
             $set[] = "$field = :$field";
             $params[$field] = $fields[$field];
