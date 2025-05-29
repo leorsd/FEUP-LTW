@@ -186,3 +186,11 @@ INSERT INTO service_review (service_id, reviewer_id, rating, text, created_at) V
 (10, 20, 5, 'Engine tune-up improved my car.', '2025-06-02 15:00:00'),
 (11, 21, 4, 'Brake inspection was helpful.', '2025-06-02 16:00:00');
 
+UPDATE service
+SET rating = (
+    SELECT AVG(rating)
+    FROM service_review
+    WHERE service_review.service_id = service.id
+)
+WHERE id IN (SELECT DISTINCT service_id FROM service_review);
+

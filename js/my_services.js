@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Adapted button IDs from your PHP template
   const customerBtn = document.getElementById("user-section-btn");
   const vendorBtn = document.getElementById("vendor-section-btn");
+  const createBtn = document.getElementById("create-service-btn");
 
   filters.page = 1;
   filters.per_page = 12;
@@ -188,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  if (customerBtn && vendorBtn) {
+  if (customerBtn && vendorBtn && createBtn) {
     customerBtn.addEventListener("click", () => {
       currentState = "customer";
       customerBtn.classList.add("selected");
@@ -213,6 +214,9 @@ document.addEventListener("DOMContentLoaded", () => {
         statusesOption.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
       }
       fetchServices();
+    });
+    createBtn.addEventListener("click", () => {
+      window.location.href = "create_service.php";
     });
   }
 

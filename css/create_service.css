@@ -1,6 +1,6 @@
 @import url('utils.css');
 
-main#create-service-main, main:not([id]) {
+main {
   max-width: 600px;
   margin: 2rem auto;
   background: #fff;
@@ -10,14 +10,14 @@ main#create-service-main, main:not([id]) {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-}
 
-main#create-service-main h2, main:not([id]) > h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--color-primary, #0088cc);
-  text-align: center;
-  margin-bottom: 1.5rem;
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary, #0088cc);
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
 }
 
 #create-service-form {
@@ -26,15 +26,10 @@ main#create-service-main h2, main:not([id]) > h2 {
   gap: 1.2rem;
 }
 
-#create-service-form > div {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
 
 #create-service-form label {
   font-weight: 600;
-  color: #222;
+  color: #0088cc;
   margin-bottom: 0.2rem;
 }
 
@@ -47,7 +42,6 @@ main#create-service-main h2, main:not([id]) > h2 {
   border-radius: 0.5rem;
   font-size: 1.1rem;
   background: #f7f9fa;
-  transition: border 0.2s;
 }
 #create-service-form input[type="text"]:focus,
 #create-service-form input[type="number"]:focus,
@@ -86,12 +80,8 @@ main#create-service-main h2, main:not([id]) > h2 {
   padding: 0.4rem 1.1rem;
   border: 2px solid var(--color-border, #e0e7ef);
   border-radius: 0.5rem;
-  background: #fff;
   color: #222;
-  font-weight: 500;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s, border 0.2s;
   user-select: none;
 }
 #form-category input[type="radio"]:checked + label {
@@ -131,24 +121,12 @@ main#create-service-main h2, main:not([id]) > h2 {
   transform: translateY(-2px) scale(1.01);
 }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  main#create-service-main, main:not([id]) { max-width: 95vw; padding: 2rem 0.5rem; }
-  .create-service-section, .create-service-form, .card { max-width: 98vw; padding: 1em 0.5em; }
-  .card { min-width: 0; }
+footer {
+  margin: 0.5rem 0 0 0;
+  display: flex;
+  justify-content: center;
+  background: none;
+  color: #888;
+  font-size: 0.95rem;
 }
-@media (max-width: 768px) {
-  main#create-service-main, main:not([id]) { padding: 1.2rem 0.2rem; }
-  main#create-service-main h2, main:not([id]) > h2 { font-size: 1.3rem; }
-}
-@media (max-width: 640px) {
-  body { font-size: 0.98rem; }
-  .create-service-section, .create-service-form, .card { padding: 0.5em 0.1em; max-width: 100vw; }
-  .card { font-size: 0.95rem; }
-  .create-service-form { flex-direction: column; gap: 0.5em; }
-}
-@media (max-width: 480px) {
-  main#create-service-main, main:not([id]) { padding: 0.5rem 0.1rem; }
-  main#create-service-main h2, main:not([id]) > h2 { font-size: 1.1rem; }
-  #create-service-form button[type="submit"] { font-size: 1rem; }
-}
+

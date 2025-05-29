@@ -11,6 +11,7 @@ function draw_my_services_body()
         <div id="main-role-toggle">
             <button id="user-section-btn" class="selected">As a customer</button>
             <button id="vendor-section-btn">As a freelancer</button>
+            <button id="create-service-btn">Create a service</button>
         </div>
         <?php draw_services_grid([
             'search_filter' => true,
