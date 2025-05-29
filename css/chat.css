@@ -6,6 +6,7 @@ body {
   display: flex;
   flex-direction: column;
 }
+
 main {
   flex: 1;
   display: flex;
@@ -25,8 +26,8 @@ h2 {
 }
 
 #chat-container {
-  max-width: 100%;
-  width: 900px;
+  height: 65vh;
+  width: 60vw;
   margin: 2rem auto;
   background: #fff;
   border-radius: 1rem;
@@ -45,29 +46,35 @@ h2 {
   gap: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid #e0e7ef;
+  flex: 0 0 auto;
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #f7f9fa;
+    border: 2px solid #e0e7ef;
+  }
+
+  .user-name {
+    font-weight: 600;
+    color: #0088cc;
+    font-size: 1.1rem;
+  }
 }
-#chat-header .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: #f7f9fa;
-  border: 2px solid #e0e7ef;
-}
-#chat-header .user-name {
-  font-weight: 600;
-  color: #0088cc;
-  font-size: 1.1rem;
-}
+
+
 #chat-messages {
   flex: 1 1 auto;
   min-height: 200px;
-  max-height: 350px;
+  max-height: none;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
   padding: 0.5rem 0;
+  scroll-behavior: smooth; 
 }
 .message {
   background: #f3f6fa;
@@ -79,12 +86,14 @@ h2 {
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
   align-self: flex-start;
 }
+
 .message.sent {
   background: #0088cc;
   color: #fff;
   align-self: flex-end;
   text-align: right;
 }
+
 .message.receive {
   background: #f3f6fa;
   color: #222;
@@ -101,11 +110,14 @@ h2 {
   width: 100%;
   display: block;
 }
+
 #chat-form {
   display: flex;
   gap: 0.5rem;
   margin-top: 1rem;
+  flex: 0 0 auto;
 }
+
 #form-content {
   flex: 1 1 auto;
   border-radius: 0.5rem;

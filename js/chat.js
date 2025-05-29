@@ -9,7 +9,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const otherUserId = params.get('user');
 
     let msg_after_id = 0;
+    let firstLoad = true;
     let lastDay = null;
+
+    function scrollChatToBottom(instant = false) {
+        if (chatMessages) {
+            if (instant) {
+                chatMessages.style.scrollBehavior = 'auto';
+            } else {
+                chatMessages.style.scrollBehavior = 'smooth';
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
 
     const loadChat = () => {
         fetch(`../api/chat_get.php?user1=${CURRENT_USER_ID}&user2=${otherUserId}&msg_after_id=${msg_after_id}`)
@@ -60,6 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     chatMessages.appendChild(messageElement);
                     msg_after_id = message.id;
                 });
+                scrollChatToBottom(firstLoad);
+                firstLoad = false;
             })
             .catch(error => {
                 console.error('Error loading chat:', error);
@@ -116,5 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadHeader();
     loadChat();
+    scrollChatToBottom();
     setInterval(loadChat, 5000); // Refresh chat every 5 seconds
 });

@@ -65,6 +65,7 @@ function draw_common_headbar($user_info)
       <ul>
         <li><a href="../pages/home.php">Home</a></li>
         <li><a href="../pages/favorites.php">Favorites</a></li>
+        <li><a href="../pages/messages.php">Messages</a></li>
         <li><a href="../pages/my_services.php?">My Services</a></li>
         <li><a href="../pages/profile.php"><img src="<?php echo $profile_pic_path; ?>" alt="Profile Picture"
               class="profile-avatar"></a></li>

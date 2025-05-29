@@ -148,5 +148,15 @@ function draw_admin_header()
   <?php
 }
 
+function draw_messages_header()
+{
+  ?>
+  <link rel="stylesheet" href="../css/messages.css">
+  <link rel="stylesheet" href="../css/headbar.css">
+  <script src="../js/headbar.js" defer></script>
+  <script src="../js/messages.js" defer></script>
+  <?php
+}
+
 ?>
 
