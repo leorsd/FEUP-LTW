@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_info']['id'])) {
   exit();
 }
 
-draw_initial_common_header('Edit Service');
+draw_initial_common_header('CarLink');
 draw_edit_service_header();
 draw_final_common_header();
 draw_common_headbar($_SESSION['user_info']);

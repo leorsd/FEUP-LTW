@@ -21,12 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const orderInfo = data.order_info || null;
       const allOrders = data.orders || [];
 
-      // Set images
       service.image = service.image ? `../images/cache/${service.image}` : "../images/service.png";
       service.provider_image = service.provider_image ? `../images/cache/${service.provider_image}` : "../images/user.jpg";
       service.rating = service.rating ? Number(service.rating).toFixed(1) : "Not rated yet";
 
-      // Render service info
       document.getElementById("service-image").src = service.image;
       document.getElementById("service-title").innerHTML = `<h3>${service.title}</h3>`;
       document.getElementById("service-description").innerHTML = `<p>Description: ${service.description}</p>`;
@@ -38,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("service-location").innerHTML = `<p>Location: ${service.location}</p>`;
       document.getElementById("service-rating").innerHTML = `<p>Rating: ${service.rating}</p>`;
 
-      // If current user is the provider, show all orders and allow status updates
       if (service.creator_id == CURRENT_USER_ID) {
 
         const hasActiveOrders = allOrders.some(order =>
@@ -47,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
           order.status_name === "Waiting for Payment"
         );
 
-        // Show edit button or make fields editable
         const editBtn = document.createElement("button");
         editBtn.textContent = "Edit Service";
         editBtn.className = "edit-service-btn";
@@ -136,11 +132,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       renderReviews(reviews);
 
-      // Review form submit
       const reviewsForm = document.getElementById("reviews-form");
       if (reviewsForm) {
 
-        // Only show if user is not provider AND order status is "Completed"
         if (service.creator_id != CURRENT_USER_ID && orderInfo === "Completed") {
           reviewsForm.classList.remove("hide");
         } else {
@@ -157,7 +151,6 @@ document.addEventListener("DOMContentLoaded", () => {
     orderDiv.innerHTML = "";
 
 
-    // If status is not set, show the order button
     if (!orderInfo) {
       orderDiv.innerHTML = `<button id="order-service-btn">Order Service</button>`;
       document.getElementById("order-service-btn").onclick = async () => {

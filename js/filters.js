@@ -1,4 +1,3 @@
-// Common filter state and listeners for all pages
 let filters = {
   page: 1,
   per_page: 12,
@@ -18,7 +17,6 @@ let filters = {
 function setupFilterListeners(filterForm, prevPageButton, nextPageButton, pageSpan, fetchCallback, clearFiltersButton) {
   if (!filterForm) return;
 
-  // Search
   if (filterForm.elements["search"]) {
     filterForm.elements["search"].addEventListener("input", (e) => {
       filters.search = e.target.value || null;
@@ -27,7 +25,6 @@ function setupFilterListeners(filterForm, prevPageButton, nextPageButton, pageSp
     });
   }
 
-  // Provider
   if (filterForm.elements["provider"]) {
     filterForm.elements["provider"].addEventListener("input", (e) => {
       filters.provider = e.target.value || null;
@@ -36,7 +33,6 @@ function setupFilterListeners(filterForm, prevPageButton, nextPageButton, pageSp
     });
   }
 
-  // Location
   if (filterForm.elements["location"]) {
     filterForm.elements["location"].addEventListener("input", (e) => {
       filters.location = e.target.value || null;
@@ -45,7 +41,6 @@ function setupFilterListeners(filterForm, prevPageButton, nextPageButton, pageSp
     });
   }
 
-  // Order by
   if (filterForm.elements["order-by"]) {
     filterForm.elements["order-by"].addEventListener("change", (e) => {
       filters.orderby = e.target.value;
@@ -54,7 +49,6 @@ function setupFilterListeners(filterForm, prevPageButton, nextPageButton, pageSp
     });
   }
 
-  // Status checkboxes (like categories)
   const statusCheckboxes = filterForm.querySelectorAll('input[name="status"]');
   if (statusCheckboxes.length > 0) {
     statusCheckboxes.forEach((cb) => {
@@ -71,7 +65,6 @@ function setupFilterListeners(filterForm, prevPageButton, nextPageButton, pageSp
     });
   }
 
-  // Category checkboxes
   const categoryCheckboxes = filterForm.querySelectorAll('input[name="categories"]');
   if (categoryCheckboxes.length > 0) {
     categoryCheckboxes.forEach((cb) => {
@@ -88,7 +81,6 @@ function setupFilterListeners(filterForm, prevPageButton, nextPageButton, pageSp
     });
   }
 
-  // Price range
   if (filterForm.elements["min-price"] && filterForm.elements["max-price"]) {
     const minPriceBar = filterForm.elements["min-price"];
     const maxPriceBar = filterForm.elements["max-price"];
@@ -156,7 +148,6 @@ function setupFilterListeners(filterForm, prevPageButton, nextPageButton, pageSp
     }
   }
 
-  // Rating range
   if (filterForm.elements["min-rating"] && filterForm.elements["max-rating"]) {
     const minRatingBar = filterForm.elements["min-rating"];
     const maxRatingBar = filterForm.elements["max-rating"];
@@ -224,7 +215,6 @@ function setupFilterListeners(filterForm, prevPageButton, nextPageButton, pageSp
     }
   }
 
-  // Pagination buttons
   if (prevPageButton) {
     prevPageButton.addEventListener("click", () => {
       if (filters.page > 1) {
@@ -283,103 +273,3 @@ function setupFilterListeners(filterForm, prevPageButton, nextPageButton, pageSp
     });
   }
 }
-
-// Collapsible filter sections logic
-function setupCollapsibleFilterSections() {
-  const isSmallScreen = () => window.innerWidth <= 768;
-  const filterSections = document.querySelectorAll(
-    "#filter-form .filter-section"
-  );
-
-  function setSectionState(section, open) {
-    if (open) {
-      section.classList.add("open");
-      section.querySelector(".filter-section-controls").style.display = "";
-    } else {
-      section.classList.remove("open");
-      section.querySelector(".filter-section-controls").style.display = "none";
-    }
-  }
-
-  function updateSectionsOnResize() {
-    filterSections.forEach((section) => {
-      if (isSmallScreen()) {
-        setSectionState(section, false); // collapsed by default
-      } else {
-        setSectionState(section, true); // always open on desktop
-      }
-    });
-  }
-
-  // Add click listeners to all filter-section-labels
-  filterSections.forEach((section) => {
-    const label = section.querySelector(".filter-section-label");
-    if (label) {
-      label.style.cursor = "pointer";
-      label.addEventListener("click", function () {
-        if (!isSmallScreen()) return;
-        const isOpen = section.classList.contains("open");
-        setSectionState(section, !isOpen);
-      });
-    }
-  });
-
-  // Initial state
-  updateSectionsOnResize();
-  window.addEventListener("resize", updateSectionsOnResize);
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  const filtersToggle = document.getElementById("filters-toggle");
-  const filtersPanel = document.getElementById("filters");
-  const filterForm = document.getElementById("filter-form");
-  if (!filtersToggle || !filtersPanel || !filterForm) return;
-
-  // Only enable this toggle for small screens
-  function isSmallScreen() {
-    return window.innerWidth <= 768;
-  }
-
-  function setPanelState(collapsed) {
-    if (collapsed) {
-      filterForm.style.display = "none";
-      Array.from(filtersPanel.children).forEach((child) => {
-        if (child !== filtersToggle && child !== filterForm)
-          child.style.display = "none";
-      });
-      filtersToggle.classList.add("collapsed");
-    } else {
-      filterForm.style.display = "";
-      Array.from(filtersPanel.children).forEach((child) => {
-        if (child !== filtersToggle && child !== filterForm)
-          child.style.display = "";
-      });
-      filtersToggle.classList.remove("collapsed");
-    }
-  }
-
-  let collapsed = false;
-  function updateOnResize() {
-    if (isSmallScreen()) {
-      collapsed = true; // Always start collapsed on small screens
-      setPanelState(collapsed);
-      filtersToggle.style.cursor = "pointer";
-    } else {
-      collapsed = false;
-      setPanelState(false);
-      filtersToggle.style.cursor = "";
-    }
-  }
-
-  filtersToggle.addEventListener("click", function () {
-    if (!isSmallScreen()) return;
-    collapsed = !collapsed;
-    setPanelState(collapsed);
-  });
-  window.addEventListener("resize", updateOnResize);
-  updateOnResize();
-
-  setupCollapsibleFilterSections();
-});
-
-// If categories/statuses are dynamically loaded, ensure their parent .filter-section-controls is always targeted for show/hide.

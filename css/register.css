@@ -39,8 +39,8 @@ header h1 a {
   background: #fff;
   border-radius: 1rem;
   box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-  padding: 1.5rem 1.2rem 1.2rem 1.2rem; /* reduced padding for less height */
-  margin: 2rem auto 1rem auto;           /* reduced bottom margin */
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  margin: 2rem auto 1rem auto;          
   min-width: 320px;
   max-width: 420px;
   width: 100%;
@@ -131,7 +131,6 @@ header h1 a {
 
 footer { display: none; }
 
-/* Responsive: Hide image and show only form when page is narrow */
 @media (max-width: 1000px) {
   body {
     grid-template-columns: 1fr;

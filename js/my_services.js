@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const statusesOption = document.getElementById("form-statuses");
   const statusTitle = document.getElementById("form-statuses-title");
 
-  // Adapted button IDs from your PHP template
   const customerBtn = document.getElementById("user-section-btn");
   const vendorBtn = document.getElementById("vendor-section-btn");
   const createBtn = document.getElementById("create-service-btn");
@@ -220,7 +219,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Default: show customer view and status filter
   if (customerBtn) customerBtn.classList.add("selected");
   if (statusesOption) statusesOption.style.display = "";
 

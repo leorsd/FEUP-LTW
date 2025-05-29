@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const buttonsContainer = document.getElementById('form-category');
 
-    // Fetch categories from the API
     fetch('../api/categories.php')
         .then(response => response.json())
         .then(categories => {

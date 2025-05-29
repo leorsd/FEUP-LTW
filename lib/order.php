@@ -8,7 +8,6 @@ class Order {
         $this->db = $db;
     }
 
-    // Create a new order (status defaults to 1, e.g., "Ordered")
     public function createOrder(int $service_id, int $customer_id, int $status_id = 1): ?int {
         $stmt = $this->db->prepare(
             "INSERT INTO service_order (service_id, customer_id, status, created_at)
@@ -24,7 +23,6 @@ class Order {
         return null;
     }
 
-    // General fetch helper for orders
     private function fetchOrders(string $where, array $params = [], string $select = "o.*, u.username AS customer_username, s.name AS status_name"): array {
         $sql = "SELECT $select
                 FROM service_order o
@@ -45,7 +43,6 @@ class Order {
             $in = implode(',', array_fill(0, count($status_ids), '?'));
             $where .= " AND o.status IN ($in)";
             $params = array_merge($params, $status_ids);
-            // Remove named param for service_id if using positional params
             $params = array_values($params);
         }
 
@@ -61,7 +58,6 @@ class Order {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Get all orders for a customer
     public function getOrdersByCustomer(int $customer_id): array {
         $sql = "SELECT o.*, s.title AS service_title, st.name AS status_name
                 FROM service_order o
@@ -74,7 +70,6 @@ class Order {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Get all orders for a provider (all their services)
     public function getOrdersByProvider(int $provider_id): array {
         $sql = "SELECT o.*, u.username AS customer_username, s.name AS status_name
                 FROM service_order o
@@ -88,7 +83,6 @@ class Order {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Get all orders for a provider and a specific customer
     public function getOrdersByProviderAndCustomer(int $provider_id, int $customer_id): array {
         $sql = "SELECT o.*, u.username AS customer_username, s.name AS status_name
                 FROM service_order o
@@ -102,7 +96,6 @@ class Order {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Get a specific order (with status name)
     public function getOrder(int $service_id, int $customer_id): ?array {
         $orders = $this->fetchOrders(
             "WHERE o.service_id = :service_id AND o.customer_id = :customer_id",
@@ -111,7 +104,6 @@ class Order {
         return $orders[0] ?? null;
     }
 
-    // Update order status (status is the status ID)
     public function updateOrderStatus(int $service_id, int $customer_id, int $status_id): bool {
         $stmt = $this->db->prepare(
             "UPDATE service_order
@@ -125,7 +117,6 @@ class Order {
         ]);
     }
 
-    // Cancel an order (delete)
     public function cancelOrder(int $service_id, int $customer_id): bool {
         $stmt = $this->db->prepare(
             "DELETE FROM service_order
@@ -137,7 +128,6 @@ class Order {
         ]);
     }
 
-    // Get the status name for a user's order or null if not found
     public function getUserOrderStatus(int $serviceId, int $userId): ?string {
         $stmt = $this->db->prepare('SELECT service_status.name FROM service_order JOIN service_status ON service_order.status = service_status.id WHERE service_order.service_id = ? AND service_order.customer_id = ?');
         $stmt->execute([$serviceId, $userId]);

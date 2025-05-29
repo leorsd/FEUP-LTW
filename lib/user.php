@@ -34,7 +34,6 @@ class User
       return preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=]{8,}$/', $password) === 1;
     }
 
-    //Check if user exists based on username
     public function usernameExists(string $username): bool
     {
       $stmt = $this->db->prepare('SELECT COUNT(*) FROM user WHERE username = :username');
@@ -42,7 +41,6 @@ class User
       return $stmt->fetchColumn() > 0;
     }
 
-    // Check if user exists based on id
     public function userExists(int $id): bool
     {
       $stmt = $this->db->prepare('SELECT COUNT(*) FROM user WHERE id = :id');
@@ -50,7 +48,6 @@ class User
       return $stmt->fetchColumn() > 0;
     }
 
-    // Check if email exists
     public function emailExists(string $email): bool
     {
       $stmt = $this->db->prepare('SELECT COUNT(*) FROM user WHERE email = :email');
@@ -58,7 +55,6 @@ class User
       return $stmt->fetchColumn() > 0;
     }
 
-    // Check if phone exists
     public function phoneExists(string $phone): bool
     {
       $stmt = $this->db->prepare('SELECT COUNT(*) FROM user WHERE phone = :phone');
@@ -84,7 +80,6 @@ class User
       return $users;
     }
 
-    // Register a new user, password is passed as argument
     public function register(string $username, string $email, string $phone, string $password): ?int
     {
       if (!self::validateUsername($username)) return null;
@@ -115,7 +110,6 @@ class User
       }
     }
 
-    // Verify password, password is passed as argument
     public function verifyPassword(string $username, string $password): ?int
     {
       $stmt = $this->db->prepare('SELECT id, password FROM user WHERE username = :username');
@@ -135,15 +129,12 @@ class User
       return $result && password_verify($password, $result['password']);
     }
 
-    // Get user info (e.g., profile data)
     public function getUserInfo(int $id): array
     {
-      // Get user info from user table
       $stmt = $this->db->prepare('SELECT * FROM user WHERE id = :id');
       $stmt->execute(['id' => $id]);
       $user = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
 
-      // Check if user is admin (exists in admin table)
       if ($user) {
         $adminStmt = $this->db->prepare('SELECT 1 FROM admin WHERE user_id = :id');
         $adminStmt->execute(['id' => $id]);
@@ -155,7 +146,6 @@ class User
       return $user;
     }
 
-    // Update user profile fields (except password and profile_picture)
     public function updateProfile(int $id, array $fields): bool
     {
       // Now allow updating username and email as well
@@ -172,26 +162,26 @@ class User
               $set[] = "age = :age";
               $params['age'] = intval($age);
             } else {
-              continue; // skip invalid age
+              continue;
             }
           } else if ($field === 'location') {
             if (strlen($fields[$field]) > 100)
-              continue; // skip invalid location
+              continue;
             $set[] = "location = :location";
             $params['location'] = $fields[$field];
           } else if ($field === 'bio') {
             if (strlen($fields[$field]) > 1000)
-              continue; // skip invalid bio
+              continue; 
             $set[] = "bio = :bio";
             $params['bio'] = $fields[$field];
           } else if ($field === 'email') {
             if (!self::validateEmail($fields[$field]))
-              continue; // skip invalid email
+              continue; 
             $set[] = "email = :email";
             $params['email'] = $fields[$field];
           } else if ($field === 'username') {
             if (!self::validateUsername($fields[$field]))
-              continue; // skip invalid username
+              continue; 
             $set[] = "username = :username";
             $params['username'] = $fields[$field];
           } else {
@@ -207,7 +197,6 @@ class User
       return $stmt->execute($params);
     }
 
-    // Update profile picture filename
     public function updateProfilePicture(int $id, string $filename): bool
     {
       $stmt = $this->db->prepare('UPDATE user SET profile_picture = :profile_picture WHERE id = :id');
@@ -217,7 +206,6 @@ class User
       ]);
     }
 
-    // Update password (after verifying current password)
     public function updatePassword(int $id, string $currentPassword, string $newPassword): bool
     {
       if (!$this->verifyPasswordId($id, $currentPassword))

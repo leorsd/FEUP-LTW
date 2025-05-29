@@ -23,7 +23,6 @@ if (!$service_id || !$user_id) {
 $db = getDatabaseConnection();
 $serviceObj = new Service($db);
 
-// Check if the user is the creator of the service
 $stmt = $db->prepare("SELECT creator_id FROM service WHERE id = ?");
 $stmt->execute([$service_id]);
 $creator_id = $stmt->fetchColumn();
@@ -34,7 +33,6 @@ if ($creator_id != $user_id) {
     exit();
 }
 
-// Check for active orders (do not allow update if there are any)
 $stmt = $db->prepare("SELECT COUNT(*) FROM service_order WHERE service_id = ? AND status IN (1,2,3)");
 $stmt->execute([$service_id]);
 $active_orders = $stmt->fetchColumn();
@@ -45,7 +43,6 @@ if ($active_orders > 0) {
     exit();
 }
 
-// Collect only allowed fields to update
 $allowed_fields = ['title', 'description', 'category', 'price', 'location', 'image'];
 $fields = [];
 foreach ($allowed_fields as $field) {
@@ -60,7 +57,6 @@ if (empty($fields)) {
     exit();
 }
 
-// Use the updateService method from Service class
 $success = $serviceObj->updateService($service_id, $user_id, $fields);
 
 if ($success) {

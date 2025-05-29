@@ -40,4 +40,30 @@ class Message {
         ]);
         return $this->db->lastInsertId();
     }
+
+    public function getChatsForUser($user_id) {
+    $stmt = $this->db->prepare(
+        "SELECT
+            other_user.id AS other_user_id,
+            other_user.username AS other_username,
+            m2.content AS last_message,
+            m2.created_at AS last_message_time
+        FROM (
+            SELECT
+                CASE
+                    WHEN m.sender_id = :user_id THEN m.receiver_id
+                    ELSE m.sender_id
+                END AS chat_partner_id,
+                MAX(m.id) AS last_message_id
+            FROM message m
+            WHERE m.sender_id = :user_id OR m.receiver_id = :user_id
+            GROUP BY chat_partner_id
+        ) chat
+        JOIN user other_user ON other_user.id = chat.chat_partner_id
+        JOIN message m2 ON m2.id = chat.last_message_id
+        ORDER BY m2.created_at DESC"
+    );
+    $stmt->execute([':user_id' => $user_id]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }
