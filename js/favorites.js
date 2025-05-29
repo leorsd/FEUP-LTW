@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const pageSpan = document.getElementById("current-page");
   const categoriesOption = document.getElementById("form-categories");
 
-  // Use the shared filters object from filters.js
   filters.page = 1;
   filters.per_page = 12;
   filters.favorites_owner = CURRENT_USER_ID;

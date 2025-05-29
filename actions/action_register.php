@@ -5,7 +5,6 @@ session_start();
 require_once(__DIR__ . '/../includes/db/connection.php');
 require_once(__DIR__ . '/../lib/user.php');
 
-// Establish the database connection
 $db = getDatabaseConnection();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -22,14 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $email = $_POST['email'];
   $phone = $_POST['phone'];
 
-  // Basic validation
   if (empty($username) || empty($password) || empty($confirm_password) || empty($email) || empty($phone)) {
     $_SESSION['error'] = 'All fields are required.';
     header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit();
   }
 
-  // Check if passwords match
   if ($password !== $confirm_password) {
     $_SESSION['error'] = 'Passwords do not match.';
     header('Location: ' . $_SERVER['HTTP_REFERER']);
@@ -38,14 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   $user = new User($db);
 
-  // Validate password
   if (!User::validatePassword($password)) {
     $_SESSION['error'] = 'Password must be at least 8 characters, contain at least one letter and one number.';
     header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit();
   }
 
-  // Check if username, email, or phone already exists
   if ($user->usernameExists($username)) {
     $_SESSION['error'] = 'Username is already taken. Please choose another one.';
     header('Location: ' . $_SERVER['HTTP_REFERER']);
@@ -62,10 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     exit();
   }
 
-  // Register user and get new user ID
   $user_id = $user->register($username, $email, $phone, $password);
   if ($user_id !== null) {
-    // Auto-login after registration
     $_SESSION['user_info'] = $user->getUserInfo($user_id);
     $_SESSION['success'] = 'Registration successful! Welcome!';
     header('Location: ../pages/home.php');

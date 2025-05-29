@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit('Method Not Allowed');
 }
 
-// Get POST data
 $service_id  = isset($_POST['service_id']) ? (int)$_POST['service_id'] : null;
 $customer_id = $_SESSION['user_info']['id'] ?? null;
 
@@ -21,7 +20,6 @@ if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['c
     exit();
 }
 
-// Simple validation for payment fields
 $cardholder = trim($_POST['cardholder'] ?? '');
 $cardnumber = preg_replace('/\D/', '', $_POST['cardnumber'] ?? '');
 $expiry    = trim($_POST['expiry'] ?? '');
@@ -40,14 +38,12 @@ if ($errors) {
     exit();
 }
 
-// Mark order as "In Progress" (status_id = 3)
 $db = getDatabaseConnection();
 $orderObj = new Order($db);
 
-// You may want to check if the order exists first
 $order = $orderObj->getOrder($service_id, $customer_id);
 if ($order) {
-    $orderObj->updateOrderStatus($service_id, $customer_id, 3); // 3 = In Progress
+    $orderObj->updateOrderStatus($service_id, $customer_id, 3);
 } else {
     $_SESSION['payment_error'] = "Order not found.";
     header("Location: ../pages/payment.php?service_id=$service_id");

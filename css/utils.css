@@ -1,11 +1,8 @@
-
-/* --- Reset & Base --- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 16px; }
 body { font-family: 'Inter', Arial, sans-serif; color: #222; background: #f7f9fa; line-height: 1.6; }
 img { max-width: 100%; display: block; border-radius: 0.5rem; object-fit: cover; }
 
-/* --- Flex & Grid Utilities --- */
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
 .flex-row { flex-direction: row; }
@@ -30,7 +27,6 @@ img { max-width: 100%; display: block; border-radius: 0.5rem; object-fit: cover;
 .gap-x-2 { column-gap: 1rem; }
 .gap-y-2 { row-gap: 1rem; }
 
-/* --- Spacing Utilities --- */
 .p-0 { padding: 0; }
 .p-1 { padding: 0.5rem; }
 .p-2 { padding: 1rem; }
@@ -45,12 +41,10 @@ img { max-width: 100%; display: block; border-radius: 0.5rem; object-fit: cover;
 .m-4 { margin: 2rem; }
 .mx-auto { margin-left: auto; margin-right: auto; }
 
-/* --- Width/Height Utilities --- */
 .w-full { width: 100%; }
 .max-w-full { max-width: 100%; }
 .h-auto { height: auto; }
 
-/* --- Typography --- */
 .text-sm { font-size: 0.875rem; }
 .text-base { font-size: 1rem; }
 .text-lg { font-size: 1.25rem; }
@@ -61,7 +55,6 @@ img { max-width: 100%; display: block; border-radius: 0.5rem; object-fit: cover;
 .text-muted { color: #888; }
 .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* --- Colors --- */
 .bg-white { background: #fff; }
 .bg-light { background: #f7f9fa; }
 .bg-dark { background: #222; color: #fff; }
@@ -71,14 +64,12 @@ img { max-width: 100%; display: block; border-radius: 0.5rem; object-fit: cover;
 .text-primary { color: #0088cc; }
 .text-accent { color: #ff9800; }
 
-/* --- Border & Shadow --- */
 .rounded { border-radius: 0.5rem; }
 .rounded-full { border-radius: 9999px; }
 .shadow { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 .shadow-lg { box-shadow: 0 4px 24px rgba(0,0,0,0.12); }
 .border { border: 1px solid #e0e7ef; }
 
-/* --- Button Utility --- */
 .btn { display: inline-block; padding: 0.5rem 1.5rem; border-radius: 0.5rem; font-weight: 600; font-size: 1rem; border: none; cursor: pointer; transition: background 0.2s, color 0.2s, transform 0.2s; }
 .btn-primary { background: #0088cc; color: #fff; }
 .btn-primary:hover { background: #005f8a; }
@@ -87,23 +78,18 @@ img { max-width: 100%; display: block; border-radius: 0.5rem; object-fit: cover;
 .btn-accent { background: #ffe082; color: #222; }
 .btn-accent:hover { background: #ffd54f; }
 
-/* --- Card Utility --- */
 .card { background: #fff; border-radius: 0.75rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 1.5rem; }
 
-/* --- Hidden/Block Utility --- */
 .hidden { display: none !important; }
 .block { display: block !important; }
 
-/* --- Overflow Utilities --- */
 .overflow-auto { overflow: auto; }
 .overflow-x-auto { overflow-x: auto; }
 .overflow-y-auto { overflow-y: auto; }
 .overflow-hidden { overflow: hidden; }
 
-/* --- Aspect Ratio Utilities --- */
 .aspect-square { aspect-ratio: 1 / 1; }
 .aspect-video { aspect-ratio: 16 / 9; }
 
-/* --- Focus/Accessibility --- */
 .focus-outline:focus { outline: 2px solid #0088cc; outline-offset: 2px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }

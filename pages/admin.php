@@ -14,7 +14,7 @@ if (!$user_info) {
     exit();
 }
 
-draw_initial_common_header('Log in');
+draw_initial_common_header('CarLink');
 draw_admin_header();
 draw_final_common_header();
 draw_common_headbar($user_info);

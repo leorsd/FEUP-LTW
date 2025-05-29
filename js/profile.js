@@ -1,11 +1,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // Fetch user profile data from API
     const response = await fetch(`../api/user.php?id=${CURRENT_USER_ID}`);
     if (!response.ok) throw new Error("Failed to load profile data.");
     const user = await response.json();
 
-    // Fill profile fields
     document.getElementById("profile-image").src = user.profile_picture
       ? `../images/cache/${user.profile_picture}`
       : "../images/user.jpg";
@@ -16,7 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("profile-location").textContent = user.location || "";
     document.getElementById("profile-bio").textContent = user.bio || "";
 
-    // If user is admin, add admin panel button
     if (user.is_admin) {
       const adminBtn = document.createElement("a");
       adminBtn.href = "admin.php";

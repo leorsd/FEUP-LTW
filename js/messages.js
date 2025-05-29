@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const li = document.createElement('li');
       li.className = 'chat-item';
 
-      // Format the last message time: show time if today (24h), else show date
       let time = '';
       if (chat.last_message_time) {
         const msgDate = new Date(chat.last_message_time);

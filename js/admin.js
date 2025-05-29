@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
   async function adminApi(action, data) {
-    // Attach CSRF token from the page to all admin API requests
     data = {
       ...data,
       csrf_token:

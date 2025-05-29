@@ -7,7 +7,7 @@ require_once(__DIR__ . '/../templates/common.php');
 require_once(__DIR__ . '/../templates/headers.php');
 
 
-draw_initial_common_header('Log in');
+draw_initial_common_header('CarLink');
 draw_login_header();
 draw_final_common_header();
 draw_login_body();

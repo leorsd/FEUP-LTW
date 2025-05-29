@@ -12,13 +12,12 @@ class Review
 
     public function addReview(int $service_id, int $reviewer_id, int $rating, string $text): bool
     {
-        // Check if user bought and completed the service (status = Completed)
-        // First, get the id for the 'Completed' status
+
         $statusStmt = $this->db->prepare('SELECT id FROM service_status WHERE name = ?');
         $statusStmt->execute(['Completed']);
         $completedStatusId = $statusStmt->fetchColumn();
         if (!$completedStatusId) {
-            return false; // No completed status defined
+            return false; 
         }
         $checkStmt = $this->db->prepare(
             'SELECT COUNT(*) FROM service_order WHERE service_id = ? AND customer_id = ? AND status = ?'
@@ -29,7 +28,6 @@ class Review
             return false;
         }
 
-        // Prevent more than one review per user per service
         $existsStmt = $this->db->prepare(
             'SELECT COUNT(*) FROM service_review WHERE service_id = ? AND reviewer_id = ?'
         );

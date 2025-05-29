@@ -36,7 +36,6 @@ class Service
 
     public function updateService(int $serviceId, int $userId, array $fields): bool
     {
-        // Only allow certain fields to be updated
         $allowed = ['title', 'description', 'price', 'location', 'category', 'image'];
         $set = [];
         $params = [];
@@ -50,7 +49,6 @@ class Service
 
         if (empty($set)) return false;
 
-        // Ensure only the creator can update
         $params['service_id'] = $serviceId;
         $params['user_id'] = $userId;
 
@@ -104,13 +102,11 @@ class Service
     ): array {
         $params = [];
         $where = [];
-        // Default SELECT and FROM for 'all' and 'created'
         $select = 'service.*, service_category.name AS category_name, user.username AS provider_username, user.profile_picture AS provider_image, COUNT(*) OVER() AS total_count';
         $from = 'service
             LEFT JOIN service_category ON service.category = service_category.id
             LEFT JOIN user ON service.creator_id = user.id';
 
-        // Context-specific joins and SELECT
         if ($context === 'bought' && $user_id !== null) {
             $from = 'service_order
                 JOIN service ON service_order.service_id = service.id
@@ -135,14 +131,12 @@ class Service
             $params['user_id'] = $user_id;
         }
 
-        // Filters
         if (!empty($filters['favorites_owner'])) {
             $from .= ' INNER JOIN favorites ON favorites.service_id = service.id ';
             $where[] = 'favorites.user_id = :favorites_owner';
             $params['favorites_owner'] = $filters['favorites_owner'];
         }
         if (!empty($filters['search'])) {
-            // Use correct alias for username in each context
             if ($context === 'sold') {
                 $where[] = '(service.title LIKE :search OR service.description LIKE :search OR service.location LIKE :search OR provider.username LIKE :search)';
             } else {
@@ -151,7 +145,6 @@ class Service
             $params['search'] = '%' . $filters['search'] . '%';
         }
         if (!empty($filters['provider'])) {
-            // Use correct alias for provider in each context
             if ($context === 'sold') {
                 $where[] = 'provider.username LIKE :provider';
             } else {
@@ -219,7 +212,6 @@ class Service
             $query .= ' WHERE ' . implode(' AND ', $where);
         }
 
-        // Order by
         $query .= match ($orderby) {
             'price-asc' => ' ORDER BY service.price ASC',
             'price-desc' => ' ORDER BY service.price DESC',
@@ -229,7 +221,6 @@ class Service
             default => ' ORDER BY service.created_at DESC',
         };
 
-        // Pagination
         if ($page !== null && $per_page !== null) {
             $offset = ($page - 1) * $per_page;
             $query .= ' LIMIT :limit OFFSET :offset';
@@ -244,7 +235,6 @@ class Service
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Get total count from the first row (if exists)
         $total = isset($results[0]['total_count']) ? (int)$results[0]['total_count'] : 0;
 
         return [

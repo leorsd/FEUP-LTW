@@ -27,7 +27,7 @@ $serviceDescription = trim($_POST['service_description'] ?? '');
 $servicePrice = intval($_POST['service_price'] ?? -1);
 $serviceCategory = intval($_POST['service_category'] ?? 0);
 $serviceLocation = trim($_POST['service_location'] ?? '');
-$serviceStatus = 1; //Default status when created is open
+$serviceStatus = 1;
 
 if (empty($serviceTitle) || empty($serviceDescription) || $servicePrice < 0 || $serviceCategory <= 0 || empty($serviceLocation)) {
     $_SESSION['error'] = "All fields are required, and price must be greater or equal to 0.";
@@ -35,7 +35,7 @@ if (empty($serviceTitle) || empty($serviceDescription) || $servicePrice < 0 || $
     exit();
 }
 
-$imagePath = null; // Default to null if no image is provided
+$imagePath = null; 
 if (isset($_FILES['service_image']) && $_FILES['service_image']['error'] === UPLOAD_ERR_OK) {
     $tmp_name = $_FILES['service_image']['tmp_name'];
     $name = basename($_FILES['service_image']['name']);
@@ -45,7 +45,7 @@ if (isset($_FILES['service_image']) && $_FILES['service_image']['error'] === UPL
         $new_name = $_SESSION['user_info']['username'] . '_' . time() . '.' . $ext;
         $dest = __DIR__ . '/../images/cache/' . $new_name;
         if (move_uploaded_file($tmp_name, $dest)) {
-            $imagePath = $new_name; // Save the image path for the database
+            $imagePath = $new_name; 
         }
     }
 }
